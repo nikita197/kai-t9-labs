@@ -1,4 +1,4 @@
-package courseworkRIS.sqlDataProvider;
+﻿package courseworkRIS.sqlDataProvider;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

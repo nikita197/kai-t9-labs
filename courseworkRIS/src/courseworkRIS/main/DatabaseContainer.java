@@ -1,4 +1,4 @@
-package courseworkRIS.main;
+п»їpackage courseworkRIS.main;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -54,11 +54,11 @@ public class DatabaseContainer {
 								.toString()
 								.equals(obj.getClass().getDeclaredField("id")
 										.get(obj).toString())) {
-							// выдача команды на замену exObj obj`ом - в
-							// зависимости от
-							// значение поля dtInsert (TODO)
-							// пока допустим, что запись obj всегда новее
-							// существующая
+							// РІС‹РґР°С‡Р° РєРѕРјР°РЅРґС‹ РЅР° Р·Р°РјРµРЅСѓ exObj obj`РѕРј - РІ
+							// Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚
+							// Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ dtInsert (TODO)
+							// РїРѕРєР° РґРѕРїСѓСЃС‚РёРј, С‡С‚Рѕ Р·Р°РїРёСЃСЊ obj РІСЃРµРіРґР° РЅРѕРІРµРµ
+							// СЃСѓС‰РµСЃС‚РІСѓСЋС‰Р°СЏ
 							int index = existObjs.indexOf(exObj);
 							existObjs.remove(exObj);
 							existObjs.add(index, obj);
