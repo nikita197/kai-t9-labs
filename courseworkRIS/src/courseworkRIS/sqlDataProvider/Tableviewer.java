@@ -11,10 +11,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+
+import courseworkRIS.main.Application;
 
 public class Tableviewer {
 
@@ -23,7 +26,6 @@ public class Tableviewer {
 
 	public Tableviewer(Composite parent, int style) {
 		Composite _compt = new Composite(parent, SWT.NONE);
-		// _compt.setLayout(new FillLayout(SWT.HORIZONTAL));
 		_compt.setLayout(new GridLayout(2, false));
 		tbInit(_compt, style);
 		toolsPanelInit(_compt, style);
@@ -81,12 +83,10 @@ public class Tableviewer {
 
 	public void toolsPanelInit(Composite parent, int style) {
 		final Composite toolsPanel = new Composite(parent, SWT.NONE);
-		// toolsPanel.setLayout(new FillLayout(SWT.VERTICAL));
 		toolsPanel.setLayout(new GridLayout(1, false));
 		toolsPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
 		Composite mainPanel = new Composite(toolsPanel, SWT.NONE);
-		// mainPanel.setLayout(new FillLayout(SWT.HORIZONTAL));
 		mainPanel.setLayout(new GridLayout(3, false));
 
 		Button filterButton = new Button(mainPanel, SWT.TOGGLE);
@@ -97,9 +97,6 @@ public class Tableviewer {
 		final Composite filterPanel = new Composite(toolsPanel, SWT.NONE);
 		final Composite findPanel = new Composite(toolsPanel, SWT.NONE);
 
-		filterPanel.setBackground(new Color(null, 1, 1, 1));
-		findPanel.setBackground(new Color(null, 1, 1, 1));
-
 		filterPanel.setLayout(new GridLayout());
 		filterPanel.setLayoutData(new GridData());
 		findPanel.setLayout(new GridLayout());
@@ -108,8 +105,8 @@ public class Tableviewer {
 		filterPanel.setVisible(false);
 		findPanel.setVisible(false);
 
-		new Text(findPanel, SWT.NONE).setText("find");
-		new Text(filterPanel, SWT.NONE).setText("filter");
+		initFilterPanel(filterPanel);
+		initFindPanel(findPanel);
 
 		filterButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event arg0) {
@@ -142,5 +139,32 @@ public class Tableviewer {
 				}
 			}
 		});
+	}
+
+	private void initFindPanel(Composite findPanel) {
+		final Text findText = new Text(findPanel, SWT.NONE);
+		Button findButton = new Button(findPanel, SWT.NONE);
+		findButton.setText("Find");
+		findButton.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event arg0) {
+				for (TableItem tbI : _tb.getItems()) {
+					for (int i = 0; i < _tb.getColumnCount(); i++) {
+						if (tbI.getText(i).equals(findText.getText())) {
+							_tb.setSelection(tbI);
+							_tb.setFocus();
+							return;
+						}
+					}
+				}
+				new MessageBox(Application.getShell())
+						.setMessage("Text not found.");
+			}
+		});
+	}
+
+	private void initFilterPanel(Composite filterPanel) {
+		//TODO выбор поля, задание фильтрации по этому полю в соответствии с его типом.
 	}
 }
