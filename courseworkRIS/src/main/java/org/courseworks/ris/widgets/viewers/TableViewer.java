@@ -3,9 +3,9 @@
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.courseworks.ris.main.AbstractEntity;
 import org.courseworks.ris.main.Application;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,10 +48,10 @@ public class TableViewer {
 		_tb.setLayoutData(data);
 	}
 
-	public void fill(List<Object> objs) throws IllegalArgumentException,
+	public void fill(List<AbstractEntity> list) throws IllegalArgumentException,
 			IllegalAccessException {
-		fillObjectData(objs.get(0).getClass());
-		fillTb(objs);
+		fillObjectData(list.get(0).getClass());
+		fillTb(list);
 		packTb();
 	}
 
@@ -63,9 +63,9 @@ public class TableViewer {
 		}
 	}
 
-	public void fillTb(List<Object> objs) throws IllegalArgumentException,
+	public void fillTb(List<AbstractEntity> list) throws IllegalArgumentException,
 			IllegalAccessException {
-		for (Object obj : objs) {
+		for (Object obj : list) {
 			TableItem newRow = new TableItem(_tb, SWT.NONE);
 			int index = 0;
 			for (Field fld : _fields) {

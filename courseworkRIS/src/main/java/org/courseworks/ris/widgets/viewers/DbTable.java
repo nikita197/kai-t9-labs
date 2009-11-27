@@ -1,7 +1,10 @@
-package org.courseworks.ris.sqldataprovider;
+package org.courseworks.ris.widgets.viewers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.courseworks.ris.cmanager.session.ExtendedSession;
+import org.courseworks.ris.main.AbstractEntity;
 
 public class DbTable {
 
@@ -13,7 +16,7 @@ public class DbTable {
 		_name = name;
 	}
 
-	public void addItems(List<AbstractEntity> items, Session sessionLink) {
+	public void addItems(List<AbstractEntity> items, ExtendedSession sessionLink) {
 		if (_items.size() > 0 && items.size() > 0) {
 			if (!_items.get(0).getClass().equals(items.get(0).getClass())) {
 				throw new IllegalArgumentException();
@@ -34,5 +37,9 @@ public class DbTable {
 
 	public String getTableName() {
 		return _name;
+	}
+
+	public List<AbstractEntity> getItems() {
+		return _items;
 	}
 }

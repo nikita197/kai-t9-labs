@@ -2,8 +2,6 @@ package org.courseworks.ris.cmanager;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Set;
-
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 import org.courseworks.ris.cmanager.session.concrete.ExtendedHPRepairSession;
 import org.courseworks.ris.cmanager.session.concrete.ExtendedOrgElQueueSession;
@@ -39,12 +37,12 @@ public class ConnectionsManager {
 		}
 	}
 
-	public ExtendedSession getSession(String aName) {
+	public static ExtendedSession getSession(String aName) {
 		return sessions.get(aName);
 	}
 
-	public Set<String> getSessions() {
-		return sessions.keySet();
+	public static String[] getSessions() {
+		return sessions.keySet().toArray(new String[0]);
 	}
 
 }
