@@ -58,7 +58,7 @@ public class Application {
 			InvocationTargetException, NoSuchMethodException, IOException,
 			URISyntaxException {
 		try {
-			String path = ""; // TODO
+			String path = "src/main/resources/mssql_servers";
 			ConnectionsManager.createSessions(
 					ConnectionsManager.HPREPAIR_SESSION,
 					new ConfigurationsManager(path));
