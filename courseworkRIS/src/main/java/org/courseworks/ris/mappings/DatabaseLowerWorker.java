@@ -1,4 +1,4 @@
-package org.courseworks.ris.mappings.hprepair;
+package org.courseworks.ris.mappings;
 
 import java.util.ArrayList;
 import java.util.List;

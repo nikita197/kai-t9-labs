@@ -18,12 +18,8 @@ public abstract class TableList {
 		return _tables;
 	}
 
-	public void setTables(List<DbTable> _tables) {
-		this._tables = _tables;
-	}
-
 	public DbTable getTable(String name) {
-		for (DbTable table : this._tables) {
+		for (DbTable table : _tables) {
 			if (table.getTableName().equals(name)) {
 				return table;
 			}

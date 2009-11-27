@@ -19,4 +19,10 @@ public class ExtendedOrgElQueueSession extends ExtendedSession {
 		return _configuration.buildSessionFactory();
 	}
 
+	@Override
+	public void fillTables() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

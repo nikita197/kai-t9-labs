@@ -9,6 +9,7 @@ import javassist.NotFoundException;
 import org.courseworks.ris.cmanager.ConfigurationsManager;
 import org.courseworks.ris.cmanager.ConnectionsManager;
 import org.courseworks.ris.cmanager.session.ExtendedSession;
+import org.courseworks.ris.cmanager.session.GeneralTableList;
 import org.courseworks.ris.gui.ProgWin;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
