@@ -14,7 +14,7 @@ public class ExtendedHPRepairSession extends ExtendedSession {
 
 	@Override
 	protected SessionFactory createFactory() {
-		_configuration.addPackage("sqlDataProvider")
+		_configuration.addPackage("org.courseworks.ris.mappings.hprepair")
 				.addAnnotatedClass(Cars.class).addAnnotatedClass(Drivers.class);
 		return _configuration.buildSessionFactory();
 	}
