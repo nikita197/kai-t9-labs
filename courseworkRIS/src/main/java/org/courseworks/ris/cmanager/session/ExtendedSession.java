@@ -1,9 +1,6 @@
 package org.courseworks.ris.cmanager.session;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.courseworks.ris.main.AbstractEntity;
+import org.courseworks.ris.mappings.hprepair.DatabaseLowerWorker;
 import org.courseworks.ris.widgets.viewers.DbTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,21 +19,15 @@ public abstract class ExtendedSession extends TableList {
 	}
 
 	public void fillTables() {
-		DbTable cars = new DbTable("Cars");
-		DbTable drivers = new DbTable("Drivers");
-		List<AbstractEntity> carsList = new ArrayList<AbstractEntity>(), driversList = new ArrayList<AbstractEntity>();
-
-		for (Object obj : _session.createQuery("from Cars").list()) {
-			carsList.add((AbstractEntity) obj);
-		}
-		for (Object obj : _session.createQuery("from Drivers").list()) {
-			driversList.add((AbstractEntity) obj);
+		for (String tableName : DatabaseLowerWorker.getEntities()) {
+			getTables().add(new DbTable(tableName));
 		}
 
-		cars.addItems(carsList, this);
-		cars.addItems(driversList, this);
-		getTables().add(cars);
-		getTables().add(drivers);
+		for (DbTable table : getTables()) {
+			table.addItems(
+					DatabaseLowerWorker.getEntity(_session,
+							table.getTableName()), this);
+		}
 	}
 
 	protected abstract SessionFactory createFactory();
