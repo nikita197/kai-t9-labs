@@ -61,7 +61,7 @@ public class Application {
 			DatabaseConnector dConnector = new DatabaseConnector(sessionKeys,
 					connStrings);
 			_dContainer = new DatabaseContainer(dConnector);
-			_dContainer.fillThis();
+			_dContainer.fillDb();
 		} finally {
 			HibernateUtil.closeSessions();
 		}

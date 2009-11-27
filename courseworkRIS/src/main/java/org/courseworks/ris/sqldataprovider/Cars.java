@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Cars")
-public class Cars {
+public class Cars extends AbstractEntity{
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	public long id;
 	public String Name;

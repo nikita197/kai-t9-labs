@@ -71,7 +71,6 @@ public class HibernateUtil {
 		try {
 			// Create the SessionFactory
 			for (String key : configs.keySet()) {
-				@SuppressWarnings("deprecation")
 				SessionFactory sessionFactory = getCfg(configs.get(key))
 						.buildSessionFactory();
 				sessionFactoryMap.put(key, sessionFactory);
@@ -88,7 +87,6 @@ public class HibernateUtil {
 	public static void buildSessionFactory(String key, String connString) {
 		try {
 			// Create the SessionFactory
-			@SuppressWarnings("deprecation")
 			SessionFactory sessionFactory = getCfg(connString)
 					.buildSessionFactory();
 			sessionFactoryMap.put(key, sessionFactory);
