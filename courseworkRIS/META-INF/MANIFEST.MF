@@ -25,4 +25,5 @@ Bundle-ClassPath: .,
  libs/hibernate-libs/required/slf4j-jdk14-1.6.4.jar,
  libs/hibernate-libs/required/slf4j-api-1.6.1.jar
 Require-Bundle: org.eclipse.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
