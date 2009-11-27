@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry exported="true" kind="lib" path="libs/hibernate-libs/required/slf4j-api-1.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/hibernate-libs/required/slf4j-jdk14-1.6.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jdbc-drivers/sqljdbc4.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/eclipse_workspace/kai-t9-labs/courseworkRIS/libs/jdbc-drivers"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="libs/hibernate-testing.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate3.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/bytecode/cglib/cglib-2.2.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/bytecode/javassist/javassist-3.12.0.GA.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/jpa/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/optional/c3p0/c3p0-0.9.1.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/optional/infinispan/infinispan-core-4.2.1.CR1.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/optional/jbosscache/jbosscache-core-3.2.1.GA.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/optional/oscache/oscache-2.1.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/optional/proxool/proxool-0.8.3.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/optional/swarmcache/swarmcache-1.0RC2.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/required/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/required/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/required/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/required/javassist-3.12.0.GA.jar"/>
+	<classpathentry kind="lib" path="libs/hibernate-libs/required/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="output" path="target"/>
+</classpath>
