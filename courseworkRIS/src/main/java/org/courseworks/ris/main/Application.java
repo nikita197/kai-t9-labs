@@ -1,9 +1,14 @@
 ﻿package org.courseworks.ris.main;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 
 import javassist.NotFoundException;
 
+import org.courseworks.ris.cmanager.ConfigurationsManager;
+import org.courseworks.ris.cmanager.ConnectionsManager;
+import org.courseworks.ris.cmanager.session.ExtendedSession;
 import org.courseworks.ris.gui.ProgWin;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -12,8 +17,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class Application {
-	private static DatabaseContainer _dContainer;
 	private static Shell _shell;
+	private static GeneralTableList _dB;
 
 	public static void main(String[] args) throws IllegalAccessException {
 		try {
@@ -50,28 +55,34 @@ public class Application {
 
 	public static void initDB() throws IllegalArgumentException,
 			IllegalAccessException, NoSuchFieldException, SecurityException,
-			InvocationTargetException, NoSuchMethodException {
+			InvocationTargetException, NoSuchMethodException, IOException,
+			URISyntaxException {
 		try {
-			String[] connStrings = new String[] {
-					"localhost:49172;databaseName=db1OnServ1;"
-							+ "instanceName=SQLEXPRESSREAL1;integratedSecurity=true;",
-					"localhost:49173;databaseName=db1OnServ2;"
-							+ "instanceName=SQLEXPRESSREAL2;integratedSecurity=true;" };
-			String[] sessionKeys = new String[] { "49172", "49173" };
-			DatabaseConnector dConnector = new DatabaseConnector(sessionKeys,
-					connStrings);
-			_dContainer = new DatabaseContainer(dConnector);
-			_dContainer.fillDb();
+			String path = ""; // TODO
+			ConnectionsManager.createSessions(
+					ConnectionsManager.HPREPAIR_SESSION,
+					new ConfigurationsManager(path));
+			fillingSessionsTables();
+			_dB = new GeneralTableList();
+			_dB.fillTables();
 		} finally {
-			HibernateUtil.closeSessions();
+			// TODO close all sessions
 		}
 	}
 
-	public static DatabaseContainer getDContainer() {
-		return _dContainer;
+	public static void fillingSessionsTables() {
+		for (String sessionKey : ConnectionsManager.getSessions()) {
+			ExtendedSession currentSession = ConnectionsManager
+					.getSession(sessionKey);
+			currentSession.fillTables();
+		}
 	}
 
 	public static Shell getShell() {
 		return _shell;
+	}
+
+	public static GeneralTableList getDb() {
+		return _dB;
 	}
 }
