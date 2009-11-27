@@ -8,9 +8,9 @@ public class DatabaseLowerWorker {
 	public static String CARS = "Cars";
 	public static String DRIVERS = "Drivers";
 
-	@SuppressWarnings("rawtypes")
-	public static List selectFromTable(ExtendedSession session, String tableName) {
-		return session.getSession().createQuery("from " + tableName).list();
+	@SuppressWarnings("unchecked")
+	public static List<AbstractEntity> selectFromTable(ExtendedSession session, String tableName) {
+		return (List<AbstractEntity>) session.getSession().createQuery("from " + tableName).list();
 	}
 
 	public static String[] getEntities(int type) {

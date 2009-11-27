@@ -17,9 +17,15 @@ public class DbTable {
 	}
 
 	public void fillItems(ExtendedSession session) {
-		for (Object obj : DatabaseLowerWorker.selectFromTable(session, _name)) {
-			_items.add((AbstractEntity) obj);
+		for (AbstractEntity obj : DatabaseLowerWorker.selectFromTable(session,
+				_name)) {
+			obj.setSessionLink(session);
+			_items.add(obj);
 		}
+	}
+
+	public void addItems(List<AbstractEntity> items) {
+		_items.addAll(items);
 	}
 
 	public void clear() {
