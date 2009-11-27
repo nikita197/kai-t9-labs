@@ -18,10 +18,10 @@ public class ExtendedSession extends TableList {
 	private int _type;
 
 	public ExtendedSession(Configuration aConfiguration, int type) {
+		_type = type;
 		_configuration = aConfiguration;
 		_factory = createFactory();
 		session = _factory.openSession();
-		_type = type;
 	}
 
 	public void refreshTables() {

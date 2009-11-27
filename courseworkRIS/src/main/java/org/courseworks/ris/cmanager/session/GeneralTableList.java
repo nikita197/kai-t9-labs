@@ -20,7 +20,8 @@ public class GeneralTableList extends TableList {
 
 		for (ExtendedSession session : ConnectionsManager.getSessions()) {
 			for (DbTable sessionTable : session.getTables()) {
-				getTable(sessionTable.getName()).fillItems(session);
+				getTable(sessionTable.getName()).addItems(
+						sessionTable.getItems());
 			}
 		}
 	}
