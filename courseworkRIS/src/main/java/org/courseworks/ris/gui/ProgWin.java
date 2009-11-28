@@ -12,7 +12,7 @@ public class ProgWin {
 	public ProgWin(Composite composite) throws IllegalArgumentException,
 			IllegalAccessException, NotFoundException {
 		new TableViewer(composite, SWT.NONE).fill(Application.getDb().getTable(
-				"Cars").getItems());
+				"Cars"));
 
 	}
 

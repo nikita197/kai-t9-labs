@@ -1,9 +1,7 @@
 ﻿package org.courseworks.ris.widgets.viewers;
 
 import java.lang.reflect.Field;
-import java.util.List;
-
-import org.courseworks.ris.mappings.AbstractEntity;
+import org.courseworks.ris.cmanager.session.DbTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -17,7 +15,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class TableViewer {
 
-	private Table _tb;
+	private Table _table;
 	private Field[] _fields;
 	private FindPanel _findP;
 	private FilterPanel _filtP;
@@ -25,55 +23,17 @@ public class TableViewer {
 	public TableViewer(Composite parent, int style) {
 		Composite _compt = new Composite(parent, SWT.NONE);
 		_compt.setLayout(new GridLayout(2, false));
-		tbInit(_compt, style);
-		toolsPanelInit(_compt, style);
+		init(_compt, style);
 	}
 
-	public void tbInit(Composite parent, int style) {
-		_tb = new Table(parent, style);
-		_tb.setLinesVisible(true);
-		_tb.setHeaderVisible(true);
+	public void init(Composite parent, int style) {
+		_table = new Table(parent, style);
+		_table.setLinesVisible(true);
+		_table.setHeaderVisible(true);
 		GridData data = new GridData(SWT.FILL, SWT.TOP, true, true);
 		data.heightHint = 200;
-		_tb.setLayoutData(data);
-	}
-
-	public void fill(List<AbstractEntity> list)
-			throws IllegalArgumentException, IllegalAccessException {
-		createTbColumns(list.get(0).getClass());
-		refreshTbFromObjects(list);
-		packTb();
-	}
-
-	public void createTbColumns(Class<?> cls) {
-		_fields = cls.getDeclaredFields();
-		tbInit(_tb.getParent(), _tb.getStyle());
-		for (Field fld : _fields) {
-			TableColumn newColumn = new TableColumn(_tb, SWT.NONE);
-			newColumn.setText(fld.getName());
-		}
-	}
-
-	public void refreshTbFromObjects(List<AbstractEntity> list)
-			throws IllegalArgumentException, IllegalAccessException {
-		_tb.removeAll();
-		for (Object obj : list) {
-			TableItem newRow = new TableItem(_tb, SWT.NONE);
-			int index = 0;
-			for (Field fld : _fields) {
-				newRow.setText(index, fld.get(obj).toString());
-				index++;
-			}
-		}
-	}
-
-	public void packTb() {
-		for (TableColumn tbc : _tb.getColumns()) {
-			tbc.pack();
-		}
-	}
-
-	public void toolsPanelInit(Composite parent, int style) {
+		_table.setLayoutData(data);
+		
 		final Composite toolsPanel = new Composite(parent, SWT.NONE);
 		toolsPanel.setLayout(new GridLayout(1, false));
 		toolsPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
@@ -86,22 +46,60 @@ public class TableViewer {
 		filterButton.setText("Filter");
 		findButton.setText("Find");
 
-		_filtP = new FilterPanel(toolsPanel, SWT.NONE, _tb);
-		_findP = new FindPanel(toolsPanel, SWT.NONE, _tb);
+		_filtP = new FilterPanel(toolsPanel, SWT.BORDER, _table);
+		_findP = new FindPanel(toolsPanel, SWT.BORDER, _table);
 
 		filterButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event arg0) {
-				filterButtonClick();
+				filterButtonClick(toolsPanel);
 			}
 		});
 		findButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event arg0) {
-				findButtonClick();
+				findButtonClick(toolsPanel);
 			}
 		});
 	}
 
-	private void findButtonClick() {
+	public void fill(DbTable dbTable)
+			throws IllegalArgumentException, IllegalAccessException {
+		_table.removeAll();
+		createColumns(dbTable.getType());
+		refresh(dbTable);
+		pack();
+		_filtP.initContent(dbTable);
+		_findP.initContent(dbTable);
+	}
+
+	public void createColumns(Class<?> cls) {
+		_fields = cls.getDeclaredFields();
+		for (Field fld : _fields) {
+			TableColumn newColumn = new TableColumn(_table, SWT.NONE);
+			newColumn.setData(fld.getClass());
+			newColumn.setText(fld.getName());
+		}
+	}
+
+	public void refresh(DbTable dbTable)
+			throws IllegalArgumentException, IllegalAccessException {
+		for (Object obj : dbTable.getItems()) {
+			TableItem newRow = new TableItem(_table, SWT.NONE);
+			newRow.setData(obj);
+			int index = 0;
+			for (Field fld : _fields) {
+				newRow.setText(index, fld.get(obj).toString());
+				index++;
+			}
+		}
+	}
+
+	public void pack() {
+		for (TableColumn tbc : _table.getColumns()) {
+			tbc.pack();
+		}
+	}
+
+	private void findButtonClick(Composite parent) {
 		if (true == _findP.getVisible()) {
 			_findP.setVisible(false);
 		} else {
@@ -111,11 +109,11 @@ public class TableViewer {
 			findpGridData.exclude = false;
 			_findP.setVisible(true);
 			_filtP.setVisible(false);
-			// TODO ? toolsPanel.layout();
+			parent.layout();
 		}
 	}
 
-	private void filterButtonClick() {
+	private void filterButtonClick(Composite parent) {
 		if (true == _filtP.getVisible()) {
 			_filtP.setVisible(false);
 		} else {
@@ -123,7 +121,7 @@ public class TableViewer {
 			filterpGridData.exclude = false;
 			_filtP.setVisible(true);
 			_findP.setVisible(false);
-			// TODO ? toolsPanel.layout();
+			parent.layout();
 		}
 	}
 }
