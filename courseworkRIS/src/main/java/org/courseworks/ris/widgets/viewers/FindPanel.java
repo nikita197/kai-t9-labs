@@ -4,7 +4,6 @@ import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.widgets.viewers.finders.AbstractFinder;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -19,13 +18,11 @@ public class FindPanel extends Composite {
 	private Table _table;
 	private AbstractFinder _finder;
 	private DbTable _dbTable;
+	private Composite _parent;
 
 	public FindPanel(Composite parent, int style, Table table) {
 		super(parent, style);
-		this.setLayout(new GridLayout());
-		this.setLayoutData(new GridData());
-		this.setVisible(false);
-
+		_parent = parent;
 		_table = table;
 	}
 
@@ -45,6 +42,9 @@ public class FindPanel extends Composite {
 				_finder = AbstractFinder.getInstance(FindPanel.this,
 						SWT.BORDER,
 						_dbTable.getFieldType(_fieldCombo.getText()));
+				// _finder.setLayout(new GridLayout());
+				_finder.setLayoutData(new GridData(SWT.TOP, SWT.TOP, true, true));
+				_parent.layout();
 			}
 		});
 		findButton.addListener(SWT.Selection, new Listener() {

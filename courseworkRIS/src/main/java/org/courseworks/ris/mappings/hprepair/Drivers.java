@@ -14,7 +14,7 @@ public class Drivers extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    public Integer id;
 
     public String Name;
 

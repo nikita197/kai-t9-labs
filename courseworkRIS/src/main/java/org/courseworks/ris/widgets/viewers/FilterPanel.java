@@ -6,7 +6,6 @@ import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.widgets.viewers.filters.AbstractFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -21,13 +20,13 @@ public class FilterPanel extends Composite {
 	private Table _table;
 	private AbstractFilter _filter;
 	private DbTable _dbTable;
+	private Composite _parent;
+	private boolean _filterActive;
+	private Button _filterButton, _clearButton;
 
 	public FilterPanel(Composite parent, int style, Table table) {
 		super(parent, style);
-		this.setLayout(new GridLayout());
-		this.setLayoutData(new GridData());
-		this.setVisible(false);
-
+		_parent = parent;
 		_table = table;
 	}
 
@@ -39,11 +38,12 @@ public class FilterPanel extends Composite {
 			_fieldCombo.add(tbc.getText());
 		}
 
-		Button filterButton = new Button(this, SWT.NONE);
-		filterButton.setText("Filter");
+		_filterButton = new Button(this, SWT.NONE);
+		_filterButton.setText("Filter");
 
-		Button clearButton = new Button(this, SWT.NONE);
-		clearButton.setText("Clear filter");
+		_clearButton = new Button(this, SWT.NONE);
+		_clearButton.setText("Clear filter");
+		_clearButton.setEnabled(false);
 
 		_fieldCombo.addListener(SWT.Selection, new Listener() {
 			@Override
@@ -51,14 +51,24 @@ public class FilterPanel extends Composite {
 				_filter = AbstractFilter.getInstance(FilterPanel.this,
 						SWT.BORDER,
 						_dbTable.getFieldType(_fieldCombo.getText()));
+				// TODO _filter.setLayout(layout)
+				_filter.setLayoutData(new GridData(SWT.TOP, SWT.TOP, true, true));
+				layout();
+				_parent.layout();
 			}
 		});
-		filterButton.addListener(SWT.Selection, new Listener() {
+		_filterButton.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(Event arg0) {
 				try {
-					refreshTable();
+					if (_filterActive) {
+						refreshTable();
+						_clearButton.setEnabled(false);
+					} else {
+						_filterActive = true;
+						_clearButton.setEnabled(true);
+					}
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -73,7 +83,7 @@ public class FilterPanel extends Composite {
 			}
 		});
 
-		clearButton.addListener(SWT.Selection, new Listener() {
+		_clearButton.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -91,6 +101,7 @@ public class FilterPanel extends Composite {
 
 	private void refreshTable() throws IllegalArgumentException,
 			IllegalAccessException {
+		_table.removeAll();
 		for (Object obj : _dbTable.getItems()) {
 			TableItem newRow = new TableItem(_table, SWT.NONE);
 			newRow.setData(obj);
