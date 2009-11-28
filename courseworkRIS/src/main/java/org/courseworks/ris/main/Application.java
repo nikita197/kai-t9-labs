@@ -22,8 +22,8 @@ public class Application {
 
 	public static void main(String[] args) throws IllegalAccessException {
 		try {
-			// initDB();
-			initInformixDB();
+			initDB();
+			//initInformixDB();
 			initGUI();
 		} catch (Exception e) {
 			e.printStackTrace();

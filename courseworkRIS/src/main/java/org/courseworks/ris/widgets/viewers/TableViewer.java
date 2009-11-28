@@ -50,6 +50,13 @@ public class TableViewer {
 		_filtP = new FilterPanel(toolsPanel, SWT.BORDER, _table);
 		_findP = new FindPanel(toolsPanel, SWT.BORDER, _table);
 
+		_filtP.setLayout(new GridLayout(1, false));
+		_filtP.setLayoutData(new GridData(SWT.TOP, SWT.TOP, true, true));
+		_filtP.setVisible(false);
+		_findP.setLayout(new GridLayout(1, false));
+		_findP.setLayoutData(new GridData(SWT.TOP, SWT.TOP, true, true));
+		_findP.setVisible(false);
+
 		filterButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event arg0) {
 				filterButtonClick(toolsPanel);
