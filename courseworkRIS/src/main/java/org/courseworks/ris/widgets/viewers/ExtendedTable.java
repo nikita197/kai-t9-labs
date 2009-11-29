@@ -43,4 +43,9 @@ public class ExtendedTable extends Table {
 			tbc.pack();
 		}
 	}
+	
+	@Override
+	public void checkSubclass() {
+		
+	}
 }
