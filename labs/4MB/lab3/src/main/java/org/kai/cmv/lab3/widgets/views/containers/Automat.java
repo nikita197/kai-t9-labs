@@ -166,4 +166,24 @@ public class Automat extends AbstractDynamicSplit {
 			}
 		}
 	}
+
+	public void nextChannel() {
+		int index = _automatList.getSelectionIndex();
+		if (index > -1) {
+			if (index < _automatList.getItemCount() - 1) {
+				_automatList.setSelection(index + 1);
+			}
+			playCurrentChanel();
+		}
+	}
+
+	public void prevChannel() {
+		int index = _automatList.getSelectionIndex();
+		if (index > -1) {
+			if (index > 0) {
+				_automatList.setSelection(index - 1);
+			}
+			playCurrentChanel();
+		}
+	}
 }
