@@ -66,6 +66,13 @@ public class Monitor extends Composite {
 		_videoFrame = SWT_AWT.new_Frame(_videoFrameComposite);
 
 		powerButtonInit();
+		pultInit();
+	}
+
+	private void pultInit() {
+		_pult = new Pult(_panelOne, SWT.BORDER, this);
+		_pult.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true,
+				false));
 	}
 
 	private void powerButtonInit() {
@@ -92,7 +99,7 @@ public class Monitor extends Composite {
 			throws MalformedURLException, CannotRealizeException, IOException,
 			MediaException {
 		_jmfPlayer.stop();
-		_jmfPlayer.init(_videoFrame, item);
+		_jmfPlayer.init(_videoFrame, _pult.getControlsFrame(), item);
 	}
 
 	public void startPlayer() {

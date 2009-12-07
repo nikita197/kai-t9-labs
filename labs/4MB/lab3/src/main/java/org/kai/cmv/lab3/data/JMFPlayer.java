@@ -13,9 +13,10 @@ import javax.media.StopAtTimeEvent;
 public class JMFPlayer {
 	private Player _player;
 	private Component _visualComponent;
+	private Component _controlsComponent;
 	private Frame _frame;
 
-	public void init(Frame frame, GeneralListItem item)
+	public void init(Frame frame, Frame cFrame, GeneralListItem item)
 			throws java.io.IOException, java.net.MalformedURLException,
 			javax.media.MediaException, javax.media.CannotRealizeException {
 		_frame = frame;
@@ -23,7 +24,9 @@ public class JMFPlayer {
 		try {
 			_player = Manager.createRealizedPlayer(item.getURL());
 			_visualComponent = _player.getVisualComponent();
+			_controlsComponent = _player.getControlPanelComponent();
 			frame.add(_visualComponent);
+			cFrame.add(_controlsComponent);
 			addListeners();
 		} catch (Exception e) {
 			e.printStackTrace();
