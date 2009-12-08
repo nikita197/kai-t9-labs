@@ -7,13 +7,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.kai.cmv.lab3.helpers.AbstractHelper;
+import org.kai.cmv.lab3.helpers.Helper;
 import org.kai.cmv.lab3.main.GUIThread;
 
 public class MainMenu extends Composite {
-	private AbstractHelper _helper;
+	private Helper _helper;
 	private Button _sheduleButton, _favoritesButton, _monutorButton;
 	private Watch _watch;
+	private int _helpMode;
 
 	public MainMenu(Composite parent, int style) {
 		super(parent, style);
@@ -42,10 +43,11 @@ public class MainMenu extends Composite {
 		_monutorButton.setLayoutData(gridData);
 		_sheduleButton.setFocus();
 
-		_helper = new AbstractHelper(this, SWT.NONE);
+		_helper = new Helper(this, SWT.NONE, this);
 		_helper.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
 		((GridData) _helper.getLayoutData()).verticalIndent = -11;
 		((GridData) _helper.getLayoutData()).horizontalIndent = -5;
+		setHelpMode(Helper.MAIN_HELP);
 	}
 
 	public void addListeners() {
@@ -103,10 +105,19 @@ public class MainMenu extends Composite {
 			getShell().pack();
 			if (visibleComponent == Screen.MONITOR)
 				screen.getScMonitor().stopPlayer();
+			setHelpMode(Helper.MAIN_HELP);
 		}
 	}
 
 	public Watch getWatch() {
 		return _watch;
+	}
+
+	public int getHelpMode() {
+		return _helpMode;
+	}
+
+	public void setHelpMode(int helpMode) {
+		_helpMode = helpMode;
 	}
 }

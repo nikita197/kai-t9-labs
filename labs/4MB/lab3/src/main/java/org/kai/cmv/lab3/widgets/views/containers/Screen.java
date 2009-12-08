@@ -4,6 +4,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.kai.cmv.lab3.helpers.Helper;
+import org.kai.cmv.lab3.main.GUIThread;
 
 public class Screen extends Composite {
 	private Shedule _shedule;
@@ -33,6 +35,7 @@ public class Screen extends Composite {
 	}
 
 	public void show(int element) {
+		MainMenu mainMenu = GUIThread.getMenu(); 
 		switch (element) {
 		case SHEDULE:
 			_monitor.stopPlayer();
@@ -42,6 +45,7 @@ public class Screen extends Composite {
 			_shedule.setVisible(true);
 			_favorites.setVisible(false);
 			_monitor.setVisible(false);
+			mainMenu.setHelpMode(Helper.SHEDULE_HELP);
 			break;
 		case FAVORITES:
 			_monitor.stopPlayer();
@@ -51,6 +55,7 @@ public class Screen extends Composite {
 			_shedule.setVisible(false);
 			_favorites.setVisible(true);
 			_monitor.setVisible(false);
+			mainMenu.setHelpMode(Helper.FAVORITES_HELP);
 			break;
 		case MONITOR:
 			((GridData) _shedule.getLayoutData()).exclude = true;
@@ -59,6 +64,7 @@ public class Screen extends Composite {
 			_shedule.setVisible(false);
 			_favorites.setVisible(false);
 			_monitor.setVisible(true);
+			mainMenu.setHelpMode(Helper.MONITOR_HELP);
 			break;
 		}
 		this.layout();

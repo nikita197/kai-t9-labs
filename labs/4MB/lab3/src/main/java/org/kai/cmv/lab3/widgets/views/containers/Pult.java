@@ -12,10 +12,11 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 public class Pult extends AbstractDynamicSplit {
-	Frame _controlsFrame;
-	Button _prevChannelButton;
-	Button _nextChannelButton;
-	Monitor _monitor;
+	private Frame _controlsFrame;
+	private Composite _controlsFrameComposite;
+	private Button _prevChannelButton;
+	private Button _nextChannelButton;
+	private Monitor _monitor;
 
 	public Pult(Composite parent, int style, Monitor monitor) {
 		super(parent, AbstractDynamicSplit.MINIMIZED, SWT.BOTTOM);
@@ -30,14 +31,13 @@ public class Pult extends AbstractDynamicSplit {
 		mainComp.setLayout(layout);
 		((GridData) mainComp.getLayoutData()).heightHint = 25;
 
-		Composite controlsFrameComposite = new Composite(mainComp, SWT.EMBEDDED
+		_controlsFrameComposite = new Composite(mainComp, SWT.EMBEDDED
 				| SWT.NO_BACKGROUND);
-		controlsFrameComposite.setLayout(new GridLayout(1, false));
-		controlsFrameComposite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL,
-				false, true));
-		((GridData) controlsFrameComposite.getLayoutData()).widthHint = 300;
+		_controlsFrameComposite.setLayout(new GridLayout(1, false));
+		_controlsFrameComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+				true, true));
 
-		_controlsFrame = SWT_AWT.new_Frame(controlsFrameComposite);
+		_controlsFrame = SWT_AWT.new_Frame(_controlsFrameComposite);
 
 		_prevChannelButton = new Button(mainComp, SWT.NONE);
 		_prevChannelButton.setText("Пред. канал");
@@ -48,19 +48,25 @@ public class Pult extends AbstractDynamicSplit {
 	}
 
 	private void addListeners() {
-		_prevChannelButton.addListener(SWT.Selection, new Listener(){
+		_prevChannelButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
-				_monitor.getAuto().prevChannel(); 
-			}});
-		_nextChannelButton.addListener(SWT.Selection, new Listener(){
+				_monitor.getAuto().prevChannel();
+			}
+		});
+		_nextChannelButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
 				_monitor.getAuto().nextChannel();
-			}});
+			}
+		});
 	}
 
 	public Frame getControlsFrame() {
 		return _controlsFrame;
+	}
+
+	public Composite getControlsFarmeComposite() {
+		return _controlsFrameComposite;
 	}
 }
