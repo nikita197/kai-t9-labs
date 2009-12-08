@@ -89,4 +89,8 @@ public class GUIThread implements Runnable {
 			_mainMenu.getWatch().setTime(_sdf.format(new Date()));
 		}
 	}
+	
+	public static MainMenu getMenu(){
+		return _mainMenu;
+	}
 }

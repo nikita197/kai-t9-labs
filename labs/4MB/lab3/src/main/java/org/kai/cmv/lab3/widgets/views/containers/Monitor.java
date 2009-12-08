@@ -108,6 +108,10 @@ public class Monitor extends Composite {
 				_videoFrameComposite.getSize().y);
 		_videoFrameComposite.setSize(_videoFrameComposite.getSize().x + 1,
 				_videoFrameComposite.getSize().y);
+		_pult.getControlsFarmeComposite().setSize(_pult.getControlsFarmeComposite().getSize().x - 1,
+				_pult.getControlsFarmeComposite().getSize().y);
+		_pult.getControlsFarmeComposite().setSize(_pult.getControlsFarmeComposite().getSize().x + 1,
+				_pult.getControlsFarmeComposite().getSize().y);
 		_powerButton.setText("ВЫКЛ");
 	}
 
