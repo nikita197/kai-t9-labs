@@ -1,6 +1,10 @@
 package org.kai.cmv.lab1.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -8,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.kai.cmv.lab1.widgets.numbersfield.GFChoose;
+import org.kai.cmv.lab1.widgets.numbersfield.GFNumber;
 
 public class NumbersView {
 
@@ -104,10 +109,29 @@ public class NumbersView {
     }
 
     public void doTest() {
-        // Создание набора цифр
-        while (true) {
+        final int colorMaxRGB = 200;
 
+        // Создание набора общих и выводимых цифр
+        List<GFNumber> allNumbers = new ArrayList<GFNumber>();
+
+        List<Integer> freeNumbers = new ArrayList<Integer>();
+        for (int i = 0; i < MAX_NUMBERS_COUNT; i++) {
+            freeNumbers.add(i);
+        }
+
+        for (int i = 0; i < MAX_NUMBERS_COUNT; i++) {
+            int number = (int) (Math.random() * (freeNumbers.size() - 1));
+            int style = (int) (Math.random());
+            Color color =
+                    new Color(null, (int) Math.random() * colorMaxRGB,
+                            (int) Math.random() * colorMaxRGB,
+                            (int) Math.random() * colorMaxRGB);
+
+            allNumbers.add(new GFNumber(freeNumbers.get(number), color,
+                    ((style == 0) ? GFNumber.ROMAN : GFNumber.WORD)));
+        }
+
+        for (int i = 0; i < _countSP.getSelection(); i++) {
         }
     }
-
 }
