@@ -9,22 +9,22 @@ import org.kai.cmv.lab1.widgets.NumbersView;
 
 public class Program {
 
-    public static void main(String[] args) {
-        final Point shellSize = new Point(600, 600);
-        Display display = new Display();
-        final Shell shell = new Shell(display);
-        shell.setLayout(new FillLayout());
+	public static void main(String[] args) {
+		final Point shellSize = new Point(600, 600);
+		Display display = new Display();
+		final Shell shell = new Shell(display);
+		shell.setLayout(new FillLayout());
 
-        new NumbersView(shell, SWT.NONE);
+		new NumbersView(shell, SWT.NONE);
 
-        shell.setSize(shellSize);
-        shell.open();
-        while (!shell.isDisposed()) {
-            if (!display.readAndDispatch()) {
-                display.sleep();
-            }
-        }
-        display.dispose();
-    }
+		shell.setSize(shellSize);
+		shell.open();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+		display.dispose();
+	}
 
 }
