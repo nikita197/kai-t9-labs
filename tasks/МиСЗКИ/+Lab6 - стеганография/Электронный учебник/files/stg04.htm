@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>Stegnography - Text</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1251">
+</head>
+
+<body bgcolor="#EBF4D5" text="#000000">
+<div align="center"> 
+  <p><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0" width="50" height="70">
+      <param name=movie value="button6.swf">
+      <param name=quality value=high>
+      <param name="BASE" value=".">
+      <param name="BGCOLOR" value="#EBF4D5">
+      <embed src="button6.swf" base="."  quality=high pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="50" height="70" bgcolor="#EBF4D5">
+      </embed> 
+    </object><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0" width="50" height="70">
+      <param name=movie value="button7.swf">
+      <param name=quality value=high>
+      <param name="BASE" value=".">
+      <param name="BGCOLOR" value="#EBF4D5">
+      <embed src="button7.swf" base="."  quality=high pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="50" height="70" bgcolor="#EBF4D5">
+      </embed> 
+    </object><br>
+    <font color="0B0BA6"><b><font color="00790A" size="4" face="Arial, Helvetica, sans-serif">Текстовая 
+    стеганография (методы, сравнительный анализ методов, реализация).</font></b></font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6">Тексты 
+    - наиболее трудное место для сокрытия данных в связи с недостатком избыточности 
+    информации в текстовых файлах по сравнению с графическими и звуковыми. Любое 
+    изменение в содержании текста довольно быстро улавливается читающим в силу 
+    его высокой структурированности.</font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"><b><font size="4">Метод 
+    расширения пробелов. </font></b><br>
+    Существует 2 объективные причины, по которым манипуляция пробелами приносит 
+    хороший результат:</font></p>
+</div>
+<ul>
+  <li> 
+    <div align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6">Изменение 
+      числа пробелов как правило ведет к малым потерям в изменении значений фразы 
+      или предложения.</font></div>
+  </li>
+  <li>
+    <div align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6">Обычный 
+      человек не замечает малые изменения в малой модификации числа пробелов.<br>
+      </font></div>
+  </li>
+</ul>
+<div align="center"> 
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"><b>Использование 
+    пробелов между фразами.</b><br>
+    Данный метод внедряет бинарное сообщение в текст путем помещения одного или 
+    двух пробелов после каждого символа завершения предложения: точки, точки с 
+    запятой, запятой и двоеточия. Один пробел кодирует &quot;0&quot;, а два пробела 
+    &quot;1&quot;. Результат представлен на рис. 3.</font></p>
+  <p align="center"><img src="pic3.gif" alt="Один пробел кодирует  <0>, два&nbsp;пробела — <1>" width="420" height="150"><br>
+    <font face="Times New Roman, Times, serif">Рис. 3.</font> </p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"> 
+    Этот метод имеет множество внутренних проблем. Он не совсем эффективен, требует 
+    большого объема текста для кодирования малого сообщения, его возможности зависят 
+    от структуры и содержания текста. Некоторые редакторы сами ставят несколько 
+    пробелов после таких символов (в данном случае необходима нормализация текста 
+    к одному пробелу).<br>
+    </font><font color="0B0BA6"><a href="progs/demo1.exe"><b>Посмотреть работу 
+    этого алгоритма.</b></a></font><br>
+    <b><a href="progs/InText1.exe">Запустить программу работающую по этому алгоритму.</a></b></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"><b>Внедрение 
+    пробелов между словами.</b><br>
+    Один вставляемый пробел между словами означает &quot;0&quot;, а два - &quot;1&quot;. 
+    В&nbsp;каждой строке кодируется несколько бит. Результат представлен на рис.&nbsp;4. 
+    </font></p>
+  <p align="center"><img src="pic4.GIF" alt="Один пробел кодирует  <0>, два&nbsp;пробела — <1>"  width="420" height="150"><br>
+    <font face="Times New Roman, Times, serif">Рис. 4.</font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6">При 
+    распечатке текста на бумаге, появляются трудности, выражающиеся в анализе 
+    расстояния между словами и между предложениями, кроме этого, если слово или 
+    предложение - в конце строки, то данные теряются, поэтому при распечатке - 
+    их там скрывать нельзя.<br>
+    Вообще говоря, с распечатанным текстом можно работать как с изображением, 
+    применяя к нему, например, <a href="stg05.htm">метод заплаток</a>.</font><br>
+    <font color="0B0BA6"><a href="progs/demo2.exe"><b>Посмотреть работу этого 
+    алгоритма.</b><br>
+    <b></b></a><b><a href="progs/InText2.exe">Запустить программу работающую по этому алгоритму.</a></b> 
+    <br>
+    </font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"><b>Внедрение 
+    пробелов в конце строки.</b><br>
+    При использовании 2 пробелов можно закодировать 1 бит на строку, при использовании 
+    4 пробелов - 2 бита на строку, и т.д. На рис. 5 представлен пример кодирования. 
+    </font></p>
+  <p align="center"><img src="pic5.gif" width="420" height="300" alt="Чем больше пробелов встраивать в конце строки, тем больше бит на строку можно закодировать"><br>
+    <font face="Times New Roman, Times, serif">Рис.5. </font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6">Вначале 
+    необходима нормализация текста, убирающая пробелы в конце строк. Изменения 
+    в тексте не воспринимаются читающим. Неудобство этого метода - невозможность 
+    извлечения кода из жестких копий текста (в первых двух случаях это возможно).<br>
+    </font><b><a href="progs/InText3.exe">Запустить программу работающую по этому 
+    алгоритму.</a></b></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"><b><font size="4">Синтаксические 
+    методы.</font></b><br>
+    В то время, как манипуляции с пробелами может не заметить читающий, число 
+    пробелов может изменить текстовый процессор, разрушая скрытые данные. Синтаксические 
+    методы свободны от этого, кроме этого, данные методы могут применяться параллельно 
+    с выше предложенными.<br>
+    Существует много случаев, когда пунктуация является двусмысленной, или когда 
+    нарушение пунктуации выражается в малом изменении содержании текста. Например, 
+    фразы &quot;хлеб, масло, и молоко&quot; и &quot;хлеб, масло и молоко&quot; 
+    определяют правильные использования запятых в тексте. Мы можем изменять данные 
+    формы произвольно, а альтернативу выбора могут определять встраиваемые бинарные 
+    данные, например, первый выбор ознаменует &quot;1&quot;, а второй &quot;0&quot;. 
+    Можно контролировать также сокращения (аббревиатуры). Недостаток данных методов 
+    - малая степень скрытия (несколько битов на килобайт).<br>
+    Можно также вставлять нарушения пунктуации - читающий, как правило это не 
+    замечает. Однако, необходимо заметить, что иногда нарушение пунктуации приводит 
+    к содержательному изменению смысла текста. Таким образом, данными методами 
+    необходимо пользоваться с осторожностью.<br>
+    Можно также изменять порядок следования фраз в предложении: &quot;До вечера 
+    я сделал работу&quot; -&gt; &quot;Я сделал работу до вечера&quot;.</font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6" size="4"><b>Семантические 
+    методы.</b></font><font face="Times New Roman, Times, serif" color="0B0BA6"><br>
+    Данные методы изменяют само содержание слов. Имеются словари синонимов. Метод 
+    ставит в соответствие один синоним для &quot;0&quot;, и другой для &quot;1&quot;. 
+    Например, &quot;БОЛЬШОЙ&quot;=&gt;&quot;0&quot;, а &quot;КРУПНЫЙ&quot;=&gt;&quot;1&quot;. 
+    Чем больше синонимов у слова, тем больше бит можно закодировать.</font></p>
+  <p align="justify"><font face="Times New Roman, Times, serif" color="0B0BA6"><b><font size="4">Приложения.</font></b><br>
+    Скрытие данных в тексте имеет множество приложений: проверка авторских прав 
+    на текст, аутентификацию, а также аннотация текста. Можно скрыть контрольную 
+    сумму текста в виде цифровой подписи и определять, был ли изменен текст в 
+    процессе передачи или нет. Можно также включить в текст инструкции для читающей 
+    программы (например, для текстовых процессоров или почтовых программ).</font></p>
+  <p align="center"><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0" width="50" height="70">
+      <param name=movie value="button6.swf">
+      <param name=quality value=high>
+      <param name="BASE" value=".">
+      <param name="BGCOLOR" value="#EBF4D5">
+      <embed src="button6.swf" base="."  quality=high pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash"  width="50" height="70" bgcolor="#EBF4D5">
+      </embed> 
+    </object><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0" width="50" height="70">
+      <param name=movie value="button7.swf">
+      <param name=quality value=high>
+      <param name="BASE" value=".">
+      <param name="BGCOLOR" value="#EBF4D5">
+      <embed src="button7.swf" base="."  quality=high pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="50" height="70" bgcolor="#EBF4D5">
+      </embed> 
+    </object></p>
+  </div>
+</body>
+</html>

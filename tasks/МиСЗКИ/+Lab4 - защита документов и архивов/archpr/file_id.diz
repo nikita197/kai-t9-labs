@@ -1,0 +1,12 @@
+Advanced Archive Password Recovery 2.20 [ASP] -
+A program for recovering lost or forgotten
+passwords for ZIP (PKZip/WinZip), ARJ/WinARJ,
+RAR/WinRAR and ACE/WinACE (1.x) archives. Supports
+the customizable "brute-force" attack, effectively
+optimized for speed (for ZIP, up to 15 million
+passwords per second on Pentium III);
+dictionary-based attack, and very fast and
+effective known-plaintext attack. For WinZip
+archives with 5 or more encrypted files,
+guaranteed decryption is available. Multilangual
+interface is provided. $60
