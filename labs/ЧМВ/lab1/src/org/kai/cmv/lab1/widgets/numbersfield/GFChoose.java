@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 public class GFChoose {
@@ -28,20 +29,18 @@ public class GFChoose {
 
 	private void createContent(Composite composite, int count, int style) {
 		_mainComposite = new Composite(composite, style);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		_mainComposite.setLayout(layout);
+		_mainComposite.setLayout(new GridLayout());
 
 		Button button;
 		Label label;
 		for (int i = 0; i < count; i++) {
 			button = new Button(_mainComposite, SWT.CHECK);
-			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			button.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false));
 			button.setVisible(false);
 			_checkButtons.add(button);
 
 			label = new Label(_mainComposite, SWT.NONE);
-			label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			label.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false));
 			_labels.add(label);
 		}
 
@@ -51,7 +50,7 @@ public class GFChoose {
 	public void show(List<GFNumber> numbers, Color foreground, boolean checking) {
 		if (numbers.size() > _labels.size()) {
 			throw new IllegalArgumentException(
-					"Не соответствие количества чисел");
+					"Несоответствие количества чисел");
 		}
 
 		Label label;
@@ -65,23 +64,38 @@ public class GFChoose {
 			if (checking) {
 				checkButton.setVisible(true);
 				label.setVisible(false);
+				((GridData) checkButton.getLayoutData()).exclude = false;
+				((GridData) label.getLayoutData()).exclude = true;
 
 				checkButton.setForeground(foreground);
 				checkButton.setText(number.getText());
 			} else {
-				checkButton.setVisible(false);
 				label.setVisible(true);
+				checkButton.setVisible(false);
+				((GridData) label.getLayoutData()).exclude = false;
+				((GridData) checkButton.getLayoutData()).exclude = true;
 
 				label.setForeground(foreground);
 				label.setText(number.getText());
 			}
+
+			checkButton.setSelection(false);
+			checkButton.setBackground(null);
 		}
 
 		for (int i = numbers.size(); i < _labels.size(); i++) {
-			_checkButtons.get(i).setVisible(false);
-			_labels.get(i).setVisible(false);
-			_labels.get(i).setText("");
+			checkButton = _checkButtons.get(i);
+			label = _labels.get(i);
+			checkButton.setVisible(false);
+			label.setVisible(false);
+			((GridData) label.getLayoutData()).exclude = true;
+			((GridData) checkButton.getLayoutData()).exclude = true;
+			checkButton.setSelection(false);
+			checkButton.setBackground(null);
+			label.setText("");
+			checkButton.setText("");
 		}
+
 		_mainComposite.layout();
 	}
 
@@ -94,6 +108,11 @@ public class GFChoose {
 		}
 
 		return result;
+	}
+
+	public void setWrong(int index) {
+		_checkButtons.get(index).setBackground(
+				Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 	}
 
 	public void setLayoutData(Object layoutData) {
