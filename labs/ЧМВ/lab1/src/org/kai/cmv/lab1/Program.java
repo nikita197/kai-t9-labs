@@ -15,7 +15,6 @@ public class Program {
 		final Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 
-		System.out.println("qqwe1");
 		new NumbersView(shell, SWT.NONE);
 
 		shell.setSize(shellSize);
