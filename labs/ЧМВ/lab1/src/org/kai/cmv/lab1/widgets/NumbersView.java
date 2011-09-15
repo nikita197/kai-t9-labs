@@ -114,7 +114,7 @@ public class NumbersView {
 		_styleCmb = new Combo(controlPComposite, SWT.READ_ONLY);
 		_styleCmb.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 		_styleCmb.add("Римские цифры");
-		_styleCmb.add("Арабские цифры");
+		_styleCmb.add("Словесная форма");
 		_styleCmb.select(0);
 
 		new Label(controlPComposite, SWT.NONE).setText("Выбрите цвет цифр:");
