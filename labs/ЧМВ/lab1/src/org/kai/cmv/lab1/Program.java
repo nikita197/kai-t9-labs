@@ -15,7 +15,7 @@ public class Program {
 		final Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 
-		new NumbersView(shell, SWT.NONE);
+		NumbersView nView = new NumbersView(shell, SWT.NONE);
 
 		shell.setSize(shellSize);
 		shell.open();
@@ -24,6 +24,7 @@ public class Program {
 				display.sleep();
 			}
 		}
+		nView.dispose();
 		display.dispose();
 	}
 
