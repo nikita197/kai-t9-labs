@@ -1,7 +1,16 @@
 package org.kai.cmv.lab1.widgets;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -15,6 +24,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
+import org.kai.cmv.lab1.this_package_is_UNNAMED.XmlMarshaller;
 import org.kai.cmv.lab1.widgets.numbersfield.GFChoose;
 import org.kai.cmv.lab1.widgets.numbersfield.GFNumber;
 
@@ -92,7 +102,10 @@ public class NumbersView {
 
 	private List<GFNumber> _showNumbers;
 
+	private List<GFNumber> _chosedNumbers;
+
 	public NumbersView(Composite composite, int style) {
+		_chosedNumbers = new ArrayList<GFNumber>();
 		createContent(composite);
 	}
 
@@ -117,7 +130,7 @@ public class NumbersView {
 		_styleCmb.add("Словесная форма");
 		_styleCmb.select(0);
 
-		new Label(controlPComposite, SWT.NONE).setText("Выбрите цвет цифр:");
+		new Label(controlPComposite, SWT.NONE).setText("Выберите цвет цифр:");
 
 		_colorCmb = new Combo(controlPComposite, SWT.READ_ONLY);
 		_colorCmb.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
@@ -126,7 +139,7 @@ public class NumbersView {
 		}
 		_colorCmb.select(0);
 
-		new Label(controlPComposite, SWT.NONE).setText("Выбрите количество"
+		new Label(controlPComposite, SWT.NONE).setText("Выберите количество"
 				+ " чисел:");
 
 		_countSP = new Spinner(controlPComposite, SWT.READ_ONLY);
@@ -135,7 +148,7 @@ public class NumbersView {
 		_countSP.setMinimum(1);
 		_countSP.setSelection(MAX_NUMBERS_COUNT / 2);
 
-		new Label(controlPComposite, SWT.NONE).setText("Выбрите длительность"
+		new Label(controlPComposite, SWT.NONE).setText("Выберите длительность"
 				+ " показа (в секундах):");
 
 		_timeSP = new Spinner(controlPComposite, SWT.READ_ONLY);
@@ -178,7 +191,6 @@ public class NumbersView {
 		_startButton.setText("Старт");
 		_startButton.addListener(SWT.MouseUp, new Listener() {
 
-			@Override
 			public void handleEvent(Event arg0) {
 				final int style = _styleCmb.getSelectionIndex();
 				final Color foreground = _colorsList.get(_colorCmb
@@ -192,7 +204,6 @@ public class NumbersView {
 
 				_showNumbersThread = new Thread(new Runnable() {
 
-					@Override
 					public void run() {
 						showNumbers(style, foreground, showNumbersCount,
 								waitTime);
@@ -211,7 +222,6 @@ public class NumbersView {
 		_finishButton.setText("Финиш");
 		_finishButton.addListener(SWT.MouseUp, new Listener() {
 
-			@Override
 			public void handleEvent(Event arg0) {
 				testUser();
 			}
@@ -254,7 +264,6 @@ public class NumbersView {
 		// Показ чисел для запоминания
 		Display.getDefault().syncExec(new Runnable() {
 
-			@Override
 			public void run() {
 				if (Display.getDefault().isDisposed()) {
 					return;
@@ -275,7 +284,6 @@ public class NumbersView {
 		// Показ всех чисел
 		Display.getDefault().syncExec(new Runnable() {
 
-			@Override
 			public void run() {
 				if (Display.getDefault().isDisposed()) {
 					return;
@@ -309,6 +317,10 @@ public class NumbersView {
 				}
 			}
 
+			if (selected) {
+				_chosedNumbers.add(_allNumbers.get(i));
+			}
+
 			if ((contain && !selected) || (!contain && selected)) {
 				_numChooser.setWrong(i);
 			}
@@ -319,6 +331,38 @@ public class NumbersView {
 
 		_statusLabel.setText("Пожалуйста, выберите параметры запуска и "
 				+ "нажмите старт: ");
+		try {
+			doSave();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void doSave() throws JAXBException, IOException {
+		XmlMarshaller xm = new XmlMarshaller();
+		xm.set_chooseStyle(_styleCmb.getSelectionIndex());
+		xm.set_allNumbers(_allNumbers);
+		xm.set__showNumbers(_showNumbers);
+		xm.set_timeSP(_timeSP.getSelection());
+		xm.set_countSP(_countSP.getSelection());
+		xm.set_chosedNumbers(_chosedNumbers);
+		xm.set_numbersColor(_colorCmb.getItem(_colorCmb.getSelectionIndex()));
+
+		Date time = Calendar.getInstance().getTime();
+		File of = new File("outputFiles" + File.separatorChar + "result"
+				+ time.getMonth() + time.getDay() + time.getHours()
+				+ time.getMinutes() + time.getSeconds() + ".xml");
+		FileOutputStream os = new FileOutputStream(of);
+		// Маршаллизация
+		JAXBContext context = JAXBContext.newInstance(XmlMarshaller.class);
+		Marshaller m = context.createMarshaller();
+		m.setProperty("jaxb.formatted.output", true);
+		m.marshal(xm, os);
+		os.close();
 	}
 
 	public void dispose() {
