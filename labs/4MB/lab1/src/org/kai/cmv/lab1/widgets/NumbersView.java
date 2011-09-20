@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
-import org.kai.cmv.lab1.this_package_is_UNNAMED.XmlMarshaller;
+import org.kai.cmv.lab1.io.TestResult;
 import org.kai.cmv.lab1.widgets.numbersfield.GFChoose;
 import org.kai.cmv.lab1.widgets.numbersfield.GFNumber;
 
@@ -365,7 +365,7 @@ public class NumbersView {
     }
 
     private void doSave() throws JAXBException, IOException {
-        XmlMarshaller xm = new XmlMarshaller();
+        TestResult xm = new TestResult();
         xm.set_chooseStyle(_styleCmb.getSelectionIndex());
         xm.set_allNumbers(_allNumbers);
         xm.set_showNumbers(_showNumbers);
@@ -380,7 +380,7 @@ public class NumbersView {
                 + time.getMinutes() + time.getSeconds() + ".xml");
         FileOutputStream os = new FileOutputStream(of);
         // Маршаллизация
-        JAXBContext context = JAXBContext.newInstance(XmlMarshaller.class);
+        JAXBContext context = JAXBContext.newInstance(TestResult.class);
         Marshaller m = context.createMarshaller();
         m.setProperty("jaxb.formatted.output", true);
         m.marshal(xm, os);
@@ -388,13 +388,13 @@ public class NumbersView {
     }
 
     public void createDiagram() throws JAXBException, IOException {
-        JAXBContext context = JAXBContext.newInstance(XmlMarshaller.class);
+        JAXBContext context = JAXBContext.newInstance(TestResult.class);
         Unmarshaller um = context.createUnmarshaller();
         for (File f : (new File("outputFiles")).listFiles()) {
-            XmlMarshaller.appendToDiagData((XmlMarshaller) um.unmarshal(f));
+            TestResult.appendToDiagData((TestResult) um.unmarshal(f));
         }
         try {
-            XmlMarshaller.write(null);
+            TestResult.write(null);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
