@@ -1,4 +1,4 @@
-package org.kai.cmv.lab1.this_package_is_UNNAMED;
+package org.kai.cmv.lab1.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import org.kai.cmv.lab1.widgets.numbersfield.GFNumber;
 @XmlRootElement(name = "ЧМВ.ЛАБОРАТОРНАЯ_РАБОТА_N1")
 @XmlType(propOrder = { "_chooseStyle", "_allNumbers", "_showNumbers",
         "_chosedNumbers", "_numbersColor", "_timeSP", "_countSP" })
-public class XmlMarshaller {
+public class TestResult {
     private String _chooseStyle;
     private String _allNumbers;
     private String _showNumbers;
@@ -26,7 +26,7 @@ public class XmlMarshaller {
     private int _timeSP;
     private int _countSP;
 
-    private static final List<XmlMarshaller> INSTANCES_LIST = new ArrayList<XmlMarshaller>();
+    private static final List<TestResult> INSTANCES_LIST = new ArrayList<TestResult>();
 
     @XmlElement(name = "тип")
     public String get_chooseStyle() {
@@ -127,7 +127,7 @@ public class XmlMarshaller {
         this._numbersColor = _numbersColor;
     }
 
-    public static void appendToDiagData(XmlMarshaller xm) {
+    public static void appendToDiagData(TestResult xm) {
         INSTANCES_LIST.add(xm);
     }
 
