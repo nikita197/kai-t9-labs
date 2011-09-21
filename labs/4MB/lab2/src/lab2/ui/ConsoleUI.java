@@ -14,6 +14,7 @@ public class ConsoleUI {
 	private static final String RM = "rm";
 	private static final String RENAME = "rename";
 	private static final String CD = "cd";
+	private static final String EXIT = "exit";
 
 	private File _currentDirectory;
 
@@ -41,7 +42,11 @@ public class ConsoleUI {
 				String[] commandArgs = command.split(" ");
 				if (commandArgs.length > 0) {
 					if (LS.equals(commandArgs[0])) {
-						System.out.print(ls());
+						if (commandArgs.length == 1) {
+							System.out.print(ls());
+						} else {
+							throw new Exception("Wrong arguments count");
+						}
 					} else if (RM.equals(commandArgs[0])) {
 						if (commandArgs.length == 2) {
 							System.out.print(rm(commandArgs[1]));
@@ -58,6 +63,12 @@ public class ConsoleUI {
 					} else if (CD.equals(commandArgs[0])) {
 						if (commandArgs.length == 2) {
 							cd(commandArgs[1]);
+						} else {
+							throw new Exception("Wrong arguments count");
+						}
+					} else if (EXIT.equals(commandArgs[0])) {
+						if (commandArgs.length == 1) {
+							return;
 						} else {
 							throw new Exception("Wrong arguments count");
 						}
