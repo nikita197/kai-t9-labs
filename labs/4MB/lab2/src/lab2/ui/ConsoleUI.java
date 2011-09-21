@@ -2,6 +2,8 @@ package lab2.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lab2.switcher.Util;
 
@@ -63,6 +65,7 @@ public class ConsoleUI {
 				}
 
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.out.println(e.getMessage());
 			}
 		}
@@ -169,7 +172,8 @@ public class ConsoleUI {
 		}
 
 		File file = new File(fileBuffer.toString());
-		return new File(file.toURI().normalize()).getAbsolutePath();// fileBuffer.toString();
+		return NormalizeFile(file).getAbsolutePath();
+		// return new File(file.toURI().normalize()).getAbsolutePath();
 	}
 
 	private File getRoot(File file) {
@@ -184,4 +188,38 @@ public class ConsoleUI {
 
 	}
 
+	/**
+	 * Возвращает файл с нормализованным абсолютным путем
+	 * 
+	 * @param inputFile
+	 *            Файл с абсолютным путем (предполагается что такой файл
+	 *            существует)
+	 * @return Файл с нормализованным абсолютным путем
+	 */
+	private File NormalizeFile(File inputFile) {
+		List<String> filePathLexems = new ArrayList<String>();
+
+		for (String filePathLexem : inputFile.getPath().split(
+				File.separator + File.separator, 0)) {
+			if (filePathLexem.equals("..")) {
+				if (filePathLexems.size() > 0) { // на всякий случай
+					filePathLexems.remove(filePathLexems.size() - 1);
+				}
+			} else if (!filePathLexem.equals(".")) {
+				filePathLexems.add(filePathLexem);
+			}
+
+		}
+
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < filePathLexems.size(); i++) {
+			sb.append(filePathLexems.get(i) + File.separatorChar);
+		}
+
+		if (filePathLexems.size() == 0) {
+			sb.append(inputFile.getPath().substring(0,
+					inputFile.getPath().indexOf(File.separator)));
+		}
+		return new File(sb.toString());
+	}
 }
