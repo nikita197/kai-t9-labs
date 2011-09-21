@@ -159,8 +159,7 @@ public class TestResult {
             tableStream.write(INSTANCES_LIST.get(i)._chooseStyle + "\t"
                     + INSTANCES_LIST.get(i)._numbersColor + "\t"
                     + INSTANCES_LIST.get(i)._countSP + "\t"
-                    + INSTANCES_LIST.get(i)._timeSP + "\t" + percent + "\t\t\t"
-                    + errCount + "\n");
+                    + INSTANCES_LIST.get(i)._timeSP + "\t" + percent + "\n");
         }
         tableStream.close();
     }
