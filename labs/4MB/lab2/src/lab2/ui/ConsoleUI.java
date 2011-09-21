@@ -218,7 +218,8 @@ public class ConsoleUI {
 
 		if (filePathLexems.size() == 0) {
 			sb.append(inputFile.getPath().substring(0,
-					inputFile.getPath().indexOf(File.separator)));
+					inputFile.getPath().indexOf(File.separator))
+					+ File.separatorChar);
 		}
 		return new File(sb.toString());
 	}
