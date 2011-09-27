@@ -134,8 +134,7 @@ public class SMenu {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (_fileListText.getItemCount() == 0
-						|| _fileListText.getSelectionIndex() != 1) {
+				if (_fileListText.getSelectionIndex() != 1) {
 					changeMenuItemsEnable(true);
 				} else {
 					changeMenuItemsEnable(false);
@@ -145,8 +144,7 @@ public class SMenu {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				if (_fileListText.getItemCount() == 0
-						|| _fileListText.getSelectionIndex() != 1) {
+				if (_fileListText.getSelectionIndex() != 1) {
 					changeMenuItemsEnable(true);
 				} else {
 					changeMenuItemsEnable(false);
@@ -183,7 +181,6 @@ public class SMenu {
 						_fileListText.removeAll();
 						changeMenuItemsEnable(false);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -215,7 +212,6 @@ public class SMenu {
 						msgBox.setMessage("File name is incorrect");
 						msgBox.open();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -233,7 +229,6 @@ public class SMenu {
 					_fileListText.removeAll();
 					changeMenuItemsEnable(false);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
