@@ -45,8 +45,10 @@ public abstract class AbstractIOLayer {
 			}
 		}
 
-		result.setLength(result.length()
-				- System.getProperty("line.separator").length());
+		int sepLength = System.getProperty("line.separator").length();
+		if (result.length() > sepLength) {
+			result.setLength(result.length() - sepLength);
+		}
 		return result.toString();
 	}
 
