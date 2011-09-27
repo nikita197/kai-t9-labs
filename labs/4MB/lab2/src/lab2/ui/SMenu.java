@@ -8,6 +8,8 @@ import lab2.commands.GIOLayer;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -27,6 +29,10 @@ public class SMenu {
 	private Label _currentFolder;
 
 	private List _fileListText;
+
+	private MenuItem _opMItem1;
+
+	private MenuItem _opMItem2;
 
 	public SMenu() {
 		_ioLayer = new GIOLayer();
@@ -94,13 +100,13 @@ public class SMenu {
 		Menu opDMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
 		opMItem.setMenu(opDMenu);
 
-		MenuItem opMItem1 = new MenuItem(opDMenu, SWT.PUSH);
-		opMItem1.setText("&Rename file");
+		_opMItem1 = new MenuItem(opDMenu, SWT.PUSH);
+		_opMItem1.setText("&Rename file");
 
 		new MenuItem(opDMenu, SWT.SEPARATOR);
 
-		MenuItem opMItem2 = new MenuItem(opDMenu, SWT.PUSH);
-		opMItem2.setText("&Remove file");
+		_opMItem2 = new MenuItem(opDMenu, SWT.PUSH);
+		_opMItem2.setText("&Remove file");
 
 		// Current folder
 		_currentFolder = new Label(composite, SWT.NONE);
@@ -109,17 +115,44 @@ public class SMenu {
 		_currentFolder
 				.setText(_ioLayer.getCurrentDirectory().getAbsolutePath());
 
+		// Disabling menuitems
+		changeMenuItemsEnable(false);
+
 		// Separator
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL)
 				.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		// List of files
-		_fileListText = new List(composite, SWT.READ_ONLY | SWT.MULTI);
+		_fileListText = new List(composite, SWT.READ_ONLY);
 		_fileListText
 				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		_currentFolder.setBackground(_fileListText.getBackground());
 
 		// ------------------------ Listeners ----------------------------------
+		_fileListText.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (_fileListText.getItemCount() == 0
+						|| _fileListText.getSelectionIndex() != 1) {
+					changeMenuItemsEnable(true);
+				} else {
+					changeMenuItemsEnable(false);
+				}
+
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				if (_fileListText.getItemCount() == 0
+						|| _fileListText.getSelectionIndex() != 1) {
+					changeMenuItemsEnable(true);
+				} else {
+					changeMenuItemsEnable(false);
+				}
+
+			}
+		});
 
 		navMItem1.addListener(SWT.Selection, new Listener() {
 
@@ -147,6 +180,7 @@ public class SMenu {
 						_currentFolder.setText(_ioLayer.getCurrentDirectory()
 								.getAbsolutePath());
 						_fileListText.removeAll();
+						changeMenuItemsEnable(false);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -155,7 +189,7 @@ public class SMenu {
 			}
 		});
 
-		opMItem1.addListener(SWT.Selection, new Listener() {
+		_opMItem1.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -182,7 +216,7 @@ public class SMenu {
 			}
 		});
 
-		opMItem2.addListener(SWT.Selection, new Listener() {
+		_opMItem2.addListener(SWT.Selection, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -191,14 +225,27 @@ public class SMenu {
 					_ioLayer.rm(_fileListText.getItem(
 							_fileListText.getSelectionIndex()).substring(5));
 					_fileListText.removeAll();
+					changeMenuItemsEnable(false);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
+
+		fMItem1.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				// exit
+				System.exit(0);
+			}
+		});
+
 	}
 
-	// /private
-
+	private void changeMenuItemsEnable(boolean value) {
+		_opMItem1.setEnabled(value);
+		_opMItem2.setEnabled(value);
+	}
 }
