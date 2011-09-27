@@ -19,6 +19,7 @@ public class Main {
             switcher.start(type);
         } catch (Exception e) {
             System.out.println("Неправильный ввод");
+            e.printStackTrace();
             System.exit(0);
         }
     }
