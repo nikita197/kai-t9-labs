@@ -139,20 +139,19 @@ public class SMenu {
 			@Override
 			public void handleEvent(Event event) {
 				// Change directory
-
 				InputDialog dlg = new InputDialog(composite.getShell(),
 						"Enter new directory", null, null, null);
 				if (dlg.open() == Window.OK) {
 					try {
 						_ioLayer.cd(dlg.getValue());
+						_currentFolder.setText(_ioLayer.getCurrentDirectory()
+								.getAbsolutePath());
+						_fileListText.removeAll();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					_currentFolder.setText(_ioLayer.getCurrentDirectory()
-							.getAbsolutePath());
 				}
-
 			}
 		});
 
@@ -169,12 +168,16 @@ public class SMenu {
 								_fileListText.getItem(
 										_fileListText.getSelectionIndex())
 										.substring(5), dlg.getValue());
+						_fileListText.setItem(
+								_fileListText.getSelectionIndex(),
+								_fileListText.getItem(
+										_fileListText.getSelectionIndex())
+										.substring(0, 5)
+										+ dlg.getValue());
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					_currentFolder.setText(_ioLayer.getCurrentDirectory()
-							.getAbsolutePath());
 				}
 			}
 		});
@@ -187,6 +190,7 @@ public class SMenu {
 				try {
 					_ioLayer.rm(_fileListText.getItem(
 							_fileListText.getSelectionIndex()).substring(5));
+					_fileListText.removeAll();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
