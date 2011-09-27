@@ -5,6 +5,8 @@ import java.io.IOException;
 import lab2.commands.AbstractIOLayer;
 import lab2.commands.GIOLayer;
 
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,6 +37,7 @@ public class SMenu {
 		final Shell shell = new Shell(display);
 		GridLayout layout = new GridLayout();
 		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
 		layout.numColumns = 1;
 		shell.setLayout(layout);
 
@@ -136,33 +139,20 @@ public class SMenu {
 			@Override
 			public void handleEvent(Event event) {
 				// Change directory
-				// // _fileListText.removeAll();
 
-				/*
-				 * InputDialog dlg = new
-				 * InputDialog(Display.getCurrent().getActiveShell(), "",
-				 * "Enter 5-8 characters", label.getText(), new
-				 * LengthValidator()); if (dlg.open() == Window.OK) { // User
-				 * clicked OK; update the label with the input
-				 * label.setText(dlg.getValue()); }
-				 */
+				InputDialog dlg = new InputDialog(composite.getShell(),
+						"Enter new directory", null, null, null);
+				if (dlg.open() == Window.OK) {
+					try {
+						_ioLayer.cd(dlg.getValue());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					_currentFolder.setText(_ioLayer.getCurrentDirectory()
+							.getAbsolutePath());
+				}
 
-				/*
-				 * composite.getShell().setEnabled(false); Shell dialog = new
-				 * Shell(composite.getShell());
-				 * dialog.setText("Enter new directory"); new Label(dialog,
-				 * SWT.NONE); dialog.setSize(200, 200); dialog.open();
-				 */
-
-				/*
-				 * MessageBox msgBox = new MessageBox(Display.getDefault()
-				 * .getActiveShell(), SWT);
-				 * msgBox.setMessage("Folder is not empty. Remove recursively?"
-				 * ); msgBox.setText("Removing " + fileName); if (msgBox.open()
-				 * == SWT.OK) { _ioLayer.cd(fileName);
-				 * _currentFolder.setText(_ioLayer.getCurrentDirectory()
-				 * .getAbsolutePath()); }
-				 */
 			}
 		});
 
@@ -171,6 +161,21 @@ public class SMenu {
 			@Override
 			public void handleEvent(Event event) {
 				// RenameSelectedFile
+				InputDialog dlg = new InputDialog(composite.getShell(),
+						"Enter new file name", null, null, null);
+				if (dlg.open() == Window.OK) {
+					try {
+						_ioLayer.rename(
+								_fileListText.getItem(
+										_fileListText.getSelectionIndex())
+										.substring(5), dlg.getValue());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					_currentFolder.setText(_ioLayer.getCurrentDirectory()
+							.getAbsolutePath());
+				}
 			}
 		});
 
@@ -180,8 +185,8 @@ public class SMenu {
 			public void handleEvent(Event event) {
 				// DeleteSelectedFile
 				try {
-					_ioLayer.rm(_fileListText.getItem(_fileListText
-							.getSelectionIndex()));
+					_ioLayer.rm(_fileListText.getItem(
+							_fileListText.getSelectionIndex()).substring(5));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
