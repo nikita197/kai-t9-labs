@@ -1,8 +1,8 @@
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +18,15 @@ public class Main {
     static {
         rusSymbols = new StringBuffer();
         decSymbols = new StringBuffer();
-        rusSymbols.append(" оеаинтсрвлкмдпуязыбгчйьхёжшюцъщэс");
+        rusSymbols.append(new String(" оеаинтсрвлкмдпуязыбгчйьхёжшюцъщэс"));
     }
 
     public static void main(String[] args) {
         System.out.println("Select encrypted file:");
         String inFile = readln();
+
+        File f = new File(".");
+        System.out.println(f.toURI().normalize().toString());
 
         System.out.println("Select output file:");
         String outFile = readln();
@@ -62,18 +65,18 @@ public class Main {
         FileInputStream fis = new FileInputStream(infile);
         BufferedInputStream bis = new BufferedInputStream(fis);
 
-        FileOutputStream fos = new FileOutputStream(outFile);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        PrintWriter pw = new PrintWriter(outFile);
 
         int c;
         m: while ((c = bis.read()) != -1) {
             for (int i = 0; i < rusSymbols.length(); i++) {
                 if (c == decSymbols.charAt(i)) {
-                    bos.write(rusSymbols.charAt(i));
+                    pw.write(rusSymbols.charAt(i));
+                    System.out.print(rusSymbols.charAt(i));
                     continue m;
                 }
             }
-            bos.write(c);
+            pw.write(c);
         }
 
         bis.close();
@@ -96,7 +99,8 @@ public class Main {
         int c;
         String s;
         m: while ((c = bis.read()) != -1) {
-            s = String.valueOf((char) c).toLowerCase();
+            s = new String(String.valueOf((char) c).toLowerCase().getBytes(),
+                    "UTF-8");
             for (int i = 0; i < decSymbols.length(); i++) {
                 if (s.charAt(0) == (decSymbols.charAt(i))) {
                     resul.set(i, resul.get(i) + 1);
