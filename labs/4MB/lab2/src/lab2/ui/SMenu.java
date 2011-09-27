@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 public class SMenu {
@@ -208,6 +209,11 @@ public class SMenu {
 										_fileListText.getSelectionIndex())
 										.substring(0, 5)
 										+ dlg.getValue());
+					} catch (IllegalArgumentException e) {
+						MessageBox msgBox = new MessageBox(Display.getDefault()
+								.getActiveShell(), SWT.OK);
+						msgBox.setMessage("File name is incorrect");
+						msgBox.open();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
