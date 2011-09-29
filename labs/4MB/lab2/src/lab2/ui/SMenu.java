@@ -115,7 +115,7 @@ public class SMenu {
                 .setText(_ioLayer.getCurrentDirectory().getAbsolutePath());
 
         // Disabling menuitems
-        changeMenuItemsEnable(false);
+        setMenuItemsState(false);
 
         // Separator
         new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL)
@@ -133,9 +133,9 @@ public class SMenu {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (_fileListText.getSelectionIndex() != 1) {
-                    changeMenuItemsEnable(true);
+                    setMenuItemsState(true);
                 } else {
-                    changeMenuItemsEnable(false);
+                    setMenuItemsState(false);
                 }
 
             }
@@ -143,9 +143,9 @@ public class SMenu {
             @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 if (_fileListText.getSelectionIndex() != 1) {
-                    changeMenuItemsEnable(true);
+                    setMenuItemsState(true);
                 } else {
-                    changeMenuItemsEnable(false);
+                    setMenuItemsState(false);
                 }
 
             }
@@ -185,7 +185,7 @@ public class SMenu {
                         _currentFolder.setText(_ioLayer.getCurrentDirectory()
                                 .getAbsolutePath());
                         _fileListText.removeAll();
-                        changeMenuItemsEnable(false);
+                        setMenuItemsState(false);
                     } catch (Exception e) {
                         MessageBox msgBox = new MessageBox(Display.getDefault()
                                 .getActiveShell(), SWT.ERROR);
@@ -236,7 +236,7 @@ public class SMenu {
                     _ioLayer.rm(_fileListText.getItem(
                             _fileListText.getSelectionIndex()).substring(5));
                     _fileListText.removeAll();
-                    changeMenuItemsEnable(false);
+                    setMenuItemsState(false);
                 } catch (Exception e) {
                     MessageBox msgBox = new MessageBox(Display.getDefault()
                             .getActiveShell(), SWT.ERROR);
@@ -258,7 +258,7 @@ public class SMenu {
 
     }
 
-    private void changeMenuItemsEnable(boolean value) {
+    private void setMenuItemsState(boolean value) {
         _opMItem1.setEnabled(value);
         _opMItem2.setEnabled(value);
     }
