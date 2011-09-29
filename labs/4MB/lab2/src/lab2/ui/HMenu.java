@@ -119,12 +119,12 @@ public class HMenu {
 		_filesList.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setCEnabled(_filesList.getSelectionCount() == 0 ? false : true);
+				setCState(_filesList.getSelectionCount() == 0 ? false : true);
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				setCEnabled(_filesList.getSelectionCount() == 0 ? false : true);
+				setCState(_filesList.getSelectionCount() == 0 ? false : true);
 			}
 		});
 
@@ -132,12 +132,12 @@ public class HMenu {
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				setCEnabled(_filesList.getSelectionCount() == 0 ? false : true);
+				setCState(_filesList.getSelectionCount() == 0 ? false : true);
 			}
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				setCEnabled(_filesList.getSelectionCount() == 0 ? false : true);
+				setCState(_filesList.getSelectionCount() == 0 ? false : true);
 			}
 
 		});
@@ -181,7 +181,7 @@ public class HMenu {
 								_ioLayer.rm(_filesList.getSelection()[0]
 										.substring(5));
 								_filesList.removeAll();
-								setCEnabled(false);
+								setCState(false);
 							}
 						} catch (IOException e) {
 							MessageBox msgBox = new MessageBox(Display
@@ -202,7 +202,7 @@ public class HMenu {
 										.getCurrentDirectory()
 										.getAbsolutePath());
 								_filesList.removeAll();
-								setCEnabled(false);
+								setCState(false);
 							} catch (Exception e) {
 								MessageBox msgBox = new MessageBox(Display
 										.getDefault().getActiveShell(),
@@ -233,10 +233,10 @@ public class HMenu {
 
 		});
 
-		setCEnabled(false);
+		setCState(false);
 	}
 
-	private void setCEnabled(boolean state) {
+	private void setCState(boolean state) {
 		Color color = (state ? Display.getCurrent().getSystemColor(
 				SWT.COLOR_BLACK) : Display.getCurrent().getSystemColor(
 				SWT.COLOR_DARK_GRAY));
