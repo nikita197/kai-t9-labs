@@ -2,15 +2,11 @@ package org.courseworks.ris.cmanager;
 
 import java.io.IOException;
 import java.util.HashMap;
+
 import org.courseworks.ris.cmanager.session.ExtendedSession;
-import org.courseworks.ris.cmanager.session.concrete.ExtendedHPRepairSession;
-import org.courseworks.ris.cmanager.session.concrete.ExtendedOrgElQueueSession;
 import org.hibernate.cfg.Configuration;
 
 public class ConnectionsManager {
-
-	public static final int HPREPAIR_SESSION = 1;
-	public static final int ORGELQUEUE_SESSION = 2;
 
 	public static final String SESSION_NAME_KEY = "session.name";
 
@@ -22,18 +18,7 @@ public class ConnectionsManager {
 				.getConfigurations()) {
 			String name = (String) configuration.getProperties().get(
 					SESSION_NAME_KEY);
-
-			switch (type) {
-			case HPREPAIR_SESSION: {
-				sessions.put(name, new ExtendedHPRepairSession(configuration));
-				break;
-			}
-
-			case ORGELQUEUE_SESSION: {
-				sessions.put(name, new ExtendedOrgElQueueSession(configuration));
-				break;
-			}
-			}
+			sessions.put(name, new ExtendedSession(configuration, type));
 		}
 	}
 
@@ -41,8 +26,12 @@ public class ConnectionsManager {
 		return sessions.get(aName);
 	}
 
-	public static String[] getSessions() {
+	public static String[] getSessionsNames() {
 		return sessions.keySet().toArray(new String[0]);
+	}
+
+	public static ExtendedSession[] getSessions() {
+		return sessions.values().toArray(new ExtendedSession[0]);
 	}
 
 }

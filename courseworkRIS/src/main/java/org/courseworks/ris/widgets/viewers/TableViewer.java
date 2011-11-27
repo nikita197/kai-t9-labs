@@ -3,8 +3,8 @@
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.courseworks.ris.main.AbstractEntity;
 import org.courseworks.ris.main.Application;
+import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;

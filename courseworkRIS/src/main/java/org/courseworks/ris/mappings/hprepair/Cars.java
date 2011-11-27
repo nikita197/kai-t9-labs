@@ -5,7 +5,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.courseworks.ris.main.AbstractEntity;
+import org.courseworks.ris.mappings.AbstractEntity;
 
 @Entity
 @Table(name="Cars")
