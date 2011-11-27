@@ -1,4 +1,4 @@
-package org.courseworks.ris.main;
+package org.courseworks.ris.mappings;
 
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 

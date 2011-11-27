@@ -3,24 +3,23 @@ package org.courseworks.ris.cmanager.session;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.courseworks.ris.widgets.viewers.DbTable;
 
 public abstract class TableList {
-	private List<DbTable> _tables;
+	protected List<DbTable> tables;
 
 	public TableList() {
-		_tables = new ArrayList<DbTable>();
+		tables = new ArrayList<DbTable>();
 	}
 
-	abstract protected void fillTables();
+	abstract protected void refreshTables();
 
 	public List<DbTable> getTables() {
-		return _tables;
+		return tables;
 	}
 
 	public DbTable getTable(String name) {
-		for (DbTable table : _tables) {
-			if (table.getTableName().equals(name)) {
+		for (DbTable table : tables) {
+			if (table.getName().equals(name)) {
 				return table;
 			}
 		}

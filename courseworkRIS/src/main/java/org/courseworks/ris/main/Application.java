@@ -60,22 +60,21 @@ public class Application {
 			URISyntaxException {
 		try {
 			String path = "/mssql_servers/";
-			ConnectionsManager.createSessions(
-					ConnectionsManager.HPREPAIR_SESSION,
+			ConnectionsManager.createSessions(ExtendedSession.HPREPAIR_SESSION,
 					new ConfigurationsManager(path));
 			fillingSessionsTables();
-			_dB = new GeneralTableList();
-			_dB.fillTables();
+			_dB = new GeneralTableList(ExtendedSession.HPREPAIR_SESSION);
+			_dB.refreshTables();
 		} finally {
 			// TODO close all sessions
 		}
 	}
 
 	public static void fillingSessionsTables() {
-		for (String sessionKey : ConnectionsManager.getSessions()) {
+		for (String sessionKey : ConnectionsManager.getSessionsNames()) {
 			ExtendedSession currentSession = ConnectionsManager
 					.getSession(sessionKey);
-			currentSession.fillTables();
+			currentSession.refreshTables();
 		}
 	}
 
