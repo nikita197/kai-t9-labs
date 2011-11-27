@@ -1,4 +1,4 @@
-﻿package courseworkRIS.main;
+﻿package org.courseworks.ris.main;
 
 import java.util.HashMap;
 
