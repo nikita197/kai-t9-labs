@@ -2,15 +2,14 @@
 
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.courseworks.ris.mappings.hprepair.Cars;
+import org.courseworks.ris.mappings.hprepair.Drivers;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.courseworks.ris.sqldataprovider.Cars;
-import org.courseworks.ris.sqldataprovider.Drivers;
-
 
 public class HibernateUtil {
 
@@ -71,6 +70,7 @@ public class HibernateUtil {
 		try {
 			// Create the SessionFactory
 			for (String key : configs.keySet()) {
+				@SuppressWarnings("deprecation")
 				SessionFactory sessionFactory = getCfg(configs.get(key))
 						.buildSessionFactory();
 				sessionFactoryMap.put(key, sessionFactory);
@@ -87,6 +87,7 @@ public class HibernateUtil {
 	public static void buildSessionFactory(String key, String connString) {
 		try {
 			// Create the SessionFactory
+			@SuppressWarnings("deprecation")
 			SessionFactory sessionFactory = getCfg(connString)
 					.buildSessionFactory();
 			sessionFactoryMap.put(key, sessionFactory);
