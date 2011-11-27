@@ -1,8 +1,9 @@
-﻿package courseworkRIS.sqlDataProvider;
+﻿package org.courseworks.ris.sqldataprovider;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.courseworks.ris.main.Application;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -17,14 +18,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import courseworkRIS.main.Application;
 
-public class Tableviewer {
+public class TableViewer {
 
 	private Table _tb;
 	private Field[] _fields;
 
-	public Tableviewer(Composite parent, int style) {
+	public TableViewer(Composite parent, int style) {
 		Composite _compt = new Composite(parent, SWT.NONE);
 		_compt.setLayout(new GridLayout(2, false));
 		tbInit(_compt, style);

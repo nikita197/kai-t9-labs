@@ -1,4 +1,4 @@
-﻿package courseworkRIS.main;
+﻿package org.courseworks.ris.main;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

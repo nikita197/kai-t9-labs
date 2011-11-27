@@ -1,4 +1,4 @@
-﻿package courseworkRIS.main;
+﻿package org.courseworks.ris.main;
 
 import java.util.HashMap;
 
@@ -8,9 +8,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.courseworks.ris.sqldataprovider.Cars;
+import org.courseworks.ris.sqldataprovider.Drivers;
 
-import courseworkRIS.sqlDataProvider.Cars;
-import courseworkRIS.sqlDataProvider.Drivers;
 
 public class HibernateUtil {
 

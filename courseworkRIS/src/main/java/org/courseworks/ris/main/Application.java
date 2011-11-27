@@ -1,15 +1,15 @@
-﻿package courseworkRIS.main;
+﻿package org.courseworks.ris.main;
 
 import java.lang.reflect.InvocationTargetException;
 
 import javassist.NotFoundException;
 
+import org.courseworks.ris.gui.ProgWin;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import courseworkRIS.GUI.ProgWin;
 
 public class Application {
 	private static DatabaseContainer _dContainer;
