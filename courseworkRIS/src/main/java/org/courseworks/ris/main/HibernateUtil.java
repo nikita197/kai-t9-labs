@@ -2,15 +2,14 @@
 
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.courseworks.ris.mappings.hprepair.Cars;
+import org.courseworks.ris.mappings.hprepair.Drivers;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.courseworks.ris.sqldataprovider.Cars;
-import org.courseworks.ris.sqldataprovider.Drivers;
-
 
 public class HibernateUtil {
 
