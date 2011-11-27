@@ -1,4 +1,4 @@
-﻿package org.courseworks.ris.sqldataprovider;
+﻿package org.courseworks.ris.widgets.viewers;
 
 import java.lang.reflect.Field;
 import java.util.List;
