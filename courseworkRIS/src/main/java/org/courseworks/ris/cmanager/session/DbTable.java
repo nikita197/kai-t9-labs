@@ -8,42 +8,43 @@ import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
 
 public class DbTable {
 
-	private List<AbstractEntity> _items;
-	private String _name;
+    private final List<AbstractEntity> _items;
 
-	public DbTable(String name) {
-		_items = new ArrayList<AbstractEntity>();
-		_name = name;
-	}
+    private final String _name;
 
-	public void fillItems(ExtendedSession session) {
-		for (AbstractEntity obj : DatabaseLowlevelProcessor.selectFromTable(session,
-				_name)) {
-			obj.setSessionLink(session);
-			_items.add(obj);
-		}
-	}
+    public DbTable(String name) {
+        _items = new ArrayList<AbstractEntity>();
+        _name = name;
+    }
 
-	public void addItems(List<AbstractEntity> items) {
-		_items.addAll(items);
-	}
+    public void fillItems(ExtendedSession session) {
+        for (AbstractEntity obj : DatabaseLowlevelProcessor.selectFromTable(
+                session, _name)) {
+            obj.setSession(session);
+            _items.add(obj);
+        }
+    }
 
-	public void clear() {
-		_items.clear();
-	}
+    public void addItems(List<AbstractEntity> items) {
+        _items.addAll(items);
+    }
 
-	public Class<?> getType() {
-		if (_items.size() > 0) {
-			return _items.get(0).getClass();
-		} else
-			return null;
-	}
+    public void clear() {
+        _items.clear();
+    }
 
-	public String getName() {
-		return _name;
-	}
+    public Class<?> getType() {
+        if (_items.size() > 0) {
+            return _items.get(0).getClass();
+        }
+        return null;
+    }
 
-	public List<AbstractEntity> getItems() {
-		return _items;
-	}
+    public String getName() {
+        return _name;
+    }
+
+    public List<AbstractEntity> getItems() {
+        return _items;
+    }
 }

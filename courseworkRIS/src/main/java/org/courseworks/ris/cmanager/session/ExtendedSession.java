@@ -9,57 +9,62 @@ import org.hibernate.cfg.Configuration;
 
 public class ExtendedSession extends TableList {
 
-	public static final int HPREPAIR_SESSION = 1;
-	public static final int ORGELQUEUE_SESSION = 2;
+    public static final int HPREPAIR_SESSION = 1;
 
-	private SessionFactory _factory;
-	protected Session session;
-	protected Configuration _configuration;
-	private int _type;
+    public static final int ORGELQUEUE_SESSION = 2;
 
-	public ExtendedSession(Configuration aConfiguration, int type) {
-		_type = type;
-		_configuration = aConfiguration;
-		_factory = createFactory();
-		session = _factory.openSession();
-	}
+    private final SessionFactory _factory;
 
-	public void refreshTables() {
-		tables.clear();
-		for (String tableName : DatabaseLowlevelProcessor.getEntities(_type)) {
-			getTables().add(new DbTable(tableName));
-		}
+    protected Session session;
 
-		for (DbTable table : tables) {
-			table.fillItems(this);
-		}
-	}
+    protected Configuration _configuration;
 
-	protected SessionFactory createFactory() {
-		switch (_type) {
-		case HPREPAIR_SESSION: {
-			_configuration.addPackage("org.courseworks.ris.mappings.hprepair")
-					.addAnnotatedClass(Cars.class)
-					.addAnnotatedClass(Drivers.class);
-			return _configuration.buildSessionFactory();
-		}
+    private final int _type;
 
-		case ORGELQUEUE_SESSION: {
-			_configuration.addPackage("org.courseworks.ris.mappings.hprepair")
-					.addAnnotatedClass(Cars.class)
-					.addAnnotatedClass(Drivers.class);
-			return _configuration.buildSessionFactory();
-		}
-		default:
-			return null;
-		}
-	}
+    public ExtendedSession(Configuration aConfiguration, int type) {
+        _type = type;
+        _configuration = aConfiguration;
+        _factory = createFactory();
+        session = _factory.openSession();
+    }
 
-	public Configuration getConfiguration() {
-		return _configuration;
-	}
+    @Override
+    public void refreshTables() {
+        tables.clear();
+        for (String tableName : DatabaseLowlevelProcessor.getEntities(_type)) {
+            getTables().add(new DbTable(tableName));
+        }
 
-	public Session getSession() {
-		return session;
-	}
+        for (DbTable table : tables) {
+            table.fillItems(this);
+        }
+    }
+
+    protected SessionFactory createFactory() {
+        switch (_type) {
+        case HPREPAIR_SESSION: {
+            _configuration.addPackage("org.courseworks.ris.mappings.hprepair")
+                    .addAnnotatedClass(Cars.class)
+                    .addAnnotatedClass(Drivers.class);
+            return _configuration.buildSessionFactory();
+        }
+
+        case ORGELQUEUE_SESSION: {
+            _configuration.addPackage("org.courseworks.ris.mappings.hprepair")
+                    .addAnnotatedClass(Cars.class)
+                    .addAnnotatedClass(Drivers.class);
+            return _configuration.buildSessionFactory();
+        }
+        default:
+            return null;
+        }
+    }
+
+    public Configuration getConfiguration() {
+        return _configuration;
+    }
+
+    public Session getSession() {
+        return session;
+    }
 }

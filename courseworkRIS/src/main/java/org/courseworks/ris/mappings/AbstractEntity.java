@@ -2,14 +2,17 @@ package org.courseworks.ris.mappings;
 
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 
-public class AbstractEntity extends Object {
-	private ExtendedSession _session;
+public abstract class AbstractEntity extends Object {
 
-	public ExtendedSession getSessionLink() {
-		return _session;
-	}
+    private ExtendedSession _session;
 
-	public void setSessionLink(ExtendedSession sessionLink) {
-		_session = sessionLink;
-	}
+    public abstract String getName();
+
+    public ExtendedSession getSession() {
+        return _session;
+    }
+
+    public void setSession(ExtendedSession session) {
+        _session = session;
+    }
 }
