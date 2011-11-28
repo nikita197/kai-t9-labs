@@ -22,7 +22,8 @@ public class Application {
 
 	public static void main(String[] args) throws IllegalAccessException {
 		try {
-			initDB();
+			// initDB();
+			initInformixDB();
 			initGUI();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,6 +61,20 @@ public class Application {
 					new ConfigurationsManager(path));
 			fillingSessionsTables();
 			_dB = new GeneralTableList(ExtendedSession.HPREPAIR_SESSION);
+			_dB.refreshTables();
+		} finally {
+			// TODO close all sessions
+		}
+	}
+
+	public static void initInformixDB() throws IOException, URISyntaxException {
+		try {
+			String path = "/informix_servers/";
+			ConnectionsManager.createSessions(
+					ExtendedSession.ORGELQUEUE_SESSION,
+					new ConfigurationsManager(path));
+			fillingSessionsTables();
+			_dB = new GeneralTableList(ExtendedSession.ORGELQUEUE_SESSION);
 			_dB.refreshTables();
 		} finally {
 			// TODO close all sessions
