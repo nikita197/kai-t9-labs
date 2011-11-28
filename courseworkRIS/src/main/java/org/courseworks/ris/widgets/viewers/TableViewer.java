@@ -3,7 +3,6 @@
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.courseworks.ris.main.Application;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -12,31 +11,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-
 
 public class TableViewer {
 
 	private Table _tb;
 	private Field[] _fields;
+	private FindPanel _findP;
+	private FilterPanel _filtP;
 
 	public TableViewer(Composite parent, int style) {
 		Composite _compt = new Composite(parent, SWT.NONE);
 		_compt.setLayout(new GridLayout(2, false));
 		tbInit(_compt, style);
 		toolsPanelInit(_compt, style);
-	}
-
-	public Table getTb() {
-		return _tb;
-	}
-
-	public void setTb(Table _tb) {
-		this._tb = _tb;
 	}
 
 	public void tbInit(Composite parent, int style) {
@@ -48,23 +38,25 @@ public class TableViewer {
 		_tb.setLayoutData(data);
 	}
 
-	public void fill(List<AbstractEntity> list) throws IllegalArgumentException,
-			IllegalAccessException {
-		fillObjectData(list.get(0).getClass());
-		fillTb(list);
+	public void fill(List<AbstractEntity> list)
+			throws IllegalArgumentException, IllegalAccessException {
+		createTbColumns(list.get(0).getClass());
+		refreshTbFromObjects(list);
 		packTb();
 	}
 
-	public void fillObjectData(Class<?> cls) {
+	public void createTbColumns(Class<?> cls) {
 		_fields = cls.getDeclaredFields();
+		tbInit(_tb.getParent(), _tb.getStyle());
 		for (Field fld : _fields) {
 			TableColumn newColumn = new TableColumn(_tb, SWT.NONE);
 			newColumn.setText(fld.getName());
 		}
 	}
 
-	public void fillTb(List<AbstractEntity> list) throws IllegalArgumentException,
-			IllegalAccessException {
+	public void refreshTbFromObjects(List<AbstractEntity> list)
+			throws IllegalArgumentException, IllegalAccessException {
+		_tb.removeAll();
 		for (Object obj : list) {
 			TableItem newRow = new TableItem(_tb, SWT.NONE);
 			int index = 0;
@@ -94,77 +86,44 @@ public class TableViewer {
 		filterButton.setText("Filter");
 		findButton.setText("Find");
 
-		final Composite filterPanel = new Composite(toolsPanel, SWT.NONE);
-		final Composite findPanel = new Composite(toolsPanel, SWT.NONE);
-
-		filterPanel.setLayout(new GridLayout());
-		filterPanel.setLayoutData(new GridData());
-		findPanel.setLayout(new GridLayout());
-		findPanel.setLayoutData(new GridData());
-
-		filterPanel.setVisible(false);
-		findPanel.setVisible(false);
-
-		initFilterPanel(filterPanel);
-		initFindPanel(findPanel);
+		_filtP = new FilterPanel(toolsPanel, SWT.NONE, _tb);
+		_findP = new FindPanel(toolsPanel, SWT.NONE, _tb);
 
 		filterButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event arg0) {
-				if (true == filterPanel.getVisible()) {
-					filterPanel.setVisible(false);
-				} else {
-					GridData filterpGridData = ((GridData) filterPanel
-							.getLayoutData());
-					filterpGridData.exclude = false;
-					filterPanel.setVisible(true);
-					findPanel.setVisible(false);
-					toolsPanel.layout();
-				}
+				filterButtonClick();
 			}
 		});
 		findButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event arg0) {
-				if (true == findPanel.getVisible()) {
-					findPanel.setVisible(false);
-				} else {
-					GridData filterpGridData = ((GridData) filterPanel
-							.getLayoutData());
-					GridData findpGridData = ((GridData) findPanel
-							.getLayoutData());
-					filterpGridData.exclude = true;
-					findpGridData.exclude = false;
-					findPanel.setVisible(true);
-					filterPanel.setVisible(false);
-					toolsPanel.layout();
-				}
+				findButtonClick();
 			}
 		});
 	}
 
-	private void initFindPanel(Composite findPanel) {
-		final Text findText = new Text(findPanel, SWT.NONE);
-		Button findButton = new Button(findPanel, SWT.NONE);
-		findButton.setText("Find");
-		findButton.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event arg0) {
-				for (TableItem tbI : _tb.getItems()) {
-					for (int i = 0; i < _tb.getColumnCount(); i++) {
-						if (tbI.getText(i).equals(findText.getText())) {
-							_tb.setSelection(tbI);
-							_tb.setFocus();
-							return;
-						}
-					}
-				}
-				new MessageBox(Application.getShell())
-						.setMessage("Text not found.");
-			}
-		});
+	private void findButtonClick() {
+		if (true == _findP.getVisible()) {
+			_findP.setVisible(false);
+		} else {
+			GridData filterpGridData = ((GridData) _filtP.getLayoutData());
+			GridData findpGridData = ((GridData) _findP.getLayoutData());
+			filterpGridData.exclude = true;
+			findpGridData.exclude = false;
+			_findP.setVisible(true);
+			_filtP.setVisible(false);
+			// TODO ? toolsPanel.layout();
+		}
 	}
 
-	private void initFilterPanel(Composite filterPanel) {
-		//TODO выбор поля, задание фильтрации по этому полю в соответствии с его типом.
+	private void filterButtonClick() {
+		if (true == _filtP.getVisible()) {
+			_filtP.setVisible(false);
+		} else {
+			GridData filterpGridData = ((GridData) _filtP.getLayoutData());
+			filterpGridData.exclude = false;
+			_filtP.setVisible(true);
+			_findP.setVisible(false);
+			// TODO ? toolsPanel.layout();
+		}
 	}
 }

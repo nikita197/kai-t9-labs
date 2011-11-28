@@ -1,6 +1,6 @@
 package org.courseworks.ris.cmanager.session;
 
-import org.courseworks.ris.mappings.DatabaseLowerWorker;
+import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
 import org.courseworks.ris.mappings.hprepair.Cars;
 import org.courseworks.ris.mappings.hprepair.Drivers;
 import org.hibernate.Session;
@@ -26,7 +26,7 @@ public class ExtendedSession extends TableList {
 
 	public void refreshTables() {
 		tables.clear();
-		for (String tableName : DatabaseLowerWorker.getEntities(_type)) {
+		for (String tableName : DatabaseLowlevelProcessor.getEntities(_type)) {
 			getTables().add(new DbTable(tableName));
 		}
 
