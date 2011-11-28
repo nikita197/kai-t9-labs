@@ -1,6 +1,7 @@
 ﻿package org.courseworks.ris.widgets.viewers;
 
 import java.lang.reflect.Field;
+
 import org.courseworks.ris.cmanager.session.DbTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -23,7 +24,7 @@ public class TableViewer {
 	public TableViewer(Composite parent, int style) {
 		Composite _compt = new Composite(parent, SWT.NONE);
 		_compt.setLayout(new GridLayout(2, false));
-		init(_compt, style);
+		init(_compt, SWT.MULTI);
 	}
 
 	public void init(Composite parent, int style) {
@@ -33,7 +34,7 @@ public class TableViewer {
 		GridData data = new GridData(SWT.FILL, SWT.TOP, true, true);
 		data.heightHint = 200;
 		_table.setLayoutData(data);
-		
+
 		final Composite toolsPanel = new Composite(parent, SWT.NONE);
 		toolsPanel.setLayout(new GridLayout(1, false));
 		toolsPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
@@ -61,8 +62,8 @@ public class TableViewer {
 		});
 	}
 
-	public void fill(DbTable dbTable)
-			throws IllegalArgumentException, IllegalAccessException {
+	public void fill(DbTable dbTable) throws IllegalArgumentException,
+			IllegalAccessException {
 		_table.removeAll();
 		createColumns(dbTable.getType());
 		refresh(dbTable);
@@ -80,8 +81,8 @@ public class TableViewer {
 		}
 	}
 
-	public void refresh(DbTable dbTable)
-			throws IllegalArgumentException, IllegalAccessException {
+	public void refresh(DbTable dbTable) throws IllegalArgumentException,
+			IllegalAccessException {
 		for (Object obj : dbTable.getItems()) {
 			TableItem newRow = new TableItem(_table, SWT.NONE);
 			newRow.setData(obj);
