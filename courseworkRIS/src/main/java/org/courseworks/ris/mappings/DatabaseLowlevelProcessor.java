@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 
-public class DatabaseLowerWorker {
+public class DatabaseLowlevelProcessor {
 	public static String CARS = "Cars";
 	public static String DRIVERS = "Drivers";
 

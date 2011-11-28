@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.courseworks.ris.mappings.AbstractEntity;
-import org.courseworks.ris.mappings.DatabaseLowerWorker;
+import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
 
 public class DbTable {
 
@@ -17,7 +17,7 @@ public class DbTable {
 	}
 
 	public void fillItems(ExtendedSession session) {
-		for (AbstractEntity obj : DatabaseLowerWorker.selectFromTable(session,
+		for (AbstractEntity obj : DatabaseLowlevelProcessor.selectFromTable(session,
 				_name)) {
 			obj.setSessionLink(session);
 			_items.add(obj);

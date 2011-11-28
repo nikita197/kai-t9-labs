@@ -1,7 +1,6 @@
 ﻿package org.courseworks.ris.main;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 
 import javassist.NotFoundException;
@@ -54,10 +53,7 @@ public class Application {
 		display.dispose();
 	}
 
-	public static void initDB() throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException,
-			InvocationTargetException, NoSuchMethodException, IOException,
-			URISyntaxException {
+	public static void initDB() throws IOException, URISyntaxException {
 		try {
 			String path = "/mssql_servers/";
 			ConnectionsManager.createSessions(ExtendedSession.HPREPAIR_SESSION,
