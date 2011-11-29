@@ -1,4 +1,4 @@
-package org.courseworks.ris.widgets.viewers.finders;
+package org.courseworks.ris.widgets.typeblocks.finders;
 
 import java.lang.reflect.Type;
 
