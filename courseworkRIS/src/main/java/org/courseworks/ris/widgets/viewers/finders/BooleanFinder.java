@@ -29,14 +29,14 @@ public class BooleanFinder extends AbstractFinder {
         super(aComposite, aStyle, aType);
 
         GridLayout layout = new GridLayout();
-        container.setLayout(layout);
+        super.setLayout(layout);
 
-        Label label = new Label(container, SWT.NONE);
-        label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        Label label = new Label(this, SWT.NONE);
+        label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
         label.setText(SC.SEARCH_HEADER);
 
-        combo = new Combo(container, SWT.READ_ONLY);
-        combo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        combo = new Combo(this, SWT.READ_ONLY);
+        combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
         combo.add(SC.TRUE);
         combo.add(SC.FALSE);

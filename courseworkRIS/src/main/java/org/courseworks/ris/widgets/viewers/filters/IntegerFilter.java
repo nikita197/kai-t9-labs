@@ -44,18 +44,18 @@ public class IntegerFilter extends AbstractFilter {
 
         GridLayout layout = new GridLayout();
         layout.numColumns = 3;
-        container.setLayout(layout);
+        super.setLayout(layout);
 
-        Label label = new Label(container, SWT.NONE);
-        label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+        Label label = new Label(this, SWT.NONE);
+        label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 3, 1));
         label.setText(SC.FILTER_HEADER);
 
-        Label xLabel = new Label(container, SWT.NONE);
-        xLabel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true));
+        Label xLabel = new Label(this, SWT.NONE);
+        xLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true));
         xLabel.setText(SC.VAR_VALUE);
 
-        combo = new Combo(container, SWT.READ_ONLY);
-        combo.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true));
+        combo = new Combo(this, SWT.READ_ONLY);
+        combo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true));
 
         combo.add(BE);
         combo.add(SE);
@@ -64,8 +64,10 @@ public class IntegerFilter extends AbstractFilter {
 
         combo.select(0);
 
-        numericText = new Text(container, SWT.SINGLE);
-        numericText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        numericText = new Text(this, SWT.SINGLE);
+        numericText
+                .setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+        numericText.setText("0");
 
         numericText.addListener(SWT.Verify, new Listener() {
 
@@ -89,7 +91,8 @@ public class IntegerFilter extends AbstractFilter {
      */
     @Override
     public boolean checkAgreement(Object aValue) {
-        if (!(aValue instanceof Integer)) {
+        if (!(aValue instanceof Integer) && !(aValue.getClass() == int.class)) {
+            System.out.println(aValue.getClass());
             throw new IllegalArgumentException("Argument must be Integer");
         }
 
@@ -97,14 +100,17 @@ public class IntegerFilter extends AbstractFilter {
         Integer filterValue = Integer.valueOf(numericText.getText());
         if (BE.equals(combo.getText())) {
             return (value >= filterValue);
-        } else if (SE.equals(combo.getText())) {
-            return (value <= filterValue);
-        } else if (E.equals(combo.getText())) {
-            return (value == filterValue);
-        } else if (NE.equals(combo.getText())) {
-            return (value != filterValue);
-        } else {
-            return false;
-        }
+        } else
+            if (SE.equals(combo.getText())) {
+                return (value <= filterValue);
+            } else
+                if (E.equals(combo.getText())) {
+                    return (value == filterValue);
+                } else
+                    if (NE.equals(combo.getText())) {
+                        return (value != filterValue);
+                    } else {
+                        return false;
+                    }
     }
 }
