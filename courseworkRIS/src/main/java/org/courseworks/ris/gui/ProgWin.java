@@ -9,11 +9,11 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ProgWin {
 
-	public ProgWin(Composite composite) throws IllegalArgumentException,
-			IllegalAccessException, NotFoundException {
-		new TableViewer(composite, SWT.NONE).fill(Application.getDb().getTable(
-				"Cars"));
+    public ProgWin(Composite composite) throws IllegalArgumentException,
+            IllegalAccessException, NotFoundException {
+        new TableViewer(composite, SWT.NONE).fill(Application.getDb().getTable(
+                "Plane"));
 
-	}
+    }
 
 }

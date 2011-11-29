@@ -14,52 +14,68 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class FindPanel extends Composite {
-	private Combo _fieldCombo;
-	private ExtendedTable _table;
-	private AbstractFinder _finder;
-	private DbTable _dbTable;
-	private Composite _parent;
+    private Combo _fieldCombo;
+    private ExtendedTable _table;
+    private AbstractFinder _finder;
+    private DbTable _dbTable;
 
-	public FindPanel(Composite parent, int style, ExtendedTable table) {
-		super(parent, style);
-		_parent = parent;
-		_table = table;
-		setLayout(new GridLayout(1, false));
-	}
+    public FindPanel(Composite parent, int style, ExtendedTable table) {
+        super(parent, style);
+        _table = table;
+        setLayout(new GridLayout(1, false));
 
-	public void initContent(DbTable dbTable) {
-		_dbTable = dbTable;
-		_fieldCombo = new Combo(this, SWT.BORDER);
-		for (TableColumn tbc : _table.getColumns()) {
-			_fieldCombo.add(tbc.getText());
-		}
+        init();
+    }
 
-		Button findButton = new Button(this, SWT.NONE);
-		findButton.setText("Find");
+    public void init() {
+        _fieldCombo = new Combo(this, SWT.BORDER);
 
-		_fieldCombo.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				_finder = AbstractFinder.getInstance(FindPanel.this,
-						SWT.BORDER,
-						_dbTable.getFieldType(_fieldCombo.getText()));
-				_finder.setLayoutData(new GridData(SWT.TOP, SWT.TOP, true, true));
-				_parent.layout();
-			}
-		});
-		findButton.addListener(SWT.Selection, new Listener() {
+        Button findButton = new Button(this, SWT.NONE);
+        findButton.setText("Find");
 
-			@Override
-			public void handleEvent(Event arg0) {
-				Object object = _finder.getSearchValue();
-				final int column = _fieldCombo.getSelectionIndex();
-				for (TableItem item : _table.getItems()) {
-					if (object.toString().equals(item.getText(column))) {
-						_table.setSelection(item);
-					}
-				}
-				// _table.getItems()[0].getText(index)
-			}
-		});
-	}
+        _fieldCombo.addListener(SWT.Selection, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                initFinder();
+            }
+        });
+
+        findButton.addListener(SWT.Selection, new Listener() {
+
+            @Override
+            public void handleEvent(Event arg0) {
+                findValue();
+            }
+        });
+    }
+
+    public void initType(DbTable dbTable) {
+        _dbTable = dbTable;
+
+        _fieldCombo.removeAll();
+        for (TableColumn tbc : _table.getColumns()) {
+            _fieldCombo.add(tbc.getText());
+        }
+    }
+
+    public void initFinder() {
+        if (_finder != null) {
+            _finder.dispose();
+        }
+
+        _finder = AbstractFinder.getInstance(FindPanel.this, SWT.BORDER,
+                _dbTable.getFieldClass(_fieldCombo.getText()));
+        _finder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    }
+
+    public void findValue() {
+        Object object = _finder.getSearchValue();
+        final int column = _fieldCombo.getSelectionIndex();
+        for (TableItem item : _table.getItems()) {
+            if (object.toString().equals(item.getText(column))) {
+                _table.setSelection(item);
+            }
+        }
+    }
+
 }

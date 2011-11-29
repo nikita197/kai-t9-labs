@@ -30,14 +30,14 @@ public class RelatedObjectFinder extends AbstractFinder {
         super(aComposite, aStyle, aType);
 
         GridLayout layout = new GridLayout();
-        container.setLayout(layout);
+        super.setLayout(layout);
 
-        Label label = new Label(container, SWT.NONE);
-        label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        Label label = new Label(this, SWT.NONE);
+        label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
         label.setText(SC.SEARCH_HEADER);
 
-        text = new Text(container, SWT.SINGLE);
-        text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        text = new Text(this, SWT.SINGLE);
+        text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
     }
 
     /**

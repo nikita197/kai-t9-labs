@@ -31,14 +31,15 @@ public class IntegerFinder extends AbstractFinder {
         super(aComposite, aStyle, aType);
 
         GridLayout layout = new GridLayout();
-        container.setLayout(layout);
+        super.setLayout(layout);
 
-        Label label = new Label(container, SWT.NONE);
-        label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        Label label = new Label(this, SWT.NONE);
+        label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
         label.setText(SC.SEARCH_HEADER);
 
-        numericText = new Text(container, SWT.SINGLE);
-        numericText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        numericText = new Text(this, SWT.SINGLE);
+        numericText
+                .setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
         numericText.addListener(SWT.Verify, new Listener() {
 
