@@ -1,4 +1,4 @@
-package org.courseworks.ris.widgets.viewers.filters;
+package org.courseworks.ris.widgets.typeblocks.filters;
 
 import java.lang.reflect.Type;
 

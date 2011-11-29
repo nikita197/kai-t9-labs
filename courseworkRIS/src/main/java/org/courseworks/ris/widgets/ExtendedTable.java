@@ -1,4 +1,4 @@
-package org.courseworks.ris.widgets.viewers;
+package org.courseworks.ris.widgets;
 
 import java.lang.reflect.Field;
 

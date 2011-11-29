@@ -3,7 +3,7 @@
 import javassist.NotFoundException;
 
 import org.courseworks.ris.main.Application;
-import org.courseworks.ris.widgets.viewers.TableViewer;
+import org.courseworks.ris.widgets.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
