@@ -9,18 +9,17 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class FindPanel extends Composite {
 	private Combo _fieldCombo;
-	private Table _table;
+	private ExtendedTable _table;
 	private AbstractFinder _finder;
 	private DbTable _dbTable;
 	private Composite _parent;
 
-	public FindPanel(Composite parent, int style, Table table) {
+	public FindPanel(Composite parent, int style, ExtendedTable table) {
 		super(parent, style);
 		_parent = parent;
 		_table = table;
