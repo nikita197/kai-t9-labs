@@ -1,7 +1,5 @@
 ﻿package org.courseworks.ris.widgets.viewers;
 
-import java.lang.reflect.Field;
-
 import org.courseworks.ris.cmanager.session.DbTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -10,14 +8,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
 public class TableViewer {
 
-	private Table _table;
-	private Field[] _fields;
+	private ExtendedTable _table;
 	private FindPanel _findP;
 	private FilterPanel _filtP;
 
@@ -28,7 +22,7 @@ public class TableViewer {
 	}
 
 	public void init(Composite parent, int style) {
-		_table = new Table(parent, style);
+		_table = new ExtendedTable(parent, style);
 		_table.setLinesVisible(true);
 		_table.setHeaderVisible(true);
 		GridData data = new GridData(SWT.FILL, SWT.TOP, true, true);
@@ -72,39 +66,11 @@ public class TableViewer {
 	public void fill(DbTable dbTable) throws IllegalArgumentException,
 			IllegalAccessException {
 		_table.removeAll();
-		createColumns(dbTable.getType());
-		refresh(dbTable);
-		pack();
+		_table.createColumns(dbTable.getType());
+		_table.refresh(dbTable);
+		_table.pack();
 		_filtP.initContent(dbTable);
 		_findP.initContent(dbTable);
-	}
-
-	public void createColumns(Class<?> cls) {
-		_fields = cls.getDeclaredFields();
-		for (Field fld : _fields) {
-			TableColumn newColumn = new TableColumn(_table, SWT.NONE);
-			newColumn.setData(fld.getClass());
-			newColumn.setText(fld.getName());
-		}
-	}
-
-	public void refresh(DbTable dbTable) throws IllegalArgumentException,
-			IllegalAccessException {
-		for (Object obj : dbTable.getItems()) {
-			TableItem newRow = new TableItem(_table, SWT.NONE);
-			newRow.setData(obj);
-			int index = 0;
-			for (Field fld : _fields) {
-				newRow.setText(index, fld.get(obj).toString());
-				index++;
-			}
-		}
-	}
-
-	public void pack() {
-		for (TableColumn tbc : _table.getColumns()) {
-			tbc.pack();
-		}
 	}
 
 	private void findButtonClick(Composite parent) {
