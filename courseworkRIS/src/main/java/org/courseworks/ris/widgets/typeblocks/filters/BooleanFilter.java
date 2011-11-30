@@ -59,7 +59,7 @@ public class BooleanFilter extends AbstractFilter {
 		}
 
 		Boolean value = (Boolean) aValue;
-		return ((combo.getSelectionIndex() == 0) && value);
+		return ((combo.getSelectionIndex() == 0) == value);
 	}
 
 	@Override

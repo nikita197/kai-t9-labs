@@ -12,17 +12,27 @@ import org.courseworks.ris.mappings.AbstractEntity;
 @Table(name = "Drivers")
 public class Drivers extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer id;
 
-    public String Name;
+	public String Name;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-        return Name;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getName() {
+		return Name;
+	}
+
+	@Override
+	public String getFieldPresent(String fieldName) {
+		if ("Name".equals(fieldName)) {
+			return "Имя";
+		} else if ("id".equals(fieldName)) {
+			return "Идентификатор";
+		}
+		return null;
+	}
 }

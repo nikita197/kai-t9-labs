@@ -18,6 +18,10 @@ import org.eclipse.swt.widgets.Text;
  */
 public class LongFilter extends AbstractFilter {
 
+	private static final String B = ">";
+
+	private static final String S = "<";
+
 	private static final String BE = ">=";
 
 	private static final String SE = "<=";
@@ -62,11 +66,12 @@ public class LongFilter extends AbstractFilter {
 		combo = new Combo(this, SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true));
 
+		combo.add(E);
+		combo.add(B);
+		combo.add(S);
+		combo.add(NE);
 		combo.add(BE);
 		combo.add(SE);
-		combo.add(E);
-		combo.add(NE);
-
 		combo.select(0);
 
 		numericText = new Text(this, SWT.SINGLE);
@@ -102,14 +107,18 @@ public class LongFilter extends AbstractFilter {
 
 		Long value = (Long) aValue;
 		Long filterValue = Long.valueOf(numericText.getText());
-		if (BE.equals(combo.getText())) {
+		if (B.equals(combo.getText())) {
+			return (value > filterValue);
+		} else if (S.equals(combo.getText())) {
+			return (value < filterValue);
+		} else if (BE.equals(combo.getText())) {
 			return (value >= filterValue);
 		} else if (SE.equals(combo.getText())) {
 			return (value <= filterValue);
 		} else if (E.equals(combo.getText())) {
-			return (value == filterValue);
+			return (value.equals(filterValue));
 		} else if (NE.equals(combo.getText())) {
-			return (value != filterValue);
+			return (!value.equals(filterValue));
 		} else {
 			return false;
 		}
