@@ -1,5 +1,6 @@
 package org.courseworks.ris.widgets.views.panels.actions;
 
+import org.courseworks.ris.cmanager.session.DbTable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -8,6 +9,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public abstract class AbstractAction {
 
+	protected DbTable _table;
 	protected ToolItem _item;
 	protected ActionsPanel _panel;
 	protected String _name;
@@ -28,6 +30,14 @@ public abstract class AbstractAction {
 			}
 
 		});
+	}
+
+	void setTable(DbTable table) {
+		_table = table;
+	}
+
+	DbTable getTable() {
+		return _table;
 	}
 
 	public abstract void run();

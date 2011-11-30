@@ -1,6 +1,8 @@
 ﻿package org.courseworks.ris.widgets;
 
 import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.widgets.views.panels.actions.ActionsPanel;
+import org.courseworks.ris.widgets.views.panels.actions.AddItemAction;
 import org.courseworks.ris.widgets.views.panels.ff.FilterPanel;
 import org.courseworks.ris.widgets.views.panels.ff.FindPanel;
 import org.courseworks.ris.widgets.views.panels.ff.PanelsTab;
@@ -14,6 +16,7 @@ public class TableViewer {
 	private Composite _container;
 	private PanelsTab _panelsTab;
 	private ExtendedTable _table;
+	private ActionsPanel _actionsPanel;
 
 	public TableViewer(Composite parent, int style) {
 		_container = new Composite(parent, style);
@@ -33,6 +36,11 @@ public class TableViewer {
 		_table.setHeaderVisible(true);
 		_table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
+		_actionsPanel = new ActionsPanel(parent, SWT.BORDER);
+		_actionsPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+				false));
+		new AddItemAction(_actionsPanel, "Add", null);
+
 		_panelsTab.setTable(_table);
 	}
 
@@ -40,6 +48,7 @@ public class TableViewer {
 			IllegalAccessException {
 		_table.initType(dbTable);
 		_panelsTab.initType(dbTable);
+		_actionsPanel.setTable(dbTable);
 
 		_table.removeAll();
 

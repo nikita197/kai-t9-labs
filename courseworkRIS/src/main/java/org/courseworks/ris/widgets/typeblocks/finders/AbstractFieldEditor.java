@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * Абстрактный класс поиска
  */
-public abstract class AbstractFinder extends Composite {
+public abstract class AbstractFieldEditor extends Composite {
 
     /** Тип искомых значений */
     private final Type _type;
@@ -21,23 +21,23 @@ public abstract class AbstractFinder extends Composite {
      * @param type Тип искомого значения
      * @return Абстрактный компонент поиска
      */
-    public static AbstractFinder getInstance(Composite composite, int style,
+    public static AbstractFieldEditor getInstance(Composite composite, int style,
             Class<?> type) {
         if ((type.equals(Long.class)) || (type.equals(long.class))) {
-            return new LongFinder(composite, style, type);
+            return new LongEditor(composite, style, type);
         } else
             if ((type.equals(Integer.class)) || (type.equals(int.class))) {
-                return new IntegerFinder(composite, style, type);
+                return new IntegerEditor(composite, style, type);
             } else
                 if ((type.equals(Boolean.class))
                         || (type.equals(boolean.class))) {
-                    return new BooleanFinder(composite, style, type);
+                    return new BooleanEditor(composite, style, type);
                 } else
                     if (type.equals(String.class)) {
-                        return new StringFinder(composite, style, type);
+                        return new StringEditor(composite, style, type);
                     } else
                         if (type.getSuperclass().equals(AbstractEntity.class)) {
-                            return new RelatedObjectFinder(composite, style,
+                            return new RelatedObjectEditor(composite, style,
                                     type);
                         }
         return null;
@@ -50,7 +50,7 @@ public abstract class AbstractFinder extends Composite {
      * @param style Стиль
      * @param type Тип фильтра
      */
-    public AbstractFinder(Composite composite, int style, Type type) {
+    public AbstractFieldEditor(Composite composite, int style, Type type) {
         super(composite, style);
         _type = type;
     }

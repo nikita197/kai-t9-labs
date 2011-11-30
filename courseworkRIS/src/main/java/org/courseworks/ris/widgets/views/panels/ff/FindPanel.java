@@ -2,7 +2,7 @@ package org.courseworks.ris.widgets.views.panels.ff;
 
 import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.main.SC;
-import org.courseworks.ris.widgets.typeblocks.finders.AbstractFinder;
+import org.courseworks.ris.widgets.typeblocks.finders.AbstractFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableItem;
 public class FindPanel extends AbstractPanel {
 	private Combo _fieldCombo;
 	private Composite _finderPlace;
-	private AbstractFinder _finder;
+	private AbstractFieldEditor _finder;
 
 	public FindPanel(PanelsTab panelsView, String name, int style) {
 		super(panelsView, name, style);
@@ -87,8 +87,10 @@ public class FindPanel extends AbstractPanel {
 			_finder.dispose();
 		}
 
-		_finder = AbstractFinder.getInstance(_finderPlace, SWT.NONE,
-				_dbTable.getFieldClass(_fieldCombo.getSelectionIndex()));
+		_finder = AbstractFieldEditor
+				.getInstance(_finderPlace, SWT.NONE, _dbTable
+						.getViewableFields()[_fieldCombo.getSelectionIndex()]
+						.getType());
 		_finder.getParent().layout();
 		_visualTable.getParent().layout();
 	}

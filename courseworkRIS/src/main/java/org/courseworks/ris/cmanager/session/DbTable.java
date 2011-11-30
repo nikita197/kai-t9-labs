@@ -9,8 +9,8 @@ import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
 
 public class DbTable {
 
-	private final List<AbstractEntity> _items;
 	private final String _name;
+	private final List<AbstractEntity> _items;
 
 	public DbTable(String name) {
 		_items = new ArrayList<AbstractEntity>();
@@ -33,13 +33,6 @@ public class DbTable {
 		_items.clear();
 	}
 
-	public Class<?> getType() {
-		if (_items.size() > 0) {
-			return _items.get(0).getClass();
-		}
-		return null;
-	}
-
 	public String getName() {
 		return _name;
 	}
@@ -48,39 +41,9 @@ public class DbTable {
 		return _items;
 	}
 
-	// public List<Type> getFieldTypes() {
-	// if (_items.size() > 0) {
-	// List<Type> typeList = new ArrayList<Type>();
-	// for (Field field : _items.get(0).getClass().getDeclaredFields()) {
-	// typeList.add(field.getType());
-	// }
-	// return typeList;
-	// }
-	// return null;
-	// }
-
-	public Field getField(String name) throws NoSuchFieldException {
+	public Field[] getViewableFields() {
 		if (_items.size() > 0) {
-			return _items.get(0).getClass().getField(name);
-		}
-		return null;
-	}
-
-	public Class<?> getFieldClass(String fieldName) {
-		if (_items.size() > 0) {
-			for (Field field : _items.get(0).getClass().getDeclaredFields()) {
-				if (field.getName().equals(fieldName)) {
-					return field.getType();
-				}
-			}
-		}
-		return null;
-	}
-
-	public Class<?> getFieldClass(int index) {
-		if (_items.size() > 0) {
-			return getFieldClass(_items.get(0).getClass().getFields()[index]
-					.getName());
+			return _items.get(0).getViewableFields();
 		}
 		return null;
 	}

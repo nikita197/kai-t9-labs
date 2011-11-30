@@ -17,7 +17,7 @@ public class ExtendedTable extends Table {
 	}
 
 	public void initType(DbTable dbTable) {
-		_fields = dbTable.getType().getDeclaredFields();
+		_fields = dbTable.getViewableFields();
 		for (Field fld : _fields) {
 			TableColumn newColumn = new TableColumn(this, SWT.NONE);
 			newColumn.setData(fld);

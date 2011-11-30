@@ -116,8 +116,10 @@ public class FilterPanel extends AbstractPanel {
 			_filter.dispose();
 		}
 
-		_filter = AbstractFilter.getInstance(_filterPlace, SWT.NONE,
-				_dbTable.getFieldClass(_fieldCombo.getSelectionIndex()));
+		_filter = AbstractFilter
+				.getInstance(_filterPlace, SWT.NONE, _dbTable
+						.getViewableFields()[_fieldCombo.getSelectionIndex()]
+						.getType());
 		_filter.getParent().layout();
 		_visualTable.getParent().layout();
 	}
