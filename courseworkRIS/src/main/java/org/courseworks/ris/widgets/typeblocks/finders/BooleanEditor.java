@@ -6,17 +6,16 @@ import org.courseworks.ris.main.SC;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 /**
- * Класс для поиска символьных значений
+ * Класс для поиска бинарных значений
  */
-public class StringFinder extends AbstractFinder {
+public class BooleanEditor extends AbstractFieldEditor {
 
-	/** Поле ввода значений */
-	protected Text text;
+	/** Список значений */
+	protected Combo combo;
 
 	/**
 	 * Конструктор
@@ -28,7 +27,7 @@ public class StringFinder extends AbstractFinder {
 	 * @param aType
 	 *            Тип
 	 */
-	public StringFinder(Composite aComposite, int aStyle, Type aType) {
+	public BooleanEditor(Composite aComposite, int aStyle, Type aType) {
 		super(aComposite, aStyle, aType);
 
 		GridLayout layout = new GridLayout();
@@ -36,12 +35,13 @@ public class StringFinder extends AbstractFinder {
 		layout.marginHeight = 0;
 		super.setLayout(layout);
 
-		Label label = new Label(this, SWT.NONE);
-		label.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		label.setText(SC.SEARCH_HEADER);
+		combo = new Combo(this, SWT.READ_ONLY);
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
-		text = new Text(this, SWT.SINGLE);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+		combo.add(SC.TRUE);
+		combo.add(SC.FALSE);
+
+		combo.select(0);
 	}
 
 	/**
@@ -49,6 +49,9 @@ public class StringFinder extends AbstractFinder {
 	 */
 	@Override
 	public Object getSearchValue() {
-		return text.getText();
+		if (combo.getSelectionIndex() == 0) {
+			return new Boolean(true);
+		}
+		return new Boolean(false);
 	}
 }

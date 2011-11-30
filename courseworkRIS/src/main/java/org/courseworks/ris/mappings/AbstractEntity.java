@@ -1,5 +1,7 @@
 package org.courseworks.ris.mappings;
 
+import java.lang.reflect.Field;
+
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 
 public abstract class AbstractEntity extends Object {
@@ -15,6 +17,15 @@ public abstract class AbstractEntity extends Object {
 	public void setSession(ExtendedSession session) {
 		_session = session;
 	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	public abstract Field[] getFields();
+
+	public abstract Field[] getViewableFields();
 
 	public abstract String getFieldPresent(String fieldName);
 }

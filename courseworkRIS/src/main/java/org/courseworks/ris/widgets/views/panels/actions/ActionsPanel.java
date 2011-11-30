@@ -1,8 +1,13 @@
 package org.courseworks.ris.widgets.views.panels.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.courseworks.ris.cmanager.session.DbTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -11,10 +16,15 @@ import org.eclipse.swt.widgets.ToolItem;
  */
 public class ActionsPanel {
 
+	private DbTable _table;
 	private Composite _composite;
 	private ToolBar _toolBar;
 
+	private List<AbstractAction> _actions;
+
 	public ActionsPanel(Composite composite, int style) {
+		_actions = new ArrayList<AbstractAction>();
+
 		_composite = new Composite(composite, SWT.BORDER);
 		_composite.setLayout(new FillLayout());
 		_toolBar = new ToolBar(_composite, style);
@@ -25,9 +35,30 @@ public class ActionsPanel {
 	}
 
 	ToolItem addItem(AbstractAction action) {
+		_actions.add(action);
+		action.setTable(_table);
+
 		ToolItem item = new ToolItem(_toolBar, SWT.PUSH);
 		item.setText(action._name);
-		item.setImage(action._icon.createImage());
+		if (action._icon != null) {
+			item.setImage(action._icon.createImage());
+		}
 		return item;
+	}
+
+	public void setTable(DbTable table) {
+		_table = table;
+
+		for (AbstractAction action : _actions) {
+			action.setTable(table);
+		}
+	}
+
+	public DbTable getTable() {
+		return _table;
+	}
+
+	public Shell getShell() {
+		return _composite.getShell();
 	}
 }
