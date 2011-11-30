@@ -41,7 +41,7 @@ public class FindPanel extends AbstractPanel {
 		header.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		header.setText(SC.SEARCH_PANEL_HEADER);
 
-		_fieldCombo = new Combo(left, SWT.BORDER);
+		_fieldCombo = new Combo(left, SWT.READ_ONLY | SWT.BORDER);
 		_fieldCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 2, 1));
 
@@ -88,7 +88,7 @@ public class FindPanel extends AbstractPanel {
 		}
 
 		_finder = AbstractFinder.getInstance(_finderPlace, SWT.NONE,
-				_dbTable.getFieldClass(_fieldCombo.getText()));
+				_dbTable.getFieldClass(_fieldCombo.getSelectionIndex()));
 		_finder.getParent().layout();
 		_visualTable.getParent().layout();
 	}

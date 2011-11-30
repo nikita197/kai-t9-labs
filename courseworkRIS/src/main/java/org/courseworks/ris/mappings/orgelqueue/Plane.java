@@ -36,4 +36,18 @@ public class Plane extends AbstractEntity {
 		return name;
 	}
 
+	@Override
+	public String getFieldPresent(String fieldName) {
+		if ("id".equals(fieldName)) {
+			return "Идентификатор";
+		} else if ("name".equals(fieldName)) {
+			return "Имя";
+		} else if ("state".equals(fieldName)) {
+			return "Состояние";
+		} else if ("engine".equals(fieldName)) {
+			return "Двигатель";
+		}
+		return null;
+	}
+
 }

@@ -30,4 +30,16 @@ public class Engine extends AbstractEntity {
 		return mark;
 	}
 
+	@Override
+	public String getFieldPresent(String fieldName) {
+		if ("id".equals(fieldName)) {
+			return "Идентификатор";
+		} else if ("mark".equals(fieldName)) {
+			return "Марка";
+		} else if ("makedate".equals(fieldName)) {
+			return "Дата производства";
+		}
+		return null;
+	}
+
 }
