@@ -1,4 +1,4 @@
-package org.courseworks.ris.widgets.typeblocks.finders;
+package org.courseworks.ris.widgets.typeblocks.editors;
 
 import java.lang.reflect.Type;
 
@@ -21,25 +21,19 @@ public abstract class AbstractFieldEditor extends Composite {
      * @param type Тип искомого значения
      * @return Абстрактный компонент поиска
      */
-    public static AbstractFieldEditor getInstance(Composite composite, int style,
-            Class<?> type) {
+    public static AbstractFieldEditor getInstance(Composite composite,
+            int style, Class<?> type) {
         if ((type.equals(Long.class)) || (type.equals(long.class))) {
             return new LongEditor(composite, style, type);
-        } else
-            if ((type.equals(Integer.class)) || (type.equals(int.class))) {
-                return new IntegerEditor(composite, style, type);
-            } else
-                if ((type.equals(Boolean.class))
-                        || (type.equals(boolean.class))) {
-                    return new BooleanEditor(composite, style, type);
-                } else
-                    if (type.equals(String.class)) {
-                        return new StringEditor(composite, style, type);
-                    } else
-                        if (type.getSuperclass().equals(AbstractEntity.class)) {
-                            return new RelatedObjectEditor(composite, style,
-                                    type);
-                        }
+        } else if ((type.equals(Integer.class)) || (type.equals(int.class))) {
+            return new IntegerEditor(composite, style, type);
+        } else if ((type.equals(Boolean.class)) || (type.equals(boolean.class))) {
+            return new BooleanEditor(composite, style, type);
+        } else if (type.equals(String.class)) {
+            return new StringEditor(composite, style, type);
+        } else if (type.getSuperclass().equals(AbstractEntity.class)) {
+            return new RelatedObjectEditor(composite, style, type);
+        }
         return null;
     }
 
@@ -60,7 +54,14 @@ public abstract class AbstractFieldEditor extends Composite {
      * 
      * @return Введенное значение для поиска
      */
-    public abstract Object getSearchValue();
+    public abstract Object getValue();
+
+    /**
+     * Заполнение поля ввода значением
+     * 
+     * @param value Значение
+     */
+    public abstract void setValue(Object value);
 
     public Type getType() {
         return _type;

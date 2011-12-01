@@ -2,30 +2,41 @@ package org.courseworks.ris.mappings;
 
 import java.lang.reflect.Field;
 
+import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 
 public abstract class AbstractEntity extends Object {
 
-	private ExtendedSession _session;
+    private ExtendedSession _session;
 
-	public abstract String getName();
+    private DbTable _table;
 
-	public ExtendedSession getSession() {
-		return _session;
-	}
+    public abstract String getName();
 
-	public void setSession(ExtendedSession session) {
-		_session = session;
-	}
+    public DbTable getTable() {
+        return _table;
+    }
 
-	@Override
-	public String toString() {
-		return getName();
-	}
+    public void setTable(DbTable table) {
+        _table = table;
+    }
 
-	public abstract Field[] getFields();
+    public ExtendedSession getSession() {
+        return _session;
+    }
 
-	public abstract Field[] getViewableFields();
+    public void setSession(ExtendedSession session) {
+        _session = session;
+    }
 
-	public abstract String getFieldPresent(String fieldName);
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    public abstract Field[] getFields();
+
+    public abstract Field[] getViewableFields();
+
+    public abstract String getFieldPresent(String fieldName);
 }
