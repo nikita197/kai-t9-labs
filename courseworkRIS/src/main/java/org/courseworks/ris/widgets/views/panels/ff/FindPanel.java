@@ -2,7 +2,7 @@ package org.courseworks.ris.widgets.views.panels.ff;
 
 import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.main.SC;
-import org.courseworks.ris.widgets.typeblocks.finders.AbstractFieldEditor;
+import org.courseworks.ris.widgets.typeblocks.editors.AbstractFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -96,7 +96,7 @@ public class FindPanel extends AbstractPanel {
 	}
 
 	public void findValue() {
-		Object object = _finder.getSearchValue();
+		Object object = _finder.getValue();
 		final int column = _fieldCombo.getSelectionIndex();
 		for (TableItem item : _visualTable.getItems()) {
 			if (object.toString().equals(item.getText(column))) {
