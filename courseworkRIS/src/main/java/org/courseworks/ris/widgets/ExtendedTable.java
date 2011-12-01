@@ -12,84 +12,82 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedTable extends Table {
 
-    private DbTable _dbTable;
+	private DbTable _dbTable;
 
-    private Field[] _fields;
+	private Field[] _fields;
 
-    public ExtendedTable(Composite parent, int style) {
-        super(parent, style);
-    }
+	public ExtendedTable(Composite parent, int style) {
+		super(parent, style);
+	}
 
-    public void initType(DbTable dbTable) {
-        _fields = dbTable.getViewableFields();
-        for (Field fld : _fields) {
-            TableColumn newColumn = new TableColumn(this, SWT.NONE);
-            newColumn.setData(fld);
-            newColumn.setText(dbTable.getFieldPresentation(fld.getName()));
-        }
-    }
+	public void initType(DbTable dbTable) {
+		removeAll();
+		for (TableColumn column : getColumns()) {
+			column.dispose();
+		}
 
-    public void fill(DbTable dbTable) throws IllegalArgumentException,
-            IllegalAccessException {
-        _dbTable = dbTable;
-        for (Object obj : dbTable.getItems()) {
-            TableItem newRow = new TableItem(this, SWT.NONE);
-            newRow.setData(obj);
-            int index = 0;
-            for (Field fld : _fields) {
-                newRow.setText(index, fld.get(obj).toString());
-                index++;
-            }
-        }
-    }
+		_fields = dbTable.getViewableFields();
+		for (Field fld : _fields) {
+			TableColumn newColumn = new TableColumn(this, SWT.NONE);
+			newColumn.setData(fld);
+			newColumn.setText(dbTable.getFieldPresentation(fld.getName()));
+		}
+	}
 
-    public void refresh() throws IllegalArgumentException,
-            IllegalAccessException {
-        if (_dbTable != null) {
-            for (Object obj : _dbTable.getItems()) {
-                TableItem newRow = new TableItem(this, SWT.NONE);
-                newRow.setData(obj);
-                int index = 0;
-                for (Field fld : _fields) {
-                    newRow.setText(index, fld.get(obj).toString());
-                    index++;
-                }
-            }
-        }
-    }
+	public void fill(DbTable dbTable) throws IllegalArgumentException,
+			IllegalAccessException {
+		_dbTable = dbTable;
+		refresh();
+	}
 
-    public AbstractEntity getSelectedItem() {
-        int index = getSelectionIndex();
+	public void refresh() throws IllegalArgumentException,
+			IllegalAccessException {
+		removeAll();
+		if (_dbTable != null) {
+			for (Object obj : _dbTable.getItems()) {
+				TableItem newRow = new TableItem(this, SWT.NONE);
+				newRow.setData(obj);
+				int index = 0;
+				for (Field fld : _fields) {
+					newRow.setText(index, fld.get(obj).toString());
+					index++;
+				}
+			}
+		}
+	}
 
-        if (index == -1) {
-            return null;
-        }
+	public AbstractEntity getSelectedItem() {
+		int index = getSelectionIndex();
 
-        return (AbstractEntity) getItem(index).getData();
-    }
+		if (index == -1) {
+			return null;
+		}
 
-    @Override
-    public void pack() {
-        TableColumn[] columns = getColumns();
+		return (AbstractEntity) getItem(index).getData();
+	}
 
-        int columnsWidth = 0;
-        for (TableColumn column : columns) {
-            column.pack();
-            columnsWidth += column.getWidth();
-        }
+	@Override
+	public void pack() {
+		TableColumn[] columns = getColumns();
 
-        // Если колонки суммарно имеют меньшюю ширину, чем таблица
-        int difference = getSize().x - columnsWidth;
-        if (difference > 0) {
-            int additionalWidth = difference / columns.length;
-            for (TableColumn column : columns) {
-                column.setWidth(column.getWidth() + additionalWidth);
-            }
-        }
-    }
+		int columnsWidth = 0;
+		for (TableColumn column : columns) {
+			column.pack();
+			columnsWidth += column.getWidth();
+		}
 
-    @Override
-    public void checkSubclass() {
+		// Если колонки суммарно имеют меньшюю ширину, чем таблица
+		int difference = getSize().x - columnsWidth;
+		if (difference > 0) {
+			int additionalWidth = difference / columns.length;
+			for (TableColumn column : columns) {
+				column.setWidth(column.getWidth() + additionalWidth);
+			}
+		}
+	}
 
-    }
+	@Override
+	public void checkSubclass() {
+
+	}
 }
