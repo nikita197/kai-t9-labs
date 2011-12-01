@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.main.Application;
 import org.courseworks.ris.mappings.AbstractEntity;
 
 @Entity
@@ -20,7 +20,6 @@ import org.courseworks.ris.mappings.AbstractEntity;
 public class Engine extends AbstractEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
 	public String mark;
@@ -65,4 +64,21 @@ public class Engine extends AbstractEntity {
 		return viewableFields.toArray(new Field[] {});
 	}
 
+	@Override
+	public void generateUID() {
+		String tableName = getTable().getName();
+		DbTable table = Application.getGenTables().getTable(tableName);
+
+		e1: for (int i = 100;; i++) {
+			for (AbstractEntity item : table.getItems()) {
+				Engine engine = (Engine) item;
+				if (engine.id == i) {
+					continue e1;
+				}
+			}
+
+			id = i;
+			break;
+		}
+	}
 }

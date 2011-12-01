@@ -6,13 +6,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.main.Application;
 import org.courseworks.ris.mappings.AbstractEntity;
 
 @Entity
@@ -20,7 +20,6 @@ import org.courseworks.ris.mappings.AbstractEntity;
 public class Plane extends AbstractEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 
 	@Column(length = 30)
@@ -72,6 +71,24 @@ public class Plane extends AbstractEntity {
 		}
 
 		return viewableFields.toArray(new Field[] {});
+	}
+
+	@Override
+	public void generateUID() {
+		String tableName = getTable().getName();
+		DbTable table = Application.getGenTables().getTable(tableName);
+
+		e1: for (int i = 100;; i++) {
+			for (AbstractEntity item : table.getItems()) {
+				Plane plane = (Plane) item;
+				if (plane.id == i) {
+					continue e1;
+				}
+			}
+
+			id = i;
+			break;
+		}
 	}
 
 }

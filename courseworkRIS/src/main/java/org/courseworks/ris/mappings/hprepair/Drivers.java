@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.main.Application;
 import org.courseworks.ris.mappings.AbstractEntity;
 
 @Entity
@@ -58,6 +60,24 @@ public class Drivers extends AbstractEntity {
 		}
 
 		return viewableFields.toArray(new Field[] {});
+	}
+
+	@Override
+	public void generateUID() {
+		String tableName = getTable().getName();
+		DbTable table = Application.getGenTables().getTable(tableName);
+
+		e1: for (int i = 100;; i++) {
+			for (AbstractEntity item : table.getItems()) {
+				Drivers driver = (Drivers) item;
+				if (driver.id == i) {
+					continue e1;
+				}
+			}
+
+			id = i;
+			break;
+		}
 	}
 
 }
