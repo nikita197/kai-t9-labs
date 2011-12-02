@@ -1,6 +1,6 @@
 package org.courseworks.ris.widgets.views.panels.ff;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.widgets.ExtendedTable;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Composite;
  */
 public abstract class AbstractPanel extends Composite {
 	ExtendedTable _visualTable;
-	protected DbTable _dbTable;
+	protected EntitySet _dbTable;
 	protected String _name;
 
 	public AbstractPanel(PanelsTab panelsTab, String name, int style) {
@@ -44,7 +44,7 @@ public abstract class AbstractPanel extends Composite {
 
 	public abstract void init();
 
-	public void initType(DbTable dbTable) {
+	public void initType(EntitySet dbTable) {
 		_dbTable = dbTable;
 	}
 

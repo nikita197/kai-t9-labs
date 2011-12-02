@@ -2,8 +2,8 @@
 
 import javassist.NotFoundException;
 
-import org.courseworks.ris.cmanager.session.DbTable;
-import org.courseworks.ris.cmanager.session.GeneralTableList;
+import org.courseworks.ris.cmanager.session.EntitySet;
+import org.courseworks.ris.cmanager.session.GeneralSession;
 import org.courseworks.ris.widgets.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -14,16 +14,16 @@ import org.eclipse.swt.widgets.MenuItem;
 
 public class ProgWin {
 
-	private final GeneralTableList _dbase;
+	private final GeneralSession _generalSession;
 
 	private final TableViewer _tableViewer;
 
 	private final Menu _menuBar;
 
-	public ProgWin(GeneralTableList dbase, Composite composite)
+	public ProgWin(GeneralSession dbase, Composite composite)
 			throws IllegalArgumentException, IllegalAccessException,
 			NotFoundException {
-		_dbase = dbase;
+		_generalSession = dbase;
 
 		_tableViewer = new TableViewer(composite, SWT.NONE);
 		// _tableViewer.fill(_dbase.getTable("Plane"));
@@ -40,7 +40,7 @@ public class ProgWin {
 			@Override
 			public void handleEvent(Event aEvent) {
 				MenuItem item = (MenuItem) aEvent.widget;
-				DbTable table = (DbTable) item.getData();
+				EntitySet table = (EntitySet) item.getData();
 				try {
 					_tableViewer.fill(table);
 				} catch (IllegalArgumentException e) {
@@ -51,7 +51,7 @@ public class ProgWin {
 			}
 		};
 
-		for (DbTable table : dbase.getTables()) {
+		for (EntitySet table : _generalSession.getTables()) {
 			MenuItem item = new MenuItem(tablesMenu, SWT.PUSH);
 			item.setData(table);
 			item.setText(table.getName());

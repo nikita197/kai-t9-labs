@@ -1,9 +1,12 @@
 package org.courseworks.ris.widgets.typeblocks.editors;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.main.SC;
+import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,29 +22,25 @@ public class RelatedObjectEditor extends AbstractFieldEditor {
 	/** Поле ввода значений */
 	protected Combo text;
 
-	private final List<Object> _values;
+	// private AbstractEntity _editItem;
+	private List<AbstractEntity> _possibleValues;
 
-	/**
-	 * Конструктор
-	 * 
-	 * @param aComposite
-	 *            Композит
-	 * @param aStyle
-	 *            Стиль
-	 * @param aType
-	 *            Тип
-	 */
-	public RelatedObjectEditor(Composite aComposite, int aStyle, Type aType) {
-		super(aComposite, aStyle, aType);
+	public RelatedObjectEditor(Composite composite, int style, Field field,
+			int editType) {
+		super(composite, style, field, editType);
 
-		_values = new ArrayList<Object>();
+		_possibleValues = new ArrayList<AbstractEntity>();
 
 		GridLayout layout = new GridLayout();
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
 		super.setLayout(layout);
 
-		text = new Combo(this, SWT.NONE);
+		if (editType == AbstractFieldEditor.FIND) {
+			text = new Combo(this, SWT.NONE);
+		} else {
+			text = new Combo(this, SWT.READ_ONLY);
+		}
 		text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 	}
 
@@ -50,10 +49,10 @@ public class RelatedObjectEditor extends AbstractFieldEditor {
 	 */
 	@Override
 	public Object getValue() {
-		if (_values.size() != 0) {
-			return _values.get(text.getSelectionIndex());
+		if (text.getSelectionIndex() < 1) {
+			return null;
 		}
-		return text.getText();
+		return _possibleValues.get(text.getSelectionIndex() - 1);
 	}
 
 	/**
@@ -65,21 +64,22 @@ public class RelatedObjectEditor extends AbstractFieldEditor {
 	 */
 	@Override
 	public void setValue(Object aValue) {
-		Object[] value = (Object[]) aValue;
-		Object[] allObjects = (Object[]) value[0];
-		int selected = (Integer) value[1];
+		int index = _possibleValues.indexOf(aValue);
+		text.select(index + 1);
+	}
 
-		// Уничтожаем старый редактируемый combo
-		text.dispose();
-		text = new Combo(this, SWT.READ_ONLY);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+	@Override
+	public void setEditingItem(AbstractEntity item) {
+		// _editItem = item;
+		text.removeAll();
+		_possibleValues.clear();
 
-		for (Object object : allObjects) {
-			_values.add(object);
-			text.add(object.toString());
+		text.add(SC.NULL_STRING);
+		DbTable relTable = item.getTable().getRelatedTable(_field);
+
+		for (AbstractEntity entity : relTable.getItems()) {
+			text.add(entity.toString());
+			_possibleValues.add(entity);
 		}
-
-		text.select(selected);
-		text.getParent().layout();
 	}
 }

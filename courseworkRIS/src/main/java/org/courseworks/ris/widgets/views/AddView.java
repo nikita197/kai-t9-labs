@@ -4,12 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.courseworks.ris.cmanager.ConnectionsManager;
+import org.courseworks.ris.cmanager.SessionsManager;
 import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.widgets.typeblocks.editors.AbstractFieldEditor;
-import org.courseworks.ris.widgets.typeblocks.editors.RelatedObjectEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,17 +22,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.hibernate.Session;
 
 public class AddView {
 
-	public static final int TYPE_ADD = 0;
+	public static final int TYPE_ADD = 1;
 
-	public static final int TYPE_UPDATE = 1;
+	public static final int TYPE_UPDATE = 2;
 
 	private final Shell _shell;
 
-	private final DbTable _sourceTable;
+	private final EntitySet _table;
+
+	private int _type;
 
 	private DbTable _currentTable;
 
@@ -41,8 +42,6 @@ public class AddView {
 	private AbstractEntity _item;
 
 	private Combo _sessionsCombo;
-
-	private List<AbstractFieldEditor> _relatedObjectsEditors;
 
 	private final Button _acceptButton;
 
@@ -54,14 +53,13 @@ public class AddView {
 
 	private int selectedIndex;
 
-	public AddView(Shell shell, String name, DbTable table, int type)
+	public AddView(Shell shell, String name, EntitySet table, int type)
 			throws InstantiationException, IllegalAccessException {
 		_actionPerformed = false;
 		_exit = false;
-		_currentTable = null;
-		_relatedObjectsEditors = new ArrayList<AbstractFieldEditor>();
 		_fieldEditors = new ArrayList<AbstractFieldEditor>();
-		_sourceTable = table;
+		_table = table;
+		_type = type;
 
 		_shell = new Shell(shell, SWT.SHELL_TRIM);
 		GridLayout shellLayout = new GridLayout();
@@ -84,6 +82,18 @@ public class AddView {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2,
 				1));
 
+		for (Field field : _table.getViewableFields()) {
+			Label name1 = new Label(composite, SWT.NONE);
+			name1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			name1.setText(_table.getFieldPresentation(field));
+
+			AbstractFieldEditor editor = AbstractFieldEditor.getInstance(
+					composite, SWT.NONE, field, AbstractFieldEditor.EDIT);
+			editor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			editor.setData(field);
+			_fieldEditors.add(editor);
+		}
+
 		_acceptButton = new Button(_shell, SWT.PUSH);
 		_discardButton = new Button(_shell, SWT.PUSH);
 
@@ -91,7 +101,6 @@ public class AddView {
 			label.setText("Заполните поля добавляемого объекта:");
 		} else if (type == TYPE_UPDATE) {
 			label.setText("Изменение полей записи:");
-			_sessionsCombo.setEnabled(false);
 		}
 		_acceptButton.setText("ОК");
 		_discardButton.setText("Отмена");
@@ -102,7 +111,7 @@ public class AddView {
 			public void handleEvent(Event aEvent) {
 				try {
 					_actionPerformed = true;
-					itemFillback();
+					fillItem();
 				} catch (Exception e) {
 					MessageBox msgBox = new MessageBox(_shell, SWT.OK
 							| SWT.ICON_ERROR);
@@ -122,17 +131,7 @@ public class AddView {
 
 		});
 
-		initContent(composite);
-
 		_shell.pack();
-	}
-
-	public void setItem(AbstractEntity item) {
-		_item = item;
-	}
-
-	public AbstractEntity getItem() {
-		return _item;
 	}
 
 	public boolean open() throws IllegalAccessException {
@@ -152,104 +151,72 @@ public class AddView {
 		return _actionPerformed;
 	}
 
-	private void initContent(Composite composite) {
-		for (Field field : _sourceTable.getViewableFields()) {
-			Label name = new Label(composite, SWT.NONE);
-			name.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-			name.setText(_sourceTable.getFieldPresentation(field.getName()));
-
-			AbstractFieldEditor editor = AbstractFieldEditor.getInstance(
-					composite, SWT.NONE, field.getType());
-			editor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-			editor.setData(field);
-			_fieldEditors.add(editor);
-
-			if ((!field.getType().isPrimitive())
-					&& (field.getType().getSuperclass()
-							.equals(AbstractEntity.class))) {
-				_relatedObjectsEditors.add(editor);
-			}
-		}
-	}
-
 	private void fillContent() throws IllegalAccessException {
-		String[] sessions = ConnectionsManager.getSessionsNames();
-		for (String session : sessions) {
-			_sessionsCombo.add(session);
-		}
+		// update case
+		if (TYPE_UPDATE == _type) {
+			ExtendedSession currentSession = _item.getTable().getSession();
+			String currentSessionName = SessionsManager.getName(currentSession);
+			_sessionsCombo.add(currentSessionName);
+			_sessionsCombo.select(0);
+			_sessionsCombo.setEnabled(false);
+		} else if (TYPE_ADD == _type) {
+			String[] sessions = SessionsManager.getSessionsNames();
+			for (String session : sessions) {
+				_sessionsCombo.add(session);
+			}
 
-		Listener listener = new Listener() {
+			Listener listener = new Listener() {
 
-			@Override
-			public void handleEvent(Event arg0) {
-				try {
+				@Override
+				public void handleEvent(Event arg0) {
 					if ((arg0 == null)
 							|| (selectedIndex != _sessionsCombo
 									.getSelectionIndex())) {
 						selectedIndex = _sessionsCombo.getSelectionIndex();
-						ExtendedSession session = ConnectionsManager
+						ExtendedSession session = SessionsManager
 								.getSession(_sessionsCombo.getText());
-						_currentTable = session
-								.getTable(_sourceTable.getName());
-
-						for (AbstractFieldEditor editor : _relatedObjectsEditors) {
-							Field field = (Field) editor.getData();
-							DbTable table = _currentTable
-									.getRelatedTable(field);
-
-							Object[] value = new Object[2];
-							value[0] = table.getItems().toArray();
-							value[1] = 0;
-
-							editor.setValue(value);
-						}
+						_currentTable = session.getEqualTable(_table);
+						_item.setTable(_currentTable);
 					}
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+
 				}
-			}
 
-		};
+			};
 
-		// update case
-		Session currentSession = _item.getSession().getSession();
-		String currentSessionName = ConnectionsManager.getName(currentSession);
-		for (int i = 0; i < sessions.length; i++) {
-			if (sessions[i].equals(currentSessionName)) {
-				_sessionsCombo.select(i);
-			}
-		}
-
-		// add case
-		if (_sessionsCombo.getSelectionIndex() == -1) {
 			_sessionsCombo.select(0);
+			listener.handleEvent(null);
+			_sessionsCombo.addListener(SWT.Selection, listener);
 		}
-
-		listener.handleEvent(null);
-
-		_sessionsCombo.addListener(SWT.Selection, listener);
 
 		for (AbstractFieldEditor editor : _fieldEditors) {
 			Field field = (Field) editor.getData();
 			Object value = field.get(_item);
 
-			if ((value == null) || (editor instanceof RelatedObjectEditor)) {
+			editor.setEditingItem(_item);
+
+			if (value == null) {
 				continue;
 			}
-
 			editor.setValue(value);
 		}
 
 	}
 
-	private void itemFillback() throws IllegalAccessException {
+	private void fillItem() throws IllegalAccessException {
 		for (AbstractFieldEditor editor : _fieldEditors) {
 			Field field = (Field) editor.getData();
 			field.set(_item, editor.getValue());
 		}
 
 		_item.setTable(_currentTable);
-		_item.setSession(ConnectionsManager.getSession(_sessionsCombo.getText()));
 		_item.generateUID();
+	}
+
+	public void setItem(AbstractEntity item) {
+		_item = item;
+	}
+
+	public AbstractEntity getItem() {
+		return _item;
 	}
 }

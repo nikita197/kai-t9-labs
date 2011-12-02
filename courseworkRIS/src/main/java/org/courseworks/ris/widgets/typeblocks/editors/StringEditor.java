@@ -1,7 +1,8 @@
 package org.courseworks.ris.widgets.typeblocks.editors;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Field;
 
+import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -13,46 +14,47 @@ import org.eclipse.swt.widgets.Text;
  */
 public class StringEditor extends AbstractFieldEditor {
 
-    /** Поле ввода значений */
-    protected Text text;
+	/** Поле ввода значений */
+	protected Text text;
 
-    /**
-     * Конструктор
-     * 
-     * @param aComposite Композит
-     * @param aStyle Стиль
-     * @param aType Тип
-     */
-    public StringEditor(Composite aComposite, int aStyle, Type aType) {
-        super(aComposite, aStyle, aType);
+	public StringEditor(Composite composite, int style, Field field,
+			int editType) {
+		super(composite, style, field, editType);
 
-        GridLayout layout = new GridLayout();
-        layout.marginWidth = 0;
-        layout.marginHeight = 0;
-        super.setLayout(layout);
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		super.setLayout(layout);
 
-        text = new Text(this, SWT.SINGLE);
-        text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
-    }
+		text = new Text(this, SWT.SINGLE);
+		text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getValue() {
-        return text.getText();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object getValue() {
+		if (text.getText() == "") {
+			return null;
+		}
+		return text.getText();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(Object aValue) {
-        if (!(aValue instanceof String)) {
-            throw new IllegalArgumentException("value must be String");
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setValue(Object aValue) {
+		if (!(aValue instanceof String)) {
+			throw new IllegalArgumentException("value must be String");
+		}
 
-        String value = (String) aValue;
-        text.setText(value);
-    }
+		String value = (String) aValue;
+		text.setText(value);
+	}
+
+	@Override
+	public void setEditingItem(AbstractEntity item) {
+	}
 }

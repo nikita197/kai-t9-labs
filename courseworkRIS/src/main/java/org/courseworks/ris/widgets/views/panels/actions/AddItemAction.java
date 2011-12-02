@@ -4,8 +4,6 @@ import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.widgets.ExtendedTable;
 import org.courseworks.ris.widgets.views.AddView;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class AddItemAction extends AbstractAction {
 
@@ -20,17 +18,10 @@ public class AddItemAction extends AbstractAction {
 		try {
 			view = new AddView(_panel.getShell(), "Добавление записи", _table,
 					AddView.TYPE_ADD);
-			view.setItem(_table.getItems().get(0).getClass().newInstance());
+			view.setItem((AbstractEntity) _table.getContentType().newInstance());
 			if (view.open()) {
 				AbstractEntity entity = view.getItem();
-				Session session = entity.getSession().getSession();
-				Transaction tx = session.beginTransaction();
-				session.save(entity);
-				tx.commit();
-
-				entity.getTable().addItem(entity);
-				_table.addItem(entity);
-
+				entity.getTable().addNewItem(entity);
 				_visualTable.refresh();
 			}
 		} catch (InstantiationException e1) {

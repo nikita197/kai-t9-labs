@@ -1,12 +1,11 @@
 ﻿package org.courseworks.ris.widgets;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.widgets.views.panels.actions.ActionsPanel;
 import org.courseworks.ris.widgets.views.panels.actions.AddItemAction;
 import org.courseworks.ris.widgets.views.panels.actions.DeleteItemAction;
 import org.courseworks.ris.widgets.views.panels.actions.UpdateItemAction;
 import org.courseworks.ris.widgets.views.panels.ff.FilterPanel;
-import org.courseworks.ris.widgets.views.panels.ff.FindPanel;
 import org.courseworks.ris.widgets.views.panels.ff.PanelsTab;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -42,7 +41,7 @@ public class TableViewer {
 		_panelsTab.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		new FilterPanel(_panelsTab, "Filter", SWT.NONE);
-		new FindPanel(_panelsTab, "Find", SWT.NONE);
+		// new FindPanel(_panelsTab, "Find", SWT.NONE);
 
 		_table = new ExtendedTable(parent, SWT.MULTI | SWT.BORDER);
 		_table.setLinesVisible(true);
@@ -60,7 +59,7 @@ public class TableViewer {
 
 		_panelsTab.setTable(_table);
 
-		_updateAction.setEnabled(false);
+		// _updateAction.setEnabled(false);
 		_table.addListener(SWT.Selection, new Listener() {
 
 			@Override
@@ -77,7 +76,7 @@ public class TableViewer {
 		});
 	}
 
-	public void fill(DbTable dbTable) throws IllegalArgumentException,
+	public void fill(EntitySet dbTable) throws IllegalArgumentException,
 			IllegalAccessException {
 		_table.initType(dbTable);
 		_panelsTab.initType(dbTable);

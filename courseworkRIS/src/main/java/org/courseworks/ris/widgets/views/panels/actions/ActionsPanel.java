@@ -3,7 +3,7 @@ package org.courseworks.ris.widgets.views.panels.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.ToolItem;
  */
 public class ActionsPanel {
 
-	private DbTable _table;
+	private EntitySet _table;
 	private Composite _composite;
 	private ToolBar _toolBar;
 
@@ -46,7 +46,7 @@ public class ActionsPanel {
 		return item;
 	}
 
-	public void setTable(DbTable table) {
+	public void setTable(EntitySet table) {
 		_table = table;
 
 		for (AbstractAction action : _actions) {
@@ -54,7 +54,7 @@ public class ActionsPanel {
 		}
 	}
 
-	public DbTable getTable() {
+	public EntitySet getTable() {
 		return _table;
 	}
 

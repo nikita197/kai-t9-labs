@@ -20,4 +20,6 @@ public class SC {
 	public static final String SEARCH_PANEL_HEADER = "Выберите поле поиска:";
 
 	public static final String APP_HEADER = "Курсовая работа";
+
+	public static final String NULL_STRING = "null";
 }

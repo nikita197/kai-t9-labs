@@ -1,19 +1,16 @@
 package org.courseworks.ris.cmanager.session;
 
-import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
-import org.courseworks.ris.mappings.hprepair.Cars;
-import org.courseworks.ris.mappings.hprepair.Drivers;
-import org.courseworks.ris.mappings.orgelqueue.Engine;
-import org.courseworks.ris.mappings.orgelqueue.Plane;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.courseworks.ris.cmanager.SessionsManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class ExtendedSession extends TableList {
+public class ExtendedSession {
 
-	public static final int HPREPAIR_SESSION = 1;
-
-	public static final int ORGELQUEUE_SESSION = 2;
+	private final List<DbTable> _tables;
 
 	private final SessionFactory _factory;
 
@@ -21,53 +18,55 @@ public class ExtendedSession extends TableList {
 
 	protected Configuration _configuration;
 
-	private final int _type;
-
-	public ExtendedSession(Configuration aConfiguration, int type) {
-		_type = type;
+	public ExtendedSession(Configuration aConfiguration,
+			GeneralSession generalSession) {
+		_tables = new ArrayList<DbTable>();
 		_configuration = aConfiguration;
 		_factory = createFactory();
 		session = _factory.openSession();
+
+		for (Class<?> entity : SessionsManager.getEntities()) {
+			_tables.add(new DbTable(entity, this, generalSession
+					.getTable(entity)));
+		}
 	}
 
-	@Override
-	public void refreshTables() {
-		tables.clear();
-		for (String tableName : DatabaseLowlevelProcessor.getEntities(_type)) {
-			getTables().add(new DbTable(tableName));
-		}
-
-		for (DbTable table : tables) {
-			table.fillItems(this);
+	public void fillTables() {
+		for (DbTable table : _tables) {
+			table.fillTable(this);
 		}
 	}
 
 	protected SessionFactory createFactory() {
-		switch (_type) {
-		case HPREPAIR_SESSION: {
-			_configuration.addPackage("org.courseworks.ris.mappings.hprepair")
-					.addAnnotatedClass(Cars.class)
-					.addAnnotatedClass(Drivers.class);
-			return _configuration.buildSessionFactory();
+		Class<?>[] entities = SessionsManager.getEntities();
+		String packageName = entities[0].getPackage().getName();
+
+		_configuration.addPackage(packageName);
+		for (Class<?> entity : entities) {
+			_configuration.addAnnotatedClass(entity);
 		}
 
-		case ORGELQUEUE_SESSION: {
-			_configuration
-					.addPackage("org.courseworks.ris.mappings.orgelqueue")
-					.addAnnotatedClass(Engine.class)
-					.addAnnotatedClass(Plane.class);
-			return _configuration.buildSessionFactory();
-		}
-		default:
-			return null;
-		}
+		return _configuration.buildSessionFactory();
 	}
 
 	public Configuration getConfiguration() {
 		return _configuration;
 	}
 
-	public Session getSession() {
+	public Session getHBSession() {
 		return session;
+	}
+
+	public List<DbTable> getTables() {
+		return _tables;
+	}
+
+	public DbTable getEqualTable(EntitySet table) {
+		for (DbTable cTable : _tables) {
+			if (cTable.getContentType().equals(table.getContentType())) {
+				return cTable;
+			}
+		}
+		return null;
 	}
 }

@@ -1,13 +1,15 @@
 package org.courseworks.ris.mappings;
 
-import java.lang.reflect.Field;
-
 import org.courseworks.ris.cmanager.session.DbTable;
-import org.courseworks.ris.cmanager.session.ExtendedSession;
 
+/**
+ * Каждый дочерний класс должен иметь методы:<br>
+ * public static String getViewName(); - возвращает представление имени таблицы<br>
+ * public static Field[] getViewableFields(); - возвращает видимые поля<br>
+ * public static String getFieldPresent(Field field); - возвращает представления
+ * полей<br>
+ */
 public abstract class AbstractEntity extends Object {
-
-	private ExtendedSession _session;
 
 	private DbTable _table;
 
@@ -21,14 +23,6 @@ public abstract class AbstractEntity extends Object {
 		_table = table;
 	}
 
-	public ExtendedSession getSession() {
-		return _session;
-	}
-
-	public void setSession(ExtendedSession session) {
-		_session = session;
-	}
-
 	@Override
 	public String toString() {
 		return getName();
@@ -36,9 +30,9 @@ public abstract class AbstractEntity extends Object {
 
 	public abstract void generateUID();
 
-	public abstract Field[] getFields();
-
-	public abstract Field[] getViewableFields();
-
-	public abstract String getFieldPresent(String fieldName);
+	// public abstract Field[] getFields();
+	//
+	// public abstract Field[] getViewableFields();
+	//
+	// public abstract String getFieldPresent(String fieldName);
 }

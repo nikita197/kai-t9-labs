@@ -3,7 +3,7 @@ package org.courseworks.ris.widgets.views.panels.ff;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.widgets.ExtendedTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -72,7 +72,7 @@ public class PanelsTab {
 		_toolBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 	}
 
-	public void initType(DbTable dbTable) {
+	public void initType(EntitySet dbTable) {
 		for (AbstractPanel panel : _panels) {
 			panel.initType(dbTable);
 		}
