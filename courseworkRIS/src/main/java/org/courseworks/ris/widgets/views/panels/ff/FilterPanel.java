@@ -2,7 +2,7 @@ package org.courseworks.ris.widgets.views.panels.ff;
 
 import java.lang.reflect.Field;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.main.SC;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.widgets.typeblocks.filters.AbstractFilter;
@@ -102,7 +102,7 @@ public class FilterPanel extends AbstractPanel {
 		});
 	}
 
-	public void initType(DbTable dbTable) {
+	public void initType(EntitySet dbTable) {
 		super.initType(dbTable);
 
 		_fieldCombo.removeAll();

@@ -6,9 +6,9 @@ import java.net.URISyntaxException;
 import javassist.NotFoundException;
 
 import org.courseworks.ris.cmanager.ConfigurationsManager;
-import org.courseworks.ris.cmanager.ConnectionsManager;
+import org.courseworks.ris.cmanager.SessionsManager;
 import org.courseworks.ris.cmanager.session.ExtendedSession;
-import org.courseworks.ris.cmanager.session.GeneralTableList;
+import org.courseworks.ris.cmanager.session.GeneralSession;
 import org.courseworks.ris.gui.ProgWin;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -23,7 +23,7 @@ public class Application {
 
 	private static SplashScreen _splash;
 
-	private static GeneralTableList _dB;
+	private static GeneralSession _generalSession;
 
 	public static void main(String[] args) {
 		_splash = new SplashScreen();
@@ -50,7 +50,7 @@ public class Application {
 		_shell.setLayout(new FillLayout());
 		_shell.setText(SC.APP_HEADER);
 
-		new ProgWin(_dB, _shell);
+		new ProgWin(_generalSession, _shell);
 
 		_shell.setSize(shellSize);
 		_shell.open();
@@ -72,15 +72,20 @@ public class Application {
 		public void run() {
 			try {
 				_splash.setSelection(3);
+
 				String path = "/informix_servers";
-				ConnectionsManager.createSessions(
-						ExtendedSession.ORGELQUEUE_SESSION,
-						new ConfigurationsManager(path));
+
+				SessionsManager.initType(SessionsManager.ORGELQUEUE_SESSION);
+				SessionsManager.createSessions(new ConfigurationsManager(path));
+
 				_splash.setSelection(7);
+
 				fillingSessionsTables();
+
 				_splash.setSelection(10);
-				_dB = new GeneralTableList(ExtendedSession.ORGELQUEUE_SESSION);
-				_dB.refreshTables();
+
+				_generalSession = SessionsManager.getGeneralSession();
+
 				_splash.setSelection(15);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -101,15 +106,19 @@ public class Application {
 		public void run() {
 			try {
 				_splash.setSelection(3);
-				String path = "/mssql_servers/";
-				ConnectionsManager.createSessions(
-						ExtendedSession.HPREPAIR_SESSION,
-						new ConfigurationsManager(path));
+
+				String path = "/mssql_servers";
+				SessionsManager.initType(SessionsManager.HPREPAIR_SESSION);
+				SessionsManager.createSessions(new ConfigurationsManager(path));
+
 				_splash.setSelection(7);
+
 				fillingSessionsTables();
+
 				_splash.setSelection(10);
-				_dB = new GeneralTableList(ExtendedSession.HPREPAIR_SESSION);
-				_dB.refreshTables();
+
+				_generalSession = SessionsManager.getGeneralSession();
+
 				_splash.setSelection(15);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -122,15 +131,15 @@ public class Application {
 	}
 
 	public static void fillingSessionsTables() {
-		for (String sessionKey : ConnectionsManager.getSessionsNames()) {
-			ExtendedSession currentSession = ConnectionsManager
+		for (String sessionKey : SessionsManager.getSessionsNames()) {
+			ExtendedSession currentSession = SessionsManager
 					.getSession(sessionKey);
-			currentSession.refreshTables();
+			currentSession.fillTables();
 		}
 	}
 
-	public static GeneralTableList getGenTables() {
-		return _dB;
+	public static GeneralSession getGenTables() {
+		return _generalSession;
 	}
 
 }

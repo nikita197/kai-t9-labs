@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.main.Application;
 import org.courseworks.ris.mappings.AbstractEntity;
 
@@ -33,39 +33,9 @@ public class Cars extends AbstractEntity {
 	}
 
 	@Override
-	public String getFieldPresent(String fieldName) {
-		if ("Name".equals(fieldName)) {
-			return "Имя";
-		} else if ("id".equals(fieldName)) {
-			return "Идентификатор";
-		}
-		return null;
-	}
-
-	@Override
-	public Field[] getFields() {
-		return getClass().getFields();
-	}
-
-	@Override
-	public Field[] getViewableFields() {
-		Field[] allFields = getClass().getDeclaredFields();
-		List<Field> viewableFields = new LinkedList<Field>();
-
-		for (Field field : allFields) {
-			if ("id".equals(field.getName())) {
-				continue;
-			}
-			viewableFields.add(field);
-		}
-
-		return viewableFields.toArray(new Field[] {});
-	}
-
-	@Override
 	public void generateUID() {
 		String tableName = getTable().getName();
-		DbTable table = Application.getGenTables().getTable(tableName);
+		EntitySet table = Application.getGenTables().getTable(tableName);
 
 		e1: for (int i = 100;; i++) {
 			for (AbstractEntity item : table.getItems()) {
@@ -79,4 +49,39 @@ public class Cars extends AbstractEntity {
 			break;
 		}
 	}
+
+	// -----------------------------------------------------------------
+
+	public static String getViewName() {
+		return "Машины";
+	}
+
+	public static String getFieldPresent(Field field) {
+		String fieldName = field.getName();
+		if ("Name".equals(fieldName)) {
+			return "Имя";
+		} else if ("id".equals(fieldName)) {
+			return "Идентификатор";
+		}
+		return null;
+	}
+
+	public static Field[] getFields() {
+		return Cars.class.getFields();
+	}
+
+	public static Field[] getViewableFields() {
+		Field[] allFields = Cars.class.getDeclaredFields();
+		List<Field> viewableFields = new LinkedList<Field>();
+
+		for (Field field : allFields) {
+			if ("id".equals(field.getName())) {
+				continue;
+			}
+			viewableFields.add(field);
+		}
+
+		return viewableFields.toArray(new Field[] {});
+	}
+
 }

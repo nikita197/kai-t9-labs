@@ -1,71 +1,78 @@
 package org.courseworks.ris.cmanager.session;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-public class DbTable {
+public class DbTable extends EntitySet {
 
-	private final String _name;
+	private EntitySet _generalTable;
+	private ExtendedSession _session;
 
-	private final List<AbstractEntity> _items;
-
-	public DbTable(String name) {
-		_items = new ArrayList<AbstractEntity>();
-		_name = name;
+	public DbTable(Class<?> type, ExtendedSession session,
+			EntitySet generalTable) {
+		super(type);
+		_session = session;
+		_generalTable = generalTable;
 	}
 
-	public void fillItems(ExtendedSession session) {
-		for (AbstractEntity obj : DatabaseLowlevelProcessor.selectFromTable(
-				session, _name)) {
-			obj.setSession(session);
-			obj.setTable(this);
-			_items.add(obj);
+	// ------------------------- Synch methods -----------------------------
+
+	public void fillTable(ExtendedSession session) {
+		clear();
+		for (AbstractEntity entity : DatabaseLowlevelProcessor.selectFromTable(
+				session, _type)) {
+			entity.setTable(this);
+			addItem(entity);
+
+			_generalTable.addItem(entity);
 		}
 	}
 
-	public void addItems(List<AbstractEntity> items) {
-		_items.addAll(items);
+	public void addNewItem(AbstractEntity item) {
+		Session hbSession = _session.getHBSession();
+		Transaction tx = hbSession.beginTransaction();
+		hbSession.save(item);
+		tx.commit();
+
+		addItem(item);
+		_generalTable.addItem(item);
 	}
 
-	public void addItem(AbstractEntity item) {
-		_items.add(item);
+	public void updateItem(AbstractEntity item) {
+		Session hbSession = _session.getHBSession();
+		Transaction tx = hbSession.beginTransaction();
+		hbSession.update(item);
+		tx.commit();
 	}
 
-	public void clear() {
-		_items.clear();
+	public void deleteItem(AbstractEntity item) {
+		Session hbSession = _session.getHBSession();
+		Transaction tx = hbSession.beginTransaction();
+		hbSession.delete(item);
+		tx.commit();
+
+		removeItem(item);
+		_generalTable.removeItem(item);
 	}
 
-	public String getName() {
-		return _name;
-	}
+	// ------------------------- Rel methods -----------------------------
 
-	public List<AbstractEntity> getItems() {
-		return _items;
-	}
-
-	public Field[] getViewableFields() {
-		if (_items.size() > 0) {
-			return _items.get(0).getViewableFields();
+	public DbTable getRelatedTable(Field field) {
+		Class<?> type = field.getType();
+		for (DbTable table : _session.getTables()) {
+			if (table.getContentType().equals(type)) {
+				return table;
+			}
 		}
 		return null;
 	}
 
-	public String getFieldPresentation(String fieldName) {
-		if (_items.size() > 0) {
-			return _items.get(0).getFieldPresent(fieldName);
-		}
-		return null;
-	}
-
-	public DbTable getRelatedTable(Field field) throws IllegalAccessException {
-		if (_items.size() > 0) {
-			return ((AbstractEntity) field.get(_items.get(0))).getTable();
-		}
-		return null;
+	public ExtendedSession getSession() {
+		return _session;
 	}
 
 }

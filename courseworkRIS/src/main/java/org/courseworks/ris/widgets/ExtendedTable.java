@@ -2,7 +2,7 @@ package org.courseworks.ris.widgets;
 
 import java.lang.reflect.Field;
 
-import org.courseworks.ris.cmanager.session.DbTable;
+import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedTable extends Table {
 
-	private DbTable _dbTable;
+	private EntitySet _dbTable;
 
 	private Field[] _fields;
 
@@ -20,7 +20,7 @@ public class ExtendedTable extends Table {
 		super(parent, style);
 	}
 
-	public void initType(DbTable dbTable) {
+	public void initType(EntitySet dbTable) {
 		removeAll();
 		for (TableColumn column : getColumns()) {
 			column.dispose();
@@ -30,11 +30,11 @@ public class ExtendedTable extends Table {
 		for (Field fld : _fields) {
 			TableColumn newColumn = new TableColumn(this, SWT.NONE);
 			newColumn.setData(fld);
-			newColumn.setText(dbTable.getFieldPresentation(fld.getName()));
+			newColumn.setText(dbTable.getFieldPresentation(fld));
 		}
 	}
 
-	public void fill(DbTable dbTable) throws IllegalArgumentException,
+	public void fill(EntitySet dbTable) throws IllegalArgumentException,
 			IllegalAccessException {
 		_dbTable = dbTable;
 		refresh();
