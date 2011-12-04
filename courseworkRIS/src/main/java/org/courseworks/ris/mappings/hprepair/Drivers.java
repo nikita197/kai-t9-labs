@@ -67,7 +67,11 @@ public class Drivers extends AbstractEntity {
 	}
 
 	public static Field[] getFields() {
-		return Cars.class.getFields();
+		return Drivers.class.getFields();
+	}
+
+	public static Field[] getRequiredFields() {
+		return Drivers.class.getFields();
 	}
 
 	public static Field[] getViewableFields() {

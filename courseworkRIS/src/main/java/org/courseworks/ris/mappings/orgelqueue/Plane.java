@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.main.Application;
 import org.courseworks.ris.mappings.AbstractEntity;
-import org.courseworks.ris.mappings.hprepair.Cars;
 
 @Entity
 @Table(name = "plane")
@@ -79,7 +78,11 @@ public class Plane extends AbstractEntity {
 	}
 
 	public static Field[] getFields() {
-		return Cars.class.getFields();
+		return Plane.class.getFields();
+	}
+
+	public static Field[] getRequiredFields() {
+		return Plane.class.getFields();
 	}
 
 	public static Field[] getViewableFields() {

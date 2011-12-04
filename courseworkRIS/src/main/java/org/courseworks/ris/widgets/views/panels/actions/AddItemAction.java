@@ -2,7 +2,7 @@ package org.courseworks.ris.widgets.views.panels.actions;
 
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.widgets.ExtendedTable;
-import org.courseworks.ris.widgets.views.AddView;
+import org.courseworks.ris.widgets.views.UpdateAddView;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public class AddItemAction extends AbstractAction {
@@ -14,19 +14,17 @@ public class AddItemAction extends AbstractAction {
 
 	@Override
 	public void run() {
-		AddView view;
+		UpdateAddView view;
 		try {
-			view = new AddView(_panel.getShell(), "Добавление записи", _table,
-					AddView.TYPE_ADD);
+			view = new UpdateAddView(_panel.getShell(), "Добавление записи", _table,
+					UpdateAddView.TYPE_ADD);
 			view.setItem((AbstractEntity) _table.getContentType().newInstance());
 			if (view.open()) {
 				AbstractEntity entity = view.getItem();
 				entity.getTable().addNewItem(entity);
 				_visualTable.refresh();
 			}
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 	}

@@ -6,6 +6,7 @@ import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.mappings.DatabaseLowlevelProcessor;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 public class DbTable extends EntitySet {
 
@@ -49,7 +50,8 @@ public class DbTable extends EntitySet {
 		tx.commit();
 	}
 
-	public void deleteItem(AbstractEntity item) {
+	public void deleteItem(AbstractEntity item)
+			throws ConstraintViolationException {
 		Session hbSession = _session.getHBSession();
 		Transaction tx = hbSession.beginTransaction();
 		hbSession.delete(item);
