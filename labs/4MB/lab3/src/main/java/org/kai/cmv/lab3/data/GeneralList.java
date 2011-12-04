@@ -35,7 +35,18 @@ public class GeneralList {
 	}
 
 	public boolean contains(GeneralListItem item) {
-		return _gli.contains(item);
+		for (GeneralListItem existItem : _gli) {
+			if (existItem.getName().equals(item.getName())
+					&& existItem.getURL().getFile()
+							.equals(item.getURL().getFile())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public int getItemsCount() {
+		return _gli.size();
 	}
 
 }
