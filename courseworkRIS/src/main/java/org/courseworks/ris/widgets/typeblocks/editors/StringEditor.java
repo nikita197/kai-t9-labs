@@ -14,47 +14,53 @@ import org.eclipse.swt.widgets.Text;
  */
 public class StringEditor extends AbstractFieldEditor {
 
-	/** Поле ввода значений */
-	protected Text text;
+    /** Поле ввода значений */
+    protected Text text;
 
-	public StringEditor(Composite composite, int style, Field field,
-			int editType) {
-		super(composite, style, field, editType);
+    public StringEditor(Composite composite, int style, Field field,
+            boolean nullable) {
+        super(composite, style, field, nullable);
 
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		super.setLayout(layout);
+        GridLayout layout = new GridLayout();
+        layout.marginWidth = 0;
+        layout.marginHeight = 0;
+        super.setLayout(layout);
 
-		text = new Text(this, SWT.SINGLE);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
-	}
+        text = new Text(this, SWT.SINGLE);
+        text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object getValue() {
-		if (text.getText() == "") {
-			return null;
-		}
-		return text.getText();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getValue() {
+        if (text.getText() == "") {
+            return null;
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setValue(Object aValue) {
-		if (!(aValue instanceof String)) {
-			throw new IllegalArgumentException("value must be String");
-		}
+        return text.getText();
+    }
 
-		String value = (String) aValue;
-		text.setText(value);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setValue(Object aValue) {
+        if (aValue == null) {
+            text.setText("");
+            return;
+        }
 
-	@Override
-	public void setEditingItem(AbstractEntity item) {
-	}
+        if (!(aValue instanceof String)) {
+            throw new IllegalArgumentException("value must be String");
+        }
+
+        String value = (String) aValue;
+        text.setText(value);
+    }
+
+    @Override
+    public void setEditingItem(AbstractEntity item) {
+    }
 }

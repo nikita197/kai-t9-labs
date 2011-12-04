@@ -19,67 +19,78 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class RelatedObjectEditor extends AbstractFieldEditor {
 
-	/** Поле ввода значений */
-	protected Combo text;
+    /** Поле ввода значений */
+    protected Combo text;
 
-	// private AbstractEntity _editItem;
-	private List<AbstractEntity> _possibleValues;
+    // private AbstractEntity _editItem;
+    private List<AbstractEntity> _possibleValues;
 
-	public RelatedObjectEditor(Composite composite, int style, Field field,
-			int editType) {
-		super(composite, style, field, editType);
+    public RelatedObjectEditor(Composite composite, int style, Field field,
+            boolean nullable) {
+        super(composite, style, field, nullable);
 
-		_possibleValues = new ArrayList<AbstractEntity>();
+        _possibleValues = new ArrayList<AbstractEntity>();
 
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		super.setLayout(layout);
+        GridLayout layout = new GridLayout();
+        layout.marginWidth = 0;
+        layout.marginHeight = 0;
+        super.setLayout(layout);
 
-		if (editType == AbstractFieldEditor.FIND) {
-			text = new Combo(this, SWT.NONE);
-		} else {
-			text = new Combo(this, SWT.READ_ONLY);
-		}
-		text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
-	}
+        text = new Combo(this, SWT.READ_ONLY);
+        text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object getValue() {
-		if (text.getSelectionIndex() < 1) {
-			return null;
-		}
-		return _possibleValues.get(text.getSelectionIndex() - 1);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getValue() {
+        int index = text.getSelectionIndex();
+        if (nullable) {
+            index--;
+        }
 
-	/**
-	 * Передаем на заполнение объект
-	 * 
-	 * @param aValue
-	 *            Массив из 2 элементов: <массив всевозможных значений>;<индекс
-	 *            выбранного элемента>
-	 */
-	@Override
-	public void setValue(Object aValue) {
-		int index = _possibleValues.indexOf(aValue);
-		text.select(index + 1);
-	}
+        if (index < 0) {
+            return null;
+        }
 
-	@Override
-	public void setEditingItem(AbstractEntity item) {
-		// _editItem = item;
-		text.removeAll();
-		_possibleValues.clear();
+        return _possibleValues.get(index);
+    }
 
-		text.add(SC.NULL_STRING);
-		DbTable relTable = item.getTable().getRelatedTable(_field);
+    /**
+     * Передаем на заполнение объект
+     * 
+     * @param aValue Массив из 2 элементов: <массив всевозможных
+     *            значений>;<индекс выбранного элемента>
+     */
+    @Override
+    public void setValue(Object aValue) {
+        if (aValue == null) {
+            text.select(0);
+            return;
+        }
 
-		for (AbstractEntity entity : relTable.getItems()) {
-			text.add(entity.toString());
-			_possibleValues.add(entity);
-		}
-	}
+        int index = _possibleValues.indexOf(aValue);
+        if (nullable) {
+            index++;
+        }
+        text.select(index);
+    }
+
+    @Override
+    public void setEditingItem(AbstractEntity item) {
+        // _editItem = item;
+        text.removeAll();
+        _possibleValues.clear();
+
+        if (nullable) {
+            text.add(SC.NULL_STRING);
+        }
+
+        DbTable relTable = item.getTable().getRelatedTable(_field);
+        for (AbstractEntity entity : relTable.getItems()) {
+            text.add(entity.toString());
+            _possibleValues.add(entity);
+        }
+    }
 }
