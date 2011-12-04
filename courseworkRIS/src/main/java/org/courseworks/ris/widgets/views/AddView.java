@@ -25,198 +25,205 @@ import org.eclipse.swt.widgets.Shell;
 
 public class AddView {
 
-	public static final int TYPE_ADD = 1;
+    public static final int TYPE_ADD = 1;
 
-	public static final int TYPE_UPDATE = 2;
+    public static final int TYPE_UPDATE = 2;
 
-	private final Shell _shell;
+    private final Shell _shell;
 
-	private final EntitySet _table;
+    private final EntitySet _table;
 
-	private int _type;
+    private int _type;
 
-	private DbTable _currentTable;
+    private DbTable _currentTable;
 
-	private final List<AbstractFieldEditor> _fieldEditors;
+    private final List<AbstractFieldEditor> _fieldEditors;
 
-	private AbstractEntity _item;
+    private AbstractEntity _item;
 
-	private Combo _sessionsCombo;
+    private Combo _sessionsCombo;
 
-	private final Button _acceptButton;
+    private final Button _acceptButton;
 
-	private final Button _discardButton;
+    private final Button _discardButton;
 
-	private boolean _actionPerformed;
+    private boolean _actionPerformed;
 
-	private boolean _exit;
+    private boolean _exit;
 
-	private int selectedIndex;
+    private int selectedIndex;
 
-	public AddView(Shell shell, String name, EntitySet table, int type)
-			throws InstantiationException, IllegalAccessException {
-		_actionPerformed = false;
-		_exit = false;
-		_fieldEditors = new ArrayList<AbstractFieldEditor>();
-		_table = table;
-		_type = type;
+    public AddView(Shell shell, String name, EntitySet table, int type)
+            throws InstantiationException, IllegalAccessException {
+        _actionPerformed = false;
+        _exit = false;
+        _fieldEditors = new ArrayList<AbstractFieldEditor>();
+        _table = table;
+        _type = type;
 
-		_shell = new Shell(shell, SWT.SHELL_TRIM);
-		GridLayout shellLayout = new GridLayout();
-		shellLayout.numColumns = 2;
-		_shell.setLayout(shellLayout);
-		_shell.setText(name);
+        _shell = new Shell(shell, SWT.SHELL_TRIM);
+        GridLayout shellLayout = new GridLayout();
+        shellLayout.numColumns = 2;
+        _shell.setLayout(shellLayout);
+        _shell.setText(name);
 
-		_sessionsCombo = new Combo(_shell, SWT.READ_ONLY);
-		_sessionsCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 2, 1));
+        _sessionsCombo = new Combo(_shell, SWT.READ_ONLY);
+        _sessionsCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+                false, 2, 1));
 
-		Label label = new Label(_shell, SWT.NONE);
-		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2,
-				1));
+        Label label = new Label(_shell, SWT.NONE);
+        label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2,
+                1));
 
-		Composite composite = new Composite(_shell, SWT.BORDER);
-		GridLayout compositeLayout = new GridLayout();
-		compositeLayout.numColumns = 2;
-		composite.setLayout(compositeLayout);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2,
-				1));
+        Composite composite = new Composite(_shell, SWT.BORDER);
+        GridLayout compositeLayout = new GridLayout();
+        compositeLayout.numColumns = 2;
+        composite.setLayout(compositeLayout);
+        composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2,
+                1));
 
-		for (Field field : _table.getViewableFields()) {
-			Label name1 = new Label(composite, SWT.NONE);
-			name1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-			name1.setText(_table.getFieldPresentation(field));
+        for (Field field : _table.getViewableFields()) {
+            Label name1 = new Label(composite, SWT.NONE);
+            name1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+            name1.setText(_table.getFieldPresentation(field));
 
-			AbstractFieldEditor editor = AbstractFieldEditor.getInstance(
-					composite, SWT.NONE, field, AbstractFieldEditor.EDIT);
-			editor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-			editor.setData(field);
-			_fieldEditors.add(editor);
-		}
+            AbstractFieldEditor editor = AbstractFieldEditor
+                    .getInstance(composite, SWT.NONE, field,
+                            AbstractFieldEditor.EDIT, false);
+            editor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+            editor.setData(field);
+            _fieldEditors.add(editor);
+        }
 
-		_acceptButton = new Button(_shell, SWT.PUSH);
-		_discardButton = new Button(_shell, SWT.PUSH);
+        _acceptButton = new Button(_shell, SWT.PUSH);
+        _discardButton = new Button(_shell, SWT.PUSH);
 
-		if (type == TYPE_ADD) {
-			label.setText("Заполните поля добавляемого объекта:");
-		} else if (type == TYPE_UPDATE) {
-			label.setText("Изменение полей записи:");
-		}
-		_acceptButton.setText("ОК");
-		_discardButton.setText("Отмена");
+        if (type == TYPE_ADD) {
+            label.setText("Заполните поля добавляемого объекта:");
+        } else
+            if (type == TYPE_UPDATE) {
+                label.setText("Изменение полей записи:");
+            }
+        _acceptButton.setText("ОК");
+        _discardButton.setText("Отмена");
 
-		_acceptButton.addListener(SWT.Selection, new Listener() {
+        _acceptButton.addListener(SWT.Selection, new Listener() {
 
-			@Override
-			public void handleEvent(Event aEvent) {
-				try {
-					_actionPerformed = true;
-					fillItem();
-				} catch (Exception e) {
-					MessageBox msgBox = new MessageBox(_shell, SWT.OK
-							| SWT.ICON_ERROR);
-					msgBox.setText("Ошибка");
-					msgBox.setText("Необходимые поля не были заполнены.");
-					_actionPerformed = false;
-				}
-			}
+            @Override
+            public void handleEvent(Event aEvent) {
+                try {
+                    _actionPerformed = true;
+                    fillItem();
+                    _shell.close();
+                } catch (Exception e) {
+                    MessageBox msgBox = new MessageBox(_shell, SWT.OK
+                            | SWT.ICON_ERROR);
+                    msgBox.setText("Ошибка");
+                    msgBox.setText("Необходимые поля не были заполнены.");
+                    _actionPerformed = false;
+                }
+            }
 
-		});
-		_discardButton.addListener(SWT.Selection, new Listener() {
+        });
+        _discardButton.addListener(SWT.Selection, new Listener() {
 
-			@Override
-			public void handleEvent(Event aEvent) {
-				_exit = true;
-			}
+            @Override
+            public void handleEvent(Event aEvent) {
+                _exit = true;
+                _shell.close();
+            }
 
-		});
+        });
 
-		_shell.pack();
-	}
+        _shell.pack();
+    }
 
-	public boolean open() throws IllegalAccessException {
-		fillContent();
-		_shell.open();
+    public boolean open() throws IllegalAccessException {
+        fillContent();
+        _shell.open();
 
-		Shell parentShell = _shell.getShell();
-		Display display = _shell.getDisplay();
+        Shell parentShell = _shell.getShell();
+        Display display = _shell.getDisplay();
 
-		while ((!parentShell.isDisposed()) && (!_shell.isDisposed())
-				&& (!_exit)) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
+        while ((!parentShell.isDisposed()) && (!_shell.isDisposed())
+                && (!_exit)) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
 
-		return _actionPerformed;
-	}
+        return _actionPerformed;
+    }
 
-	private void fillContent() throws IllegalAccessException {
-		// update case
-		if (TYPE_UPDATE == _type) {
-			ExtendedSession currentSession = _item.getTable().getSession();
-			String currentSessionName = SessionsManager.getName(currentSession);
-			_sessionsCombo.add(currentSessionName);
-			_sessionsCombo.select(0);
-			_sessionsCombo.setEnabled(false);
-		} else if (TYPE_ADD == _type) {
-			String[] sessions = SessionsManager.getSessionsNames();
-			for (String session : sessions) {
-				_sessionsCombo.add(session);
-			}
+    private void fillContent() throws IllegalAccessException {
+        if (TYPE_UPDATE == _type) {
+            ExtendedSession currentSession = _item.getTable().getSession();
+            String currentSessionName = SessionsManager.getName(currentSession);
+            _sessionsCombo.add(currentSessionName);
+            _sessionsCombo.setEnabled(false);
+        } else
+            if (TYPE_ADD == _type) {
+                String[] sessions = SessionsManager.getSessionsNames();
+                for (String session : sessions) {
+                    _sessionsCombo.add(session);
+                }
+            }
 
-			Listener listener = new Listener() {
+        Listener listener = new Listener() {
 
-				@Override
-				public void handleEvent(Event arg0) {
-					if ((arg0 == null)
-							|| (selectedIndex != _sessionsCombo
-									.getSelectionIndex())) {
-						selectedIndex = _sessionsCombo.getSelectionIndex();
-						ExtendedSession session = SessionsManager
-								.getSession(_sessionsCombo.getText());
-						_currentTable = session.getEqualTable(_table);
-						_item.setTable(_currentTable);
-					}
+            @Override
+            public void handleEvent(Event arg0) {
+                if ((arg0 == null)
+                        || (selectedIndex != _sessionsCombo.getSelectionIndex())) {
+                    selectedIndex = _sessionsCombo.getSelectionIndex();
+                    ExtendedSession session = SessionsManager
+                            .getSession(_sessionsCombo.getText());
+                    _currentTable = session.getEqualTable(_table);
+                    _item.setTable(_currentTable);
 
-				}
+                    for (AbstractFieldEditor editor : _fieldEditors) {
+                        editor.setEditingItem(_item);
+                    }
 
-			};
+                }
 
-			_sessionsCombo.select(0);
-			listener.handleEvent(null);
-			_sessionsCombo.addListener(SWT.Selection, listener);
-		}
+            }
 
-		for (AbstractFieldEditor editor : _fieldEditors) {
-			Field field = (Field) editor.getData();
-			Object value = field.get(_item);
+        };
 
-			editor.setEditingItem(_item);
+        _sessionsCombo.select(0);
+        listener.handleEvent(null);
+        _sessionsCombo.addListener(SWT.Selection, listener);
 
-			if (value == null) {
-				continue;
-			}
-			editor.setValue(value);
-		}
+        for (AbstractFieldEditor editor : _fieldEditors) {
+            Field field = (Field) editor.getData();
+            Object value = field.get(_item);
 
-	}
+            if (value == null) {
+                continue;
+            }
+            editor.setValue(value);
+        }
 
-	private void fillItem() throws IllegalAccessException {
-		for (AbstractFieldEditor editor : _fieldEditors) {
-			Field field = (Field) editor.getData();
-			field.set(_item, editor.getValue());
-		}
+    }
 
-		_item.setTable(_currentTable);
-		_item.generateUID();
-	}
+    private void fillItem() throws IllegalAccessException {
+        for (AbstractFieldEditor editor : _fieldEditors) {
+            Field field = (Field) editor.getData();
+            field.set(_item, editor.getValue());
+        }
 
-	public void setItem(AbstractEntity item) {
-		_item = item;
-	}
+        _item.setTable(_currentTable);
+        if (TYPE_ADD == _type) {
+            _item.generateUID();
+        }
+    }
 
-	public AbstractEntity getItem() {
-		return _item;
-	}
+    public void setItem(AbstractEntity item) {
+        _item = item;
+    }
+
+    public AbstractEntity getItem() {
+        return _item;
+    }
 }
