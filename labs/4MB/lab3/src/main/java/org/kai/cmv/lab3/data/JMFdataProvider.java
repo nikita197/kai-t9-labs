@@ -56,8 +56,6 @@ public class JMFdataProvider {
 	public void getProperties(String path) {
 		File propFile;
 		_properties.clear();
-		// propFile = new
-		// File(JMFdataProvider.class.getResource(path).toURI());
 		propFile = new File(getFullPath(path));
 		if (!propFile.exists() || propFile.isDirectory()) {
 			throw new IllegalArgumentException("File is not exist");
@@ -120,8 +118,7 @@ public class JMFdataProvider {
 
 	public String getFullPath(String path) {
 		String s = File.separator;
-		return "I:" + s + "Documents" + s + "Eclipse_workplace" + s + "lab3"
-				+ s + "src" + s + "main" + s + "resources" + s + path;
+		return "src" + s + "main" + s + "resources" + s + path;
 	}
 
 }
