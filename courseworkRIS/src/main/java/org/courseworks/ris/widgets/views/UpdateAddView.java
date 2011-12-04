@@ -114,12 +114,24 @@ public class UpdateAddView {
 				try {
 					_actionPerformed = true;
 					fillItem();
-					_shell.close();
+
+					List<String> unfilledFields = getNfilledFields();
+					if (unfilledFields.size() == 0) {
+						_shell.close();
+					} else {
+						MessageBox msgBox = new MessageBox(_shell, SWT.OK
+								| SWT.ICON_ERROR);
+						msgBox.setText("Необходимые поля не были заполнены.");
+						StringBuffer fields = new StringBuffer();
+						for (String field : unfilledFields) {
+							fields.append(field + " ");
+						}
+						msgBox.setText("Поля" + fields.toString()
+								+ " не были заполнены.");
+						msgBox.open();
+						_actionPerformed = false;
+					}
 				} catch (Exception e) {
-					MessageBox msgBox = new MessageBox(_shell, SWT.OK
-							| SWT.ICON_ERROR);
-					msgBox.setText("Ошибка");
-					msgBox.setText("Необходимые поля не были заполнены.");
 					_actionPerformed = false;
 				}
 			}
