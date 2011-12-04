@@ -48,6 +48,9 @@ public class Shedule extends Composite {
 		_toFavButton = new Button(buttonsPanel, SWT.NONE);
 		_toFavButton.setText("В избранное");
 
+		_clearButton = new Button(buttonsPanel, SWT.NONE);
+		_clearButton.setText("Очистить");
+
 		addListeners();
 	}
 
@@ -73,11 +76,13 @@ public class Shedule extends Composite {
 			@Override
 			public void handleEvent(Event arg0) {
 				int selectedIndex = _list.getSelectionIndex();
-				GeneralListItem gli = GUIThread.getDataProvider().getData()
-						.getItem(selectedIndex);
-				Favorites fav = _screen.getScFavorites();
-				if (!fav.containsFavList(gli)) {
-					fav.addFavListItem(gli);
+				if (selectedIndex > -1) {
+					GeneralListItem gli = GUIThread.getDataProvider().getData()
+							.getItem(selectedIndex);
+					Favorites fav = _screen.getScFavorites();
+					if (!fav.containsFavList(gli)) {
+						fav.addFavListItem(gli);
+					}
 				}
 			}
 		});
@@ -91,6 +96,27 @@ public class Shedule extends Composite {
 							.getItem(selectedIndex);
 					GUIThread.getDataProvider().unlinkingFile(gli);
 					_list.remove(selectedIndex);
+
+					Favorites fav = _screen.getScFavorites();
+					Automat automat = _screen.getScMonitor().getAuto();
+					if (fav.containsFavList(gli)) {
+						fav.delFavListItem(gli);
+					}
+					if (automat.containsAutomatList(gli)) {
+						automat.delAutomatListItem(gli);
+					}
+				}
+			}
+		});
+
+		_clearButton.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				for (int i = _list.getItemCount() - 1; i >= 0; i--) {
+					GeneralListItem gli = GUIThread.getDataProvider().getData()
+							.getItem(i);
+					GUIThread.getDataProvider().unlinkingFile(gli);
+					_list.remove(i);
 
 					Favorites fav = _screen.getScFavorites();
 					Automat automat = _screen.getScMonitor().getAuto();

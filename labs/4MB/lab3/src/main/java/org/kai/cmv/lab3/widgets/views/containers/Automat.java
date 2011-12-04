@@ -34,6 +34,7 @@ public class Automat extends AbstractDynamicSplit {
 	public void addAutomatListItem(GeneralListItem newItem) {
 		_automatList.add(newItem.getName());
 		_automatItems.add(newItem);
+		_automatList.setSelection(_automatList.getItemCount() - 1);
 		_monitor.layout();
 	}
 
@@ -146,5 +147,23 @@ public class Automat extends AbstractDynamicSplit {
 		_deleteButton.setText("Удалить");
 
 		addListeners();
+	}
+
+	public void playCurrentChanel() {
+		int index = _automatList.getSelectionIndex();
+		if (index > -1) {
+			try {
+				_monitor.createPlayer(_automatItems.get(index));
+				_monitor.startPlayer();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (CannotRealizeException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (MediaException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

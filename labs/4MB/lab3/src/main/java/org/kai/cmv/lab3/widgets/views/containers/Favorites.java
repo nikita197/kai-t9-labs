@@ -92,10 +92,12 @@ public class Favorites extends Composite {
 			@Override
 			public void handleEvent(Event arg0) {
 				int selectedIndex = _favList.getSelectionIndex();
-				Automat automat = _screen.getScMonitor().getAuto();
-				GeneralListItem item = _favItems.get(selectedIndex);
-				if (!automat.containsAutomatList(item)) {
-					automat.addAutomatListItem(item);
+				if (selectedIndex > -1) {
+					Automat automat = _screen.getScMonitor().getAuto();
+					GeneralListItem item = _favItems.get(selectedIndex);
+					if (!automat.containsAutomatList(item)) {
+						automat.addAutomatListItem(item);
+					}
 				}
 			}
 		});
