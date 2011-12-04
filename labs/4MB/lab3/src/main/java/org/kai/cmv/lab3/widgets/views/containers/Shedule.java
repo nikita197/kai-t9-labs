@@ -55,10 +55,16 @@ public class Shedule extends Composite {
 		_addButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
+				int itemsCount = GUIThread.getDataProvider().getData()
+						.getItemsCount();
 				String newItem = GUIThread.getDataProvider().linkingFile();
 				if (newItem != null) {
-					_list.add(newItem);
-					_list.setSelection(_list.getItemCount() - 1);
+					if (GUIThread.getDataProvider().getData().getItemsCount() != itemsCount) {
+						_list.add(newItem);
+						_list.setSelection(_list.getItemCount() - 1);
+					} else {
+						_list.setSelection(_list.indexOf(newItem));
+					}
 				}
 			}
 		});
