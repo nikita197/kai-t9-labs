@@ -30,7 +30,7 @@ public class MainMenu extends Composite {
 		_watch.setLayoutData(clocksData);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, true);
-		gridData.heightHint = 180;
+		gridData.heightHint = 50;
 		_sheduleButton = new Button(this, SWT.TOGGLE);
 		_sheduleButton.setText("Расписание");
 		_sheduleButton.setLayoutData(gridData);
@@ -43,9 +43,9 @@ public class MainMenu extends Composite {
 		_sheduleButton.setFocus();
 
 		_helper = new AbstractHelper(this, SWT.NONE);
-		_helper.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, true));
-		((GridData) _helper.getLayoutData()).verticalIndent = -6;
-		((GridData) _helper.getLayoutData()).horizontalIndent = -6;
+		_helper.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
+		((GridData) _helper.getLayoutData()).verticalIndent = -11;
+		((GridData) _helper.getLayoutData()).horizontalIndent = -5;
 	}
 
 	public void addListeners() {
