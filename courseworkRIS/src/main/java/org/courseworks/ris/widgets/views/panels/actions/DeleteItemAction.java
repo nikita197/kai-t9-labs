@@ -17,10 +17,9 @@ public class DeleteItemAction extends AbstractAction {
 			AbstractEntity entity = _visualTable.getSelectedItem();
 			entity.getTable().deleteItem(entity);
 			_visualTable.refresh();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out
+					.println("Удаление невозможно - существуют связаные записи");
 		}
 	}
 }

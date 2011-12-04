@@ -18,6 +18,7 @@ public class EntitySet {
 
 	private Method _getName;
 	private Method _getViewableFields;
+	private Method _getRequiredFields;
 	private Method _getFieldPresent;
 
 	public EntitySet(Class<?> type) {
@@ -28,6 +29,7 @@ public class EntitySet {
 		try {
 			_getName = _type.getMethod("getViewName");
 			_getViewableFields = _type.getMethod("getViewableFields");
+			_getRequiredFields = _type.getMethod("getRequiredFields");
 			_getFieldPresent = _type.getMethod("getFieldPresent", Field.class);
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -66,6 +68,16 @@ public class EntitySet {
 
 	public Class<?> getContentType() {
 		return _type;
+	}
+
+	public Field[] getRequiredFields() {
+		try {
+			return (Field[]) _getRequiredFields.invoke(null);
+		} catch (IllegalAccessException e) {
+			return null;
+		} catch (InvocationTargetException e) {
+			return null;
+		}
 	}
 
 	public Field[] getViewableFields() {

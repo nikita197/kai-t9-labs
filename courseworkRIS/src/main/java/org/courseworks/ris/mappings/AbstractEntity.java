@@ -1,5 +1,8 @@
 package org.courseworks.ris.mappings;
 
+import java.lang.reflect.Field;
+import java.util.Calendar;
+
 import org.courseworks.ris.cmanager.session.DbTable;
 
 /**
@@ -23,6 +26,17 @@ public abstract class AbstractEntity extends Object {
 		_table = table;
 	}
 
+	public Object getFieldValue(Field field) throws IllegalArgumentException,
+			IllegalAccessException {
+		if (Calendar.class.equals(field.getType())) {
+			Calendar date = (Calendar) field.get(this);
+			if (date != null) {
+				return formateDate(date);
+			}
+		}
+		return field.get(this);
+	}
+
 	@Override
 	public String toString() {
 		return getName();
@@ -30,9 +44,19 @@ public abstract class AbstractEntity extends Object {
 
 	public abstract void generateUID();
 
-	// public abstract Field[] getFields();
-	//
-	// public abstract Field[] getViewableFields();
-	//
-	// public abstract String getFieldPresent(String fieldName);
+	public static String formateDate(Calendar date) {
+		StringBuffer result = new StringBuffer();
+		result.append(date.get(Calendar.DAY_OF_MONTH));
+		result.append(".");
+		result.append(date.get(Calendar.MONTH));
+		result.append(".");
+		result.append(date.get(Calendar.YEAR));
+		result.append(" ");
+		result.append(date.get(Calendar.HOUR));
+		result.append(":");
+		result.append(date.get(Calendar.MINUTE));
+		result.append(":");
+		result.append(date.get(Calendar.SECOND));
+		return result.toString();
+	}
 }

@@ -70,6 +70,10 @@ public class Cars extends AbstractEntity {
 		return Cars.class.getFields();
 	}
 
+	public static Field[] getRequiredFields() {
+		return Cars.class.getFields();
+	}
+
 	public static Field[] getViewableFields() {
 		Field[] allFields = Cars.class.getDeclaredFields();
 		List<Field> viewableFields = new LinkedList<Field>();

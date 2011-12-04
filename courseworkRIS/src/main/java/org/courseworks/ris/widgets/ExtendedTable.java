@@ -44,12 +44,15 @@ public class ExtendedTable extends Table {
 			IllegalAccessException {
 		removeAll();
 		if (_dbTable != null) {
-			for (Object obj : _dbTable.getItems()) {
+			for (AbstractEntity obj : _dbTable.getItems()) {
 				TableItem newRow = new TableItem(this, SWT.NONE);
 				newRow.setData(obj);
 				int index = 0;
 				for (Field fld : _fields) {
-					newRow.setText(index, fld.get(obj).toString());
+					Object value = obj.getFieldValue(fld);
+					if (value != null) {
+						newRow.setText(index, value.toString());
+					}
 					index++;
 				}
 			}
