@@ -2,6 +2,7 @@ package org.courseworks.ris.widgets;
 
 import java.lang.reflect.Field;
 
+import org.courseworks.ris.cmanager.SessionsManager;
 import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
@@ -31,6 +32,9 @@ public class ExtendedTable extends Table {
             newColumn.setData(fld);
             newColumn.setText(dbTable.getFieldPresentation(fld));
         }
+
+        TableColumn sessionColumn = new TableColumn(this, SWT.NONE);
+        sessionColumn.setText("Сервер");
     }
 
     public void fill(EntitySet dbTable) throws IllegalArgumentException,
@@ -46,6 +50,7 @@ public class ExtendedTable extends Table {
             for (AbstractEntity obj : _dbTable.getItems()) {
                 TableItem newRow = new TableItem(this, SWT.NONE);
                 newRow.setData(obj);
+
                 int index = 0;
                 for (Field fld : _fields) {
                     Object value = obj.getFieldValue(fld);
@@ -54,6 +59,8 @@ public class ExtendedTable extends Table {
                     }
                     index++;
                 }
+                newRow.setText(index,
+                        SessionsManager.getName(obj.getTable().getSession()));
             }
         }
     }

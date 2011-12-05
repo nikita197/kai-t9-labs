@@ -65,4 +65,8 @@ public class TableViewer {
         _panelsTab.initType(_table.getTable());
     }
 
+    public void setLayoutData(Object layoutData) {
+        _container.setLayoutData(layoutData);
+    }
+
 }
