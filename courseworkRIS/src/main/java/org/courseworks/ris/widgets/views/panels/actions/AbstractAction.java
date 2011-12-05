@@ -2,6 +2,7 @@ package org.courseworks.ris.widgets.views.panels.actions;
 
 import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.widgets.ExtendedTable;
+import org.courseworks.ris.widgets.TableViewer;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -10,49 +11,52 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public abstract class AbstractAction {
 
-	protected ExtendedTable _visualTable;
+    protected TableViewer _tableViewer;
 
-	protected EntitySet _table;
+    protected ExtendedTable _visualTable;
 
-	protected ToolItem _item;
+    protected EntitySet _table;
 
-	protected ActionsPanel _panel;
+    protected ToolItem _item;
 
-	protected String _name;
+    protected ActionsPanel _panel;
 
-	protected ImageDescriptor _icon;
+    protected String _name;
 
-	public AbstractAction(ExtendedTable table, ActionsPanel panel, String name,
-			ImageDescriptor icon) {
-		_visualTable = table;
-		_panel = panel;
-		_name = name;
-		_icon = icon;
+    protected ImageDescriptor _icon;
 
-		_item = _panel.addItem(this);
+    public AbstractAction(TableViewer tableViewer, ExtendedTable table,
+            ActionsPanel panel, String name, ImageDescriptor icon) {
+        _tableViewer = tableViewer;
+        _visualTable = table;
+        _panel = panel;
+        _name = name;
+        _icon = icon;
 
-		_item.addListener(SWT.Selection, new Listener() {
+        _item = _panel.addItem(this);
 
-			@Override
-			public void handleEvent(Event arg0) {
-				run();
-			}
+        _item.addListener(SWT.Selection, new Listener() {
 
-		});
-	}
+            @Override
+            public void handleEvent(Event arg0) {
+                run();
+            }
 
-	void setTable(EntitySet table) {
-		_table = table;
-	}
+        });
+    }
 
-	EntitySet getTable() {
-		return _table;
-	}
+    void setTable(EntitySet table) {
+        _table = table;
+    }
 
-	public abstract void run();
+    EntitySet getTable() {
+        return _table;
+    }
 
-	public void setEnabled(boolean enabled) {
-		_item.setEnabled(enabled);
-	}
+    public abstract void run();
+
+    public void setEnabled(boolean enabled) {
+        _item.setEnabled(enabled);
+    }
 
 }

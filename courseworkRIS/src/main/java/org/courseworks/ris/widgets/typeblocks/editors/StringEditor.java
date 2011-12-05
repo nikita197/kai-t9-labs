@@ -26,7 +26,7 @@ public class StringEditor extends AbstractFieldEditor {
         layout.marginHeight = 0;
         super.setLayout(layout);
 
-        text = new Text(this, SWT.SINGLE);
+        text = new Text(this, SWT.SINGLE | SWT.BORDER);
         text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
     }
 
@@ -35,7 +35,7 @@ public class StringEditor extends AbstractFieldEditor {
      */
     @Override
     public Object getValue() {
-        if (text.getText() == "") {
+        if (text.getText().trim().equals("")) {
             return null;
         }
 
