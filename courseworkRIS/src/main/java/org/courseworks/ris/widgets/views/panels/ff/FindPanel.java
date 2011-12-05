@@ -1,8 +1,13 @@
 package org.courseworks.ris.widgets.views.panels.ff;
 
+import java.lang.reflect.Field;
+import java.util.Calendar;
+
 import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.main.SC;
+import org.courseworks.ris.mappings.AbstractEntity;
 import org.courseworks.ris.widgets.typeblocks.editors.AbstractFieldEditor;
+import org.courseworks.ris.widgets.typeblocks.editors.DateEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -12,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TableItem;
 
 public class FindPanel extends AbstractPanel {
@@ -20,6 +25,7 @@ public class FindPanel extends AbstractPanel {
     private Composite _finderPlace;
     private Label _headerLabel;
     private AbstractFieldEditor _finder;
+    private int index;
 
     public FindPanel(PanelsTab panelsView, String name, int style) {
         super(panelsView, name, style);
@@ -71,7 +77,13 @@ public class FindPanel extends AbstractPanel {
 
             @Override
             public void handleEvent(Event arg0) {
-                findValue();
+                try {
+                    findValue();
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -84,9 +96,11 @@ public class FindPanel extends AbstractPanel {
             _headerLabel.dispose();
         }
 
+        index = -1;
+
         _fieldCombo.removeAll();
-        for (TableColumn tbc : _visualTable.getColumns()) {
-            _fieldCombo.add(tbc.getText());
+        for (Field field : dbTable.getViewableFields()) {
+            _fieldCombo.add(dbTable.getFieldPresentation(field));
         }
     }
 
@@ -95,6 +109,8 @@ public class FindPanel extends AbstractPanel {
             _finder.dispose();
             _headerLabel.dispose();
         }
+
+        index = -1;
 
         _headerLabel = new Label(_finderPlace, SWT.NONE);
         _headerLabel
@@ -109,14 +125,38 @@ public class FindPanel extends AbstractPanel {
         _visualTable.getParent().layout();
     }
 
-    public void findValue() {
-        Object object = _finder.getValue();
-        final int column = _fieldCombo.getSelectionIndex();
-        for (TableItem item : _visualTable.getItems()) {
-            if (object.toString().equals(item.getText(column))) {
-                _visualTable.setSelection(item);
-            }
-        }
-    }
+    public void findValue() throws IllegalArgumentException,
+            IllegalAccessException {
+        if ((_finder != null) && (_finder.getValue() != null)) {
+            Object object = _finder.getValue();
 
+            // PATCH for date
+            if (_finder.getClass().equals(DateEditor.class)) {
+                object = AbstractEntity.formateDate((Calendar) object);
+            }
+            // --------------
+
+            final int column = _fieldCombo.getSelectionIndex();
+
+            TableItem[] items = _visualTable.getItems();
+            if (index < items.length - 1) {
+                for (int i = index + 1; i < items.length; i++) {
+                    TableItem item = items[i];
+                    if (item.getText(column).contains(object.toString())) {
+                        _visualTable.setSelection(item);
+                        index = i;
+                        return;
+                    }
+                }
+            }
+
+            MessageBox msgBox = new MessageBox(_visualTable.getShell(), SWT.OK
+                    | SWT.ICON_INFORMATION);
+            msgBox.setText("Поиск завершен");
+            msgBox.setMessage("Поиск завершен");
+            msgBox.open();
+        }
+
+        index = -1;
+    }
 }

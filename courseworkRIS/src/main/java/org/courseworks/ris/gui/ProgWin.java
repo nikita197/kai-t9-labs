@@ -8,8 +8,12 @@ import org.courseworks.ris.reports.Reports;
 import org.courseworks.ris.rqueries.RQuery;
 import org.courseworks.ris.widgets.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -20,6 +24,8 @@ public class ProgWin {
     private Shell _shell;
 
     private final GeneralSession _generalSession;
+
+    private final Label _tableLabel;
 
     private final TableViewer _tableViewer;
 
@@ -32,8 +38,15 @@ public class ProgWin {
 
         _shell = composite.getShell();
 
+        _tableLabel = new Label(composite, SWT.NONE);
+        _tableLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+                false));
+        _tableLabel
+                .setFont(new Font(null, new FontData("Tahoma", 13, SWT.BOLD)));
+
         _tableViewer = new TableViewer(composite, SWT.NONE);
-        // _tableViewer.fill(_dbase.getTable("Plane"));
+        _tableViewer
+                .setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         _menuBar = new Menu(composite.getShell(), SWT.BAR);
         MenuItem tables = new MenuItem(_menuBar, SWT.CASCADE);
@@ -73,6 +86,7 @@ public class ProgWin {
                 EntitySet table = (EntitySet) item.getData();
                 try {
                     _tableViewer.fill(table);
+                    _tableLabel.setText(table.getViewName());
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
@@ -94,5 +108,6 @@ public class ProgWin {
         Event event = new Event();
         event.widget = tablesMenu.getItem(0);
         listener.handleEvent(event);
+        tablesMenu.getItem(0).setSelection(true);
     }
 }

@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class FilterPanel extends AbstractPanel {
@@ -111,8 +110,8 @@ public class FilterPanel extends AbstractPanel {
         }
 
         _fieldCombo.removeAll();
-        for (TableColumn tbc : _visualTable.getColumns()) {
-            _fieldCombo.add(tbc.getText());
+        for (Field field : dbTable.getViewableFields()) {
+            _fieldCombo.add(dbTable.getFieldPresentation(field));
         }
     }
 
