@@ -1,62 +1,71 @@
-package org.courseworks.ris.widgets.typeblocks.editors;
+package org.courseworks.ris.widgets.typeblocks.filters;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.Calendar;
 
+import org.courseworks.ris.main.SC;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class DateEditor extends AbstractFieldEditor {
+public class DateFilter extends AbstractFilter {
 
+    private static final String B = ">";
+    private static final String S = "<";
+    private static final String E = "=";
+
+    /** Список значений */
+    protected Combo combo;
     private Calendar _currentTime;
     private Text _timeText;
     private Button _editButton;
-    private Button _clearButton;
     private DateTime _calendar;
     private DateTime _time;
 
-    public DateEditor(Composite composite, int style, Field field,
-            boolean nullable) {
-        super(composite, style, field, nullable);
+    public DateFilter(Composite aComposite, int aStyle, Type aType) {
+        super(aComposite, aStyle, aType);
 
         GridLayout layout = new GridLayout();
         layout.marginWidth = 0;
         layout.marginHeight = 0;
-        layout.numColumns = 3;
+        layout.numColumns = 4;
         super.setLayout(layout);
 
+        Label label = new Label(this, SWT.NONE);
+        label.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 4, 1));
+        label.setText(SC.FILTER_HEADER);
+
+        Label xLabel = new Label(this, SWT.NONE);
+        xLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+        xLabel.setText(SC.VAR_VALUE);
+
+        combo = new Combo(this, SWT.READ_ONLY);
+        combo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+
+        combo.add(E);
+        combo.add(B);
+        combo.add(S);
+        combo.select(0);
+
         _timeText = new Text(this, SWT.READ_ONLY | SWT.BORDER);
-        _timeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+        _timeText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
         _editButton = new Button(this, SWT.PUSH);
         _editButton.setText("E");
-        _editButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-                false));
+        _editButton
+                .setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
-        _clearButton = new Button(this, SWT.PUSH);
-        _clearButton.setText("C");
-        _clearButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-                false));
-
-        _clearButton.addListener(SWT.Selection, new Listener() {
-
-            @Override
-            public void handleEvent(Event arg0) {
-                _timeText.setText("");
-                _currentTime = null;
-            }
-
-        });
         _editButton.addListener(SWT.Selection, new Listener() {
 
             @Override
@@ -145,24 +154,33 @@ public class DateEditor extends AbstractFieldEditor {
      * {@inheritDoc}
      */
     @Override
-    public Object getValue() {
-        return _currentTime;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(Object aValue) {
+    public boolean checkAgreement(Object aValue) {
         if (!(aValue instanceof Calendar)) {
-            throw new IllegalArgumentException("aValue must be Calendar");
+            throw new IllegalArgumentException("Argument must be Calendar");
         }
 
-        _currentTime = (Calendar) aValue;
-        _timeText.setText(AbstractEntity.formateDate(_currentTime));
+        if (_currentTime == null) {
+            return true;
+        }
+
+        Calendar value = (Calendar) aValue;
+        if (E.equals(combo.getText())) {
+            return (!value.after(_currentTime) && !value.before(_currentTime));
+        } else
+            if (B.equals(combo.getText())) {
+                return value.after(_currentTime);
+            } else
+                if (S.equals(combo.getText())) {
+                    return value.before(_currentTime);
+                }
+
+        return false;
     }
 
     @Override
-    public void setEditingItem(AbstractEntity item) {
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        combo.setEnabled(enabled);
+        _editButton.setEnabled(enabled);
     }
 }

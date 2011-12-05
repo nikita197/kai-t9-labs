@@ -1,6 +1,7 @@
 package org.courseworks.ris.widgets.typeblocks.filters;
 
 import java.lang.reflect.Type;
+import java.util.Calendar;
 
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.widgets.Composite;
@@ -36,10 +37,14 @@ public abstract class AbstractFilter extends Composite {
                     if (type.equals(String.class)) {
                         return new StringFilter(composite, style, type);
                     } else
-                        if (type.getSuperclass().equals(AbstractEntity.class)) {
-                            return new RelatedObjectFilter(composite, style,
-                                    type);
-                        }
+                        if (type.equals(Calendar.class)) {
+                            return new DateFilter(composite, style, type);
+                        } else
+                            if (type.getSuperclass().equals(
+                                    AbstractEntity.class)) {
+                                return new RelatedObjectFilter(composite,
+                                        style, type);
+                            }
         return null;
     }
 

@@ -6,85 +6,63 @@ import org.courseworks.ris.widgets.views.panels.actions.AddItemAction;
 import org.courseworks.ris.widgets.views.panels.actions.DeleteItemAction;
 import org.courseworks.ris.widgets.views.panels.actions.UpdateItemAction;
 import org.courseworks.ris.widgets.views.panels.ff.FilterPanel;
+import org.courseworks.ris.widgets.views.panels.ff.FindPanel;
 import org.courseworks.ris.widgets.views.panels.ff.PanelsTab;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
 public class TableViewer {
 
-	private final Composite _container;
+    private final Composite _container;
 
-	private PanelsTab _panelsTab;
+    private PanelsTab _panelsTab;
 
-	private ExtendedTable _table;
+    private ExtendedTable _table;
 
-	private ActionsPanel _actionsPanel;
+    private ActionsPanel _actionsPanel;
 
-	private AddItemAction _addAction;
+    public TableViewer(Composite parent, int style) {
+        _container = new Composite(parent, style);
+        _container.setLayout(new GridLayout(1, false));
+        init(_container);
+    }
 
-	private UpdateItemAction _updateAction;
+    public void init(Composite parent) {
+        _panelsTab = new PanelsTab(parent, SWT.BORDER);
+        _panelsTab.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-	private DeleteItemAction _deleteAction;
+        new FilterPanel(_panelsTab, "Фильтрация", SWT.NONE);
+        new FindPanel(_panelsTab, "Поиск", SWT.NONE);
 
-	public TableViewer(Composite parent, int style) {
-		_container = new Composite(parent, style);
-		_container.setLayout(new GridLayout(1, false));
-		init(_container);
-	}
+        _table = new ExtendedTable(parent, SWT.MULTI | SWT.BORDER);
+        _table.setLinesVisible(true);
+        _table.setHeaderVisible(true);
+        _table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-	public void init(Composite parent) {
-		_panelsTab = new PanelsTab(parent, SWT.BORDER);
-		_panelsTab.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+        _actionsPanel = new ActionsPanel(parent, SWT.BORDER);
+        _actionsPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+                false));
+        new AddItemAction(this, _table, _actionsPanel, "Добавить", null);
+        new UpdateItemAction(this, _table, _actionsPanel, "Изменить", null);
+        new DeleteItemAction(this, _table, _actionsPanel, "Удалить", null);
 
-		new FilterPanel(_panelsTab, "Filter", SWT.NONE);
-		// new FindPanel(_panelsTab, "Find", SWT.NONE);
+        _panelsTab.setTable(_table);
+    }
 
-		_table = new ExtendedTable(parent, SWT.MULTI | SWT.BORDER);
-		_table.setLinesVisible(true);
-		_table.setHeaderVisible(true);
-		_table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    public void fill(EntitySet dbTable) throws IllegalArgumentException,
+            IllegalAccessException {
+        _table.initType(dbTable);
+        _panelsTab.initType(dbTable);
+        _actionsPanel.setTable(dbTable);
 
-		_actionsPanel = new ActionsPanel(parent, SWT.BORDER);
-		_actionsPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false));
-		_addAction = new AddItemAction(_table, _actionsPanel, "Add", null);
-		_updateAction = new UpdateItemAction(_table, _actionsPanel, "Update",
-				null);
-		_deleteAction = new DeleteItemAction(_table, _actionsPanel, "Delete",
-				null);
+        _table.fill(dbTable);
+        _table.pack();
+    }
 
-		_panelsTab.setTable(_table);
+    public void removeFilter() {
+        _panelsTab.initType(_table.getTable());
+    }
 
-		// _updateAction.setEnabled(false);
-		_table.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event aEvent) {
-				if (_table.getSelectedItem() != null) {
-					_addAction.setEnabled(true);
-					_deleteAction.setEnabled(true);
-				} else {
-					_addAction.setEnabled(false);
-					_deleteAction.setEnabled(false);
-				}
-			}
-
-		});
-	}
-
-	public void fill(EntitySet dbTable) throws IllegalArgumentException,
-			IllegalAccessException {
-		_table.initType(dbTable);
-		_panelsTab.initType(dbTable);
-		_actionsPanel.setTable(dbTable);
-
-		_table.fill(dbTable);
-		_table.pack();
-
-		_updateAction.setEnabled(true);
-	}
 }
