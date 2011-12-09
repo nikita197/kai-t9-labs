@@ -1,6 +1,7 @@
 package org.courseworks.ris.mappings;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.courseworks.ris.cmanager.session.DbTable;
@@ -46,18 +47,21 @@ public abstract class AbstractEntity extends Object {
     public abstract void generateUID();
 
     public static String formateDate(Calendar date) {
-        StringBuffer result = new StringBuffer();
-        result.append(date.get(Calendar.DAY_OF_MONTH));
-        result.append(".");
-        result.append(date.get(Calendar.MONTH));
-        result.append(".");
-        result.append(date.get(Calendar.YEAR));
-        result.append(" ");
-        result.append(date.get(Calendar.HOUR));
-        result.append(":");
-        result.append(date.get(Calendar.MINUTE));
-        result.append(":");
-        result.append(date.get(Calendar.SECOND));
-        return result.toString();
+        // StringBuffer result = new StringBuffer();
+        // result.append(date.get(Calendar.DAY_OF_MONTH));
+        // result.append(".");
+        // result.append(date.get(Calendar.MONTH));
+        // result.append(".");
+        // result.append(date.get(Calendar.YEAR));
+        // result.append(" ");
+        // result.append(date.get(Calendar.HOUR));
+        // result.append(":");
+        // result.append(date.get(Calendar.MINUTE));
+        // result.append(":");
+        // result.append(date.get(Calendar.SECOND));
+        // return result.toString();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy hh:mm:ss");
+        return sdf.format(date.getTime());
     }
 }
