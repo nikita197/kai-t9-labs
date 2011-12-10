@@ -12,44 +12,54 @@ import org.courseworks.ris.mappings.AbstractEntity;
 @Table(name = "markhelper")
 public class MarkHelper extends AbstractEntity {
 
-	@Id
-	public String id;
-	public String name;
+    @Id
+    public String id;
+    public String name;
 
-	@Override
-	public String getName() {
-		return id;
-	}
+    @Override
+    public String getName() {
+        return id.trim();
+    }
 
-	@Override
-	public void generateUID() {
-	}
+    @Override
+    public void generateUID() {
+    }
 
-	// -----------------------------------------------------------------
+    public boolean isLinkAllowed() {
+        // машин с такой маркой может быть сколько угодно
+        return true;
+    }
 
-	public static String getViewName() {
-		return "Справочник машин";
-	}
+    // -----------------------------------------------------------------
 
-	public static String getFieldPresent(Field field) {
-		String fieldName = field.getName();
-		if ("id".equals(fieldName)) {
-			return "Идентификатор";
-		} else if ("name".equals(fieldName)) {
-			return "Имя";
-		}
-		return null;
-	}
+    public static String getViewName() {
+        return "Справочник машин";
+    }
 
-	public static Field[] getFields() {
-		return MarkHelper.class.getFields();
-	}
+    public static String getFieldPresent(Field field) {
+        String fieldName = field.getName();
+        if ("id".equals(fieldName)) {
+            return "Идентификатор";
+        } else
+            if ("name".equals(fieldName)) {
+                return "Имя";
+            }
+        return null;
+    }
 
-	public static Field[] getRequiredFields() {
-		return MarkHelper.class.getFields();
-	}
+    public static Field[] getFields() {
+        return MarkHelper.class.getFields();
+    }
 
-	public static Field[] getViewableFields() {
-		return MarkHelper.class.getFields();
-	}
+    public static Field[] getRequiredFields() {
+        return MarkHelper.class.getFields();
+    }
+
+    public static Field[] getEditableFields() {
+        return MarkHelper.class.getFields();
+    }
+
+    public static Field[] getViewableFields() {
+        return MarkHelper.class.getFields();
+    }
 }

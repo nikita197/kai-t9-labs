@@ -20,6 +20,9 @@ public class DeleteItemAction extends AbstractAction {
             if (_visualTable.getSelectedItem() != null) {
                 AbstractEntity entity = _visualTable.getSelectedItem();
                 entity.getTable().deleteItem(entity);
+
+                AbstractAction.patchit(entity.getTable());
+
                 _tableViewer.removeFilter();
                 _visualTable.refresh();
             }
@@ -29,6 +32,7 @@ public class DeleteItemAction extends AbstractAction {
             msgBox.setText("Удаление невозможно.");
             msgBox.setMessage("Существуют записи, связанные с этой записью.");
             msgBox.open();
+            e.printStackTrace();
         }
     }
 }
