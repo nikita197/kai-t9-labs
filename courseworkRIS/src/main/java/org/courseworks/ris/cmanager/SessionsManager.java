@@ -7,10 +7,13 @@ import java.util.Map.Entry;
 
 import org.courseworks.ris.cmanager.session.ExtendedSession;
 import org.courseworks.ris.cmanager.session.GeneralSession;
-import org.courseworks.ris.mappings.hprepair.Cars;
-import org.courseworks.ris.mappings.hprepair.Drivers;
-import org.courseworks.ris.mappings.orgelqueue.Engine;
-import org.courseworks.ris.mappings.orgelqueue.Plane;
+import org.courseworks.ris.mappings.orgelqueue.Car;
+import org.courseworks.ris.mappings.orgelqueue.Client;
+import org.courseworks.ris.mappings.orgelqueue.MarkHelper;
+import org.courseworks.ris.mappings.orgelqueue.Parking;
+import org.courseworks.ris.mappings.orgelqueue.Parking_place;
+import org.courseworks.ris.mappings.orgelqueue.Payment;
+import org.courseworks.ris.mappings.orgelqueue.Rate;
 import org.hibernate.cfg.Configuration;
 
 public class SessionsManager {
@@ -77,10 +80,13 @@ public class SessionsManager {
 	public static Class<?>[] getEntities() {
 		switch (_type) {
 		case HPREPAIR_SESSION: {
-			return new Class<?>[] { Cars.class, Drivers.class };
+			return null;
+			// return new Class<?>[] { Cars.class, Drivers.class };
 		}
 		case ORGELQUEUE_SESSION: {
-			return new Class<?>[] { Engine.class, Plane.class };
+			return new Class<?>[] { Car.class, Client.class, MarkHelper.class,
+					Parking_place.class, Parking.class, Payment.class,
+					Rate.class };
 		}
 		}
 		return null;
