@@ -1,6 +1,7 @@
 package org.courseworks.ris.widgets.views.panels.actions;
 
 import org.courseworks.ris.mappings.AbstractEntity;
+import org.courseworks.ris.mappings.orgelqueue.Payment;
 import org.courseworks.ris.widgets.ExtendedTable;
 import org.courseworks.ris.widgets.TableViewer;
 import org.courseworks.ris.widgets.views.AddView;
@@ -24,6 +25,12 @@ public class AddItemAction extends AbstractAction {
                 if (view.open()) {
                     AbstractEntity entity = view.getItem();
                     entity.getTable().addNewItem(entity);
+
+                    AbstractAction.patchit(entity.getTable());
+                    if (entity instanceof Payment) {
+                        ((Payment) entity).generateCost();
+                    }
+
                     _tableViewer.removeFilter();
                     _visualTable.refresh();
                 }

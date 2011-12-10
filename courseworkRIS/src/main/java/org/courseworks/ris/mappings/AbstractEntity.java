@@ -3,6 +3,8 @@ package org.courseworks.ris.mappings;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.courseworks.ris.cmanager.session.DbTable;
 
@@ -16,38 +18,61 @@ import org.courseworks.ris.cmanager.session.DbTable;
  */
 public abstract class AbstractEntity extends Object {
 
-	private DbTable _table;
+    private DbTable _table;
 
-	public abstract String getName();
+    public abstract String getName();
 
-	public DbTable getTable() {
-		return _table;
-	}
+    public DbTable getTable() {
+        return _table;
+    }
 
-	public void setTable(DbTable table) {
-		_table = table;
-	}
+    public void setTable(DbTable table) {
+        _table = table;
+    }
 
-	public Object getFieldValue(Field field) throws IllegalArgumentException,
-			IllegalAccessException {
-		if (Calendar.class.equals(field.getType())) {
-			Calendar date = (Calendar) field.get(this);
-			if (date != null) {
-				return formateDate(date);
-			}
-		}
-		return field.get(this);
-	}
+    public Object getFieldValue(Field field) throws IllegalArgumentException,
+            IllegalAccessException {
+        if (Calendar.class.equals(field.getType())) {
+            Calendar date = (Calendar) field.get(this);
+            if (date != null) {
+                return formateDate(date);
+            }
+        }
+        return field.get(this);
+    }
 
-	@Override
-	public String toString() {
-		return getName();
-	}
+    public List<AbstractEntity> getAllowedLinkedItems(Field field) {
+        List<AbstractEntity> allowedItems = new LinkedList<AbstractEntity>();
+        for (AbstractEntity linkedItem : _table.getRelatedTable(field)
+                .getItems()) {
+            if (linkedItem.isLinkAllowed()) {
+                allowedItems.add(linkedItem);
+            }
+        }
 
-	public abstract void generateUID();
+        // add current item's field
+        try {
+            if (field.get(this) != null) {
+                allowedItems.add((AbstractEntity) field.get(this));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-	public static String formateDate(Calendar date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-		return sdf.format(date.getTime());
-	}
+        return allowedItems;
+    }
+
+    public abstract boolean isLinkAllowed();
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    public abstract void generateUID();
+
+    public static String formateDate(Calendar date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+        return sdf.format(date.getTime());
+    }
 }

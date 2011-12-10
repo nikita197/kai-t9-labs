@@ -16,68 +16,78 @@ import org.courseworks.ris.mappings.AbstractEntity;
 @Table(name = "rate")
 public class Rate extends AbstractEntity {
 
-	@Id
-	public long id;
-	public int h_cost;
+    @Id
+    public long id;
+    public int h_cost;
 
-	@Override
-	public String getName() {
-		return String.valueOf(h_cost) + "руб/час";
-	}
+    @Override
+    public String getName() {
+        return String.valueOf(h_cost) + "руб/час";
+    }
 
-	@Override
-	public void generateUID() {
-		String tableName = getTable().getName();
-		EntitySet table = Application.getGenTables().getTable(tableName);
+    @Override
+    public void generateUID() {
+        String tableName = getTable().getName();
+        EntitySet table = Application.getGenTables().getTable(tableName);
 
-		e1: for (int i = 200000;; i++) {
-			for (AbstractEntity item : table.getItems()) {
-				Rate rate = (Rate) item;
-				if (rate.id == i) {
-					continue e1;
-				}
-			}
+        e1: for (int i = 200000;; i++) {
+            for (AbstractEntity item : table.getItems()) {
+                Rate rate = (Rate) item;
+                if (rate.id == i) {
+                    continue e1;
+                }
+            }
 
-			id = i;
-			break;
-		}
-	}
+            id = i;
+            break;
+        }
+    }
 
-	// -----------------------------------------------------------------
+    public boolean isLinkAllowed() {
+        // разрешены все тарифы
+        return true;
+    }
 
-	public static String getViewName() {
-		return "Тарифы";
-	}
+    // -----------------------------------------------------------------
 
-	public static String getFieldPresent(Field field) {
-		String fieldName = field.getName();
-		if ("id".equals(fieldName)) {
-			return "Идентификатор";
-		} else if ("h_cost".equals(fieldName)) {
-			return "Руб/час";
-		}
-		return null;
-	}
+    public static String getViewName() {
+        return "Тарифы";
+    }
 
-	public static Field[] getFields() {
-		return Rate.class.getFields();
-	}
+    public static String getFieldPresent(Field field) {
+        String fieldName = field.getName();
+        if ("id".equals(fieldName)) {
+            return "Идентификатор";
+        } else
+            if ("h_cost".equals(fieldName)) {
+                return "Руб/час";
+            }
+        return null;
+    }
 
-	public static Field[] getRequiredFields() {
-		return Rate.class.getFields();
-	}
+    public static Field[] getFields() {
+        return Rate.class.getFields();
+    }
 
-	public static Field[] getViewableFields() {
-		Field[] allFields = Rate.class.getDeclaredFields();
-		List<Field> viewableFields = new LinkedList<Field>();
+    public static Field[] getRequiredFields() {
+        return Rate.class.getFields();
+    }
 
-		for (Field field : allFields) {
-			if ("id".equals(field.getName())) {
-				continue;
-			}
-			viewableFields.add(field);
-		}
+    public static Field[] getEditableFields() {
+        return getViewableFields();
+    }
 
-		return viewableFields.toArray(new Field[] {});
-	}
+    public static Field[] getViewableFields() {
+        Field[] allFields = Rate.class.getDeclaredFields();
+        List<Field> viewableFields = new LinkedList<Field>();
+
+        for (Field field : allFields) {
+            if ("id".equals(field.getName())) {
+                continue;
+            }
+            viewableFields.add(field);
+        }
+
+        return viewableFields.toArray(new Field[] {});
+    }
 }

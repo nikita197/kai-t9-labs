@@ -56,10 +56,11 @@ public class ProgWin {
         tables.setMenu(tablesMenu);
 
         MenuItem reports = new MenuItem(_menuBar, SWT.PUSH);
-        reports.addListener(SWT.Selection, new Listener() {
+        reports.addListener(SWT.MouseUp, new Listener() {
 
             @Override
             public void handleEvent(Event event) {
+                System.out.println("QWE");
                 new Reports(_shell).open();
             }
 

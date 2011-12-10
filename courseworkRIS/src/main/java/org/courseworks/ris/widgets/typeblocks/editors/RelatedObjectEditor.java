@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.main.SC;
 import org.courseworks.ris.mappings.AbstractEntity;
 import org.eclipse.swt.SWT;
@@ -87,8 +86,8 @@ public class RelatedObjectEditor extends AbstractFieldEditor {
             text.add(SC.NULL_STRING);
         }
 
-        DbTable relTable = item.getTable().getRelatedTable(_field);
-        for (AbstractEntity entity : relTable.getItems()) {
+        // DbTable relTable = item.getTable().getRelatedTable(_field);
+        for (AbstractEntity entity : item.getAllowedLinkedItems(_field)) {
             text.add(entity.toString());
             _possibleValues.add(entity);
         }

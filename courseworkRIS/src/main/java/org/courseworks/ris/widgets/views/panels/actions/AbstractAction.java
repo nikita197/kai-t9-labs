@@ -1,6 +1,11 @@
 package org.courseworks.ris.widgets.views.panels.actions;
 
+import java.util.List;
+
+import org.courseworks.ris.cmanager.SessionsManager;
+import org.courseworks.ris.cmanager.session.DbTable;
 import org.courseworks.ris.cmanager.session.EntitySet;
+import org.courseworks.ris.cmanager.session.ExtendedSession;
 import org.courseworks.ris.widgets.ExtendedTable;
 import org.courseworks.ris.widgets.TableViewer;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -59,4 +64,40 @@ public abstract class AbstractAction {
         _item.setEnabled(enabled);
     }
 
+    /**
+     * Патч для обновления
+     * 
+     * @param table
+     */
+    public static void patchit(DbTable table) {
+        // Payment
+        if ("payment".equals(table.getName().toLowerCase())) {
+            final String parkingTable = "parking";
+            final String parkingPlaceTable = "parking_place";
+            for (ExtendedSession session : SessionsManager.getSessions()) {
+                List<DbTable> tables = session.getTables();
+                for (DbTable tmp : tables) {
+                    if ((parkingTable.equals(tmp.getName().toLowerCase()))
+                            || (parkingPlaceTable.equals(tmp.getName()
+                                    .toLowerCase()))) {
+                        tmp.refresh();
+                    }
+                }
+            }
+        }
+
+        // Parking
+        if ("parking".equals(table.getName().toLowerCase())) {
+            final String parkingPlaceTable = "parking_place";
+            for (ExtendedSession session : SessionsManager.getSessions()) {
+                List<DbTable> tables = session.getTables();
+                for (DbTable tmp : tables) {
+                    if (parkingPlaceTable.equals(tmp.getName().toLowerCase())) {
+                        tmp.refresh();
+                    }
+                }
+            }
+        }
+
+    }
 }

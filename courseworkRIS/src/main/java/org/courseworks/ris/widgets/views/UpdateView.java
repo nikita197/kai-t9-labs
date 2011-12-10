@@ -46,6 +46,7 @@ public class UpdateView extends AbstractView {
                 _actionPerformed = false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             _actionPerformed = false;
         }
     }
