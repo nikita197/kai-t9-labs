@@ -1,10 +1,16 @@
 ﻿package org.courseworks.ris.gui;
 
+import java.io.File;
+
 import javassist.NotFoundException;
 
 import org.courseworks.ris.cmanager.session.EntitySet;
 import org.courseworks.ris.cmanager.session.GeneralSession;
-import org.courseworks.ris.reports.Reports;
+import org.courseworks.ris.reports.AbstractReport;
+import org.courseworks.ris.reports.ReportAllAuto;
+import org.courseworks.ris.reports.ReportDMonth;
+import org.courseworks.ris.reports.ReportPK;
+import org.courseworks.ris.reports.ReportSC;
 import org.courseworks.ris.rqueries.RQuery;
 import org.courseworks.ris.widgets.TableViewer;
 import org.eclipse.swt.SWT;
@@ -55,20 +61,60 @@ public class ProgWin {
         Menu tablesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
         tables.setMenu(tablesMenu);
 
-        MenuItem reports = new MenuItem(_menuBar, SWT.PUSH);
-        reports.addListener(SWT.MouseUp, new Listener() {
+        // Reports
+        MenuItem reports = new MenuItem(_menuBar, SWT.CASCADE);
+        reports.setText("&Отчеты");
+
+        Menu reportsMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
+        reports.setMenu(reportsMenu);
+
+        Listener reportListener = new Listener() {
 
             @Override
             public void handleEvent(Event event) {
-                System.out.println("QWE");
-                new Reports(_shell).open();
+                MenuItem item = (MenuItem) event.widget;
+                AbstractReport report = (AbstractReport) item.getData();
+                File file = report.compile();
+                if (file != null) {
+                    report.open(file);
+                }
             }
 
-        });
-        reports.setText("&Отчеты");
+        };
 
-        MenuItem queries = new MenuItem(_menuBar, SWT.PUSH);
-        queries.setText("&Распределенный запрос");
+        MenuItem reportAllAuto = new MenuItem(reportsMenu, SWT.PUSH);
+        ReportAllAuto report1 = new ReportAllAuto();
+        reportAllAuto.setData(report1);
+        reportAllAuto.setText(report1.getName());
+        reportAllAuto.addListener(SWT.Selection, reportListener);
+
+        MenuItem reportDMonth = new MenuItem(reportsMenu, SWT.PUSH);
+        ReportDMonth report2 = new ReportDMonth();
+        reportDMonth.setData(report2);
+        reportDMonth.setText(report2.getName());
+        reportDMonth.addListener(SWT.Selection, reportListener);
+
+        MenuItem reportPK = new MenuItem(reportsMenu, SWT.PUSH);
+        ReportPK report3 = new ReportPK(_tableViewer.getTable());
+        reportPK.setData(report3);
+        reportPK.setText(report3.getName());
+        reportPK.addListener(SWT.Selection, reportListener);
+
+        MenuItem reportSC = new MenuItem(reportsMenu, SWT.PUSH);
+        ReportSC report4 = new ReportSC(_tableViewer.getTable());
+        reportSC.setData(report4);
+        reportSC.setText(report4.getName());
+        reportSC.addListener(SWT.Selection, reportListener);
+
+        // RQueries
+        MenuItem rqueries = new MenuItem(_menuBar, SWT.CASCADE);
+        rqueries.setText("&Распределенный запрос");
+
+        Menu rqueriesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
+        rqueries.setMenu(rqueriesMenu);
+
+        MenuItem queries = new MenuItem(rqueriesMenu, SWT.PUSH);
+        queries.setText("&Распределенный запрос 1");
         queries.addListener(SWT.Selection, new Listener() {
 
             @Override
