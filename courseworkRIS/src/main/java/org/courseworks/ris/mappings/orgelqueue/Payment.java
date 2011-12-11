@@ -72,6 +72,11 @@ public class Payment extends AbstractEntity implements Serializable {
 
             float currentCost = (((float) pickup - put) / (1000 * 3600))
                     * rate_id.h_cost;
+
+            currentCost = currentCost * 100;
+            int i = (int) Math.round(currentCost);
+            currentCost = (float) i / 100;
+
             cost = currentCost;
         }
 

@@ -32,7 +32,6 @@ public class DeleteItemAction extends AbstractAction {
             msgBox.setText("Удаление невозможно.");
             msgBox.setMessage("Существуют записи, связанные с этой записью.");
             msgBox.open();
-            e.printStackTrace();
         }
     }
 }

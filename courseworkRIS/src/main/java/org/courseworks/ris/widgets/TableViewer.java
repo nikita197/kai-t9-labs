@@ -69,4 +69,8 @@ public class TableViewer {
         _container.setLayoutData(layoutData);
     }
 
+    public ExtendedTable getTable() {
+        return _table;
+    }
+
 }
