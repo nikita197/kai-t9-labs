@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report.jrxml" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="742" leftMargin="57" rightMargin="43" topMargin="43" bottomMargin="43">
+	<parameter name="date1" class="java.util.Date"/>
+	<parameter name="date2" class="java.util.Date"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+	client.surname,
+	client.name,
+	client.middlename,
+	payment.cost,
+	parking.pickup_date
+FROM client,parking,payment
+WHERE
+	client.id = parking.client_id AND
+	parking.id = payment.parking_id AND
+	parking.pickup_date < $P{date2}  AND
+	parking.pickup_date >= $P{date1}]]>
+	</queryString>
+	<field name="surname" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="middlename" class="java.lang.String"/>
+	<field name="cost" class="java.lang.Float"/>
+	<field name="pickup_date" class="java.util.Date"/>
+	<variable name="sum_cost" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{cost}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<title>
+		<band height="45" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement x="182" y="0" width="365" height="43"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Платежи за период с "+$P{date1}+" до "+$P{date2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="14" y="30" width="57" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Фамилия]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="112" y="30" width="57" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Имя]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="30" width="85" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Отчество]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="322" y="28" width="85" height="17"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Сумма оплаты]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="28" width="85" height="17"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Время оплаты]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement x="14" y="0" width="71" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{surname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="112" y="0" width="57" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="196" y="0" width="85" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{middlename}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="322" y="0" width="72" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{cost}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="434" y="0" width="183" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{pickup_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="45" splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="45" splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band height="45" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement x="336" y="14" width="72" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[String.valueOf($V{sum_cost})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="238" y="14" width="85" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ИТОГО:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
