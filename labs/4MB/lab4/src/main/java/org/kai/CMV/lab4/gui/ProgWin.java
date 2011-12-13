@@ -2,8 +2,6 @@
 
 import java.io.File;
 
-import javassist.NotFoundException;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -15,146 +13,133 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.kai.CMV.lab4.cmanager.session.EntitySet;
-import org.kai.CMV.lab4.cmanager.session.GeneralSession;
-import org.kai.CMV.lab4.reports.AbstractReport;
-import org.kai.CMV.lab4.reports.ReportAllAuto;
-import org.kai.CMV.lab4.reports.ReportDMonth;
-import org.kai.CMV.lab4.reports.ReportPK;
-import org.kai.CMV.lab4.reports.ReportSC;
-import org.kai.CMV.lab4.rqueries.RQuery;
 import org.kai.CMV.lab4.widgets.TableViewer;
 
 public class ProgWin {
 
-    private Shell _shell;
+	private Shell _shell;
 
-    private final GeneralSession _generalSession;
+	private final Label _tableLabel;
 
-    private final Label _tableLabel;
+	private final TableViewer _tableViewer;
 
-    private final TableViewer _tableViewer;
+	private final Menu _menuBar;
 
-    private final Menu _menuBar;
+	public ProgWin(Composite composite) throws IllegalArgumentException,
+			IllegalAccessException {
+		_shell = composite.getShell();
 
-    public ProgWin(GeneralSession dbase, Composite composite)
-            throws IllegalArgumentException, IllegalAccessException,
-            NotFoundException {
-        _generalSession = dbase;
+		_tableLabel = new Label(composite, SWT.NONE);
+		_tableLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false));
+		_tableLabel
+				.setFont(new Font(null, new FontData("Tahoma", 13, SWT.BOLD)));
 
-        _shell = composite.getShell();
+		_tableViewer = new TableViewer(composite, SWT.NONE);
+		_tableViewer
+				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-        _tableLabel = new Label(composite, SWT.NONE);
-        _tableLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-                false));
-        _tableLabel
-                .setFont(new Font(null, new FontData("Tahoma", 13, SWT.BOLD)));
+		_menuBar = new Menu(composite.getShell(), SWT.BAR);
+		MenuItem tables = new MenuItem(_menuBar, SWT.CASCADE);
+		tables.setText("&Таблицы");
 
-        _tableViewer = new TableViewer(composite, SWT.NONE);
-        _tableViewer
-                .setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		Menu tablesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
+		tables.setMenu(tablesMenu);
 
-        _menuBar = new Menu(composite.getShell(), SWT.BAR);
-        MenuItem tables = new MenuItem(_menuBar, SWT.CASCADE);
-        tables.setText("&Таблицы");
+		// Reports
+		MenuItem reports = new MenuItem(_menuBar, SWT.CASCADE);
+		reports.setText("&Отчеты");
 
-        Menu tablesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
-        tables.setMenu(tablesMenu);
+		Menu reportsMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
+		reports.setMenu(reportsMenu);
 
-        // Reports
-        MenuItem reports = new MenuItem(_menuBar, SWT.CASCADE);
-        reports.setText("&Отчеты");
+		Listener reportListener = new Listener() {
 
-        Menu reportsMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
-        reports.setMenu(reportsMenu);
+			@Override
+			public void handleEvent(Event event) {
+				MenuItem item = (MenuItem) event.widget;
+				AbstractReport report = (AbstractReport) item.getData();
+				File file = report.compile();
+				if (file != null) {
+					report.open(file);
+				}
+			}
 
-        Listener reportListener = new Listener() {
+		};
 
-            @Override
-            public void handleEvent(Event event) {
-                MenuItem item = (MenuItem) event.widget;
-                AbstractReport report = (AbstractReport) item.getData();
-                File file = report.compile();
-                if (file != null) {
-                    report.open(file);
-                }
-            }
+		MenuItem reportAllAuto = new MenuItem(reportsMenu, SWT.PUSH);
+		ReportAllAuto report1 = new ReportAllAuto();
+		reportAllAuto.setData(report1);
+		reportAllAuto.setText(report1.getName());
+		reportAllAuto.addListener(SWT.Selection, reportListener);
 
-        };
+		MenuItem reportDMonth = new MenuItem(reportsMenu, SWT.PUSH);
+		ReportDMonth report2 = new ReportDMonth();
+		reportDMonth.setData(report2);
+		reportDMonth.setText(report2.getName());
+		reportDMonth.addListener(SWT.Selection, reportListener);
 
-        MenuItem reportAllAuto = new MenuItem(reportsMenu, SWT.PUSH);
-        ReportAllAuto report1 = new ReportAllAuto();
-        reportAllAuto.setData(report1);
-        reportAllAuto.setText(report1.getName());
-        reportAllAuto.addListener(SWT.Selection, reportListener);
+		MenuItem reportPK = new MenuItem(reportsMenu, SWT.PUSH);
+		ReportPK report3 = new ReportPK(_tableViewer.getTable());
+		reportPK.setData(report3);
+		reportPK.setText(report3.getName());
+		reportPK.addListener(SWT.Selection, reportListener);
 
-        MenuItem reportDMonth = new MenuItem(reportsMenu, SWT.PUSH);
-        ReportDMonth report2 = new ReportDMonth();
-        reportDMonth.setData(report2);
-        reportDMonth.setText(report2.getName());
-        reportDMonth.addListener(SWT.Selection, reportListener);
+		MenuItem reportSC = new MenuItem(reportsMenu, SWT.PUSH);
+		ReportSC report4 = new ReportSC(_tableViewer.getTable());
+		reportSC.setData(report4);
+		reportSC.setText(report4.getName());
+		reportSC.addListener(SWT.Selection, reportListener);
 
-        MenuItem reportPK = new MenuItem(reportsMenu, SWT.PUSH);
-        ReportPK report3 = new ReportPK(_tableViewer.getTable());
-        reportPK.setData(report3);
-        reportPK.setText(report3.getName());
-        reportPK.addListener(SWT.Selection, reportListener);
+		// RQueries
+		MenuItem rqueries = new MenuItem(_menuBar, SWT.CASCADE);
+		rqueries.setText("&Распределенный запрос");
 
-        MenuItem reportSC = new MenuItem(reportsMenu, SWT.PUSH);
-        ReportSC report4 = new ReportSC(_tableViewer.getTable());
-        reportSC.setData(report4);
-        reportSC.setText(report4.getName());
-        reportSC.addListener(SWT.Selection, reportListener);
+		Menu rqueriesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
+		rqueries.setMenu(rqueriesMenu);
 
-        // RQueries
-        MenuItem rqueries = new MenuItem(_menuBar, SWT.CASCADE);
-        rqueries.setText("&Распределенный запрос");
+		MenuItem queries = new MenuItem(rqueriesMenu, SWT.PUSH);
+		queries.setText("&Распределенный запрос 1");
+		queries.addListener(SWT.Selection, new Listener() {
 
-        Menu rqueriesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
-        rqueries.setMenu(rqueriesMenu);
+			@Override
+			public void handleEvent(Event event) {
+				System.out.println("Rquery");
+				new RQuery(_shell).open();
+			}
 
-        MenuItem queries = new MenuItem(rqueriesMenu, SWT.PUSH);
-        queries.setText("&Распределенный запрос 1");
-        queries.addListener(SWT.Selection, new Listener() {
+		});
 
-            @Override
-            public void handleEvent(Event event) {
-                System.out.println("Rquery");
-                new RQuery(_shell).open();
-            }
+		Listener listener = new Listener() {
 
-        });
+			@Override
+			public void handleEvent(Event aEvent) {
+				MenuItem item = (MenuItem) aEvent.widget;
+				EntitySet table = (EntitySet) item.getData();
+				try {
+					_tableViewer.fill(table);
+					_tableLabel.setText(table.getViewName());
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		};
 
-        Listener listener = new Listener() {
+		for (EntitySet table : _generalSession.getTables()) {
+			MenuItem item = new MenuItem(tablesMenu, SWT.RADIO);
+			item.setData(table);
+			item.setText(table.getViewName());
+			item.addListener(SWT.Selection, listener);
+		}
 
-            @Override
-            public void handleEvent(Event aEvent) {
-                MenuItem item = (MenuItem) aEvent.widget;
-                EntitySet table = (EntitySet) item.getData();
-                try {
-                    _tableViewer.fill(table);
-                    _tableLabel.setText(table.getViewName());
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+		composite.getShell().setMenuBar(_menuBar);
 
-        for (EntitySet table : _generalSession.getTables()) {
-            MenuItem item = new MenuItem(tablesMenu, SWT.RADIO);
-            item.setData(table);
-            item.setText(table.getViewName());
-            item.addListener(SWT.Selection, listener);
-        }
-
-        composite.getShell().setMenuBar(_menuBar);
-
-        // Show first table
-        Event event = new Event();
-        event.widget = tablesMenu.getItem(0);
-        listener.handleEvent(event);
-        tablesMenu.getItem(0).setSelection(true);
-    }
+		// Show first table
+		Event event = new Event();
+		event.widget = tablesMenu.getItem(0);
+		listener.handleEvent(event);
+		tablesMenu.getItem(0).setSelection(true);
+	}
 }
