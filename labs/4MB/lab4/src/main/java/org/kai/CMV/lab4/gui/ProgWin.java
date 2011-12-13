@@ -1,7 +1,5 @@
 ﻿package org.kai.CMV.lab4.gui;
 
-import java.io.File;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -53,25 +51,7 @@ public class ProgWin {
 		Menu reportsMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
 		reports.setMenu(reportsMenu);
 
-		Listener reportListener = new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				MenuItem item = (MenuItem) event.widget;
-				AbstractReport report = (AbstractReport) item.getData();
-				File file = report.compile();
-				if (file != null) {
-					report.open(file);
-				}
-			}
-
-		};
-
 		MenuItem reportAllAuto = new MenuItem(reportsMenu, SWT.PUSH);
-		ReportAllAuto report1 = new ReportAllAuto();
-		reportAllAuto.setData(report1);
-		reportAllAuto.setText(report1.getName());
-		reportAllAuto.addListener(SWT.Selection, reportListener);
 
 		MenuItem reportDMonth = new MenuItem(reportsMenu, SWT.PUSH);
 		ReportDMonth report2 = new ReportDMonth();

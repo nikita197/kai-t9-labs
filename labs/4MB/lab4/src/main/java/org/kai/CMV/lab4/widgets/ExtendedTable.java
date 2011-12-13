@@ -10,11 +10,18 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedTable extends Table {
 	public static int TABLE1 = 1, TABLE2 = 2;
-	private static List<Table> _tables;
+	private static List<String[]> _tablesHeaders;
+	private static List<List<String[]>> _tablesData;
 	private static int _currentTable = -1;
 
 	public ExtendedTable(Composite parent, int style) {
 		super(parent, style);
+		createTables();
+	}
+
+	public void createTables() {
+		String[] headers = null;
+		List<String[]> data = null;
 	}
 
 	public void fill(int table) throws IllegalArgumentException,
@@ -27,13 +34,12 @@ public class ExtendedTable extends Table {
 			IllegalAccessException {
 		removeAll();
 		if (_currentTable != -1) {
-			for (TableItem item : _tables.get(_currentTable).getItems()) {
+			for (String[] item : _tablesData.get(_currentTable)) {
 				TableItem newRow = new TableItem(this, SWT.NONE);
 				newRow.setData(item);
 			}
-			for (int i = 0; i < _tables.get(_currentTable).getColumnCount(); i++) {
-				this.getColumn(i).setText(
-						_tables.get(_currentTable).getColumns()[i].getText());
+			for (int i = 0; i < _tablesHeaders.get(_currentTable).length; i++) {
+				this.getColumn(i).setText(_tablesHeaders.get(_currentTable)[i]);
 			}
 		}
 	}
@@ -51,8 +57,8 @@ public class ExtendedTable extends Table {
 
 	public static List<String> getHeaders() {
 		List<String> columnHeaders = null;
-		for (TableColumn column : _tables.get(_currentTable).getColumns()) {
-			columnHeaders.add(column.getText());
+		for (String item : _tablesHeaders.get(_currentTable)) {
+			columnHeaders.add(item);
 		}
 		return columnHeaders;
 	}
