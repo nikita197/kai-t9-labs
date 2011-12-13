@@ -28,46 +28,19 @@ public class ExtendedTable extends Table {
 				"Стоимость", "Дата поступления" };
 		List<Object[]> data = new ArrayList<Object[]>();
 
-		Object[] line1 = new Object[] { "АК-47", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line2 = new Object[] { "Ракеты противотанковые", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line3 = new Object[] { "Гранаты", 460, 5400,
-				Calendar.getInstance() };
-		Object[] line4 = new Object[] { "Мины", 460, 1400,
-				Calendar.getInstance() };
-		Object[] line5 = new Object[] { "Плюшевые медведи", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line6 = new Object[] { "Зачетки", 460, 400,
-				Calendar.getInstance() };
-		Object[] line7 = new Object[] { "Книги", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line8 = new Object[] { "Клавиатуры", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line9 = new Object[] { "Мышки", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line10 = new Object[] { "Наушники", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line11 = new Object[] { "Мониторы", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line12 = new Object[] { "Конфеты", 460, 2400,
-				Calendar.getInstance() };
-		Object[] line13 = new Object[] { "Ноутбуки", 460, 2400,
-				Calendar.getInstance() };
-
-		data.add(line1);
-		data.add(line2);
-		data.add(line3);
-		data.add(line4);
-		data.add(line5);
-		data.add(line6);
-		data.add(line7);
-		data.add(line8);
-		data.add(line9);
-		data.add(line10);
-		data.add(line11);
-		data.add(line12);
-		data.add(line13);
+		data.add(getNewLine("АК-47", 460, 2400));
+		data.add(getNewLine("Ракеты противотанковые", 460, 2400));
+		data.add(getNewLine("Гранаты", 460, 5400));
+		data.add(getNewLine("Мины", 460, 1400));
+		data.add(getNewLine("Плюшевые медведи", 460, 2400));
+		data.add(getNewLine("Зачетки", 460, 400));
+		data.add(getNewLine("Книги", 460, 2400));
+		data.add(getNewLine("Клавиатуры", 460, 2400));
+		data.add(getNewLine("Мышки", 460, 2400));
+		data.add(getNewLine("Наушники", 460, 2400));
+		data.add(getNewLine("Мониторы", 460, 2400));
+		data.add(getNewLine("Конфеты", 460, 2400));
+		data.add(getNewLine("Ноутбуки", 460, 2400));
 
 		_tablesHeaders = new ArrayList<String[]>();
 		_tablesData = new ArrayList<List<Object[]>>();
@@ -82,6 +55,17 @@ public class ExtendedTable extends Table {
 			tColumn.setText(column);
 			tColumn.pack();
 		}
+	}
+
+	private int getRandom(int value) {
+		return (int) (Math.floor(Math.random() * value) + 1);
+	}
+
+	private Object[] getNewLine(String name, int number, int value) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2011, getRandom(11), getRandom(29), getRandom(23),
+				getRandom(58), getRandom(58));
+		return new Object[] { name, number, value, calendar };
 	}
 
 	public void fill(int table) throws IllegalArgumentException,
