@@ -1,8 +1,6 @@
 package org.kai.CMV.lab4.widgets.views;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -16,151 +14,115 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.kai.CMV.lab4.cmanager.session.DbTable;
-import org.kai.CMV.lab4.cmanager.session.EntitySet;
-import org.kai.CMV.lab4.mappings.AbstractEntity;
+import org.kai.CMV.lab4.widgets.ExtendedTable;
 import org.kai.CMV.lab4.widgets.typeblocks.editors.AbstractFieldEditor;
 
 public abstract class AbstractView {
 
-    protected final EntitySet _table;
+	protected final List<AbstractFieldEditor> _fieldEditors;
 
-    protected AbstractEntity _item;
+	protected final Shell _shell;
 
-    protected DbTable _currentTable;
+	protected Combo _sessionsCombo;
 
-    protected final List<AbstractFieldEditor> _fieldEditors;
+	protected Label _headerLabel;
 
-    protected final Shell _shell;
+	protected final Button _acceptButton;
 
-    protected Combo _sessionsCombo;
+	protected final Button _discardButton;
 
-    protected Label _headerLabel;
+	protected boolean _actionPerformed;
 
-    protected final Button _acceptButton;
+	protected int selectedIndex;
 
-    protected final Button _discardButton;
+	public AbstractView(Shell shell, String name)
+			throws InstantiationException, IllegalAccessException {
+		_actionPerformed = false;
+		_fieldEditors = new ArrayList<AbstractFieldEditor>();
 
-    protected boolean _actionPerformed;
+		_shell = new Shell(shell, SWT.SHELL_TRIM);
+		GridLayout shellLayout = new GridLayout();
+		shellLayout.numColumns = 2;
+		_shell.setLayout(shellLayout);
+		_shell.setText(name);
 
-    protected int selectedIndex;
+		_sessionsCombo = new Combo(_shell, SWT.READ_ONLY);
+		_sessionsCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 2, 1));
 
-    public AbstractView(Shell shell, String name, EntitySet table)
-            throws InstantiationException, IllegalAccessException {
-        _actionPerformed = false;
-        _fieldEditors = new ArrayList<AbstractFieldEditor>();
-        _table = table;
+		_headerLabel = new Label(_shell, SWT.NONE);
+		_headerLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+				false, 2, 1));
 
-        _shell = new Shell(shell, SWT.SHELL_TRIM);
-        GridLayout shellLayout = new GridLayout();
-        shellLayout.numColumns = 2;
-        _shell.setLayout(shellLayout);
-        _shell.setText(name);
+		Composite composite = new Composite(_shell, SWT.BORDER);
+		GridLayout compositeLayout = new GridLayout();
+		compositeLayout.numColumns = 2;
+		composite.setLayout(compositeLayout);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2,
+				1));
 
-        _sessionsCombo = new Combo(_shell, SWT.READ_ONLY);
-        _sessionsCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-                false, 2, 1));
+		Class<?>[] types = ExtendedTable.getFields();
+		String[] headers = ExtendedTable.getHeaders();
 
-        _headerLabel = new Label(_shell, SWT.NONE);
-        _headerLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-                false, 2, 1));
+		for (int i = 0; i < headers.length; i++) {
+			Label name1 = new Label(composite, SWT.NONE);
+			name1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			name1.setText(headers[i]);
 
-        Composite composite = new Composite(_shell, SWT.BORDER);
-        GridLayout compositeLayout = new GridLayout();
-        compositeLayout.numColumns = 2;
-        composite.setLayout(compositeLayout);
-        composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2,
-                1));
+			AbstractFieldEditor editor = AbstractFieldEditor.getInstance(
+					composite, SWT.NONE, types[i], AbstractFieldEditor.EDIT,
+					false);
+			editor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			_fieldEditors.add(editor);
+		}
 
-        for (Field field : _table.getEditableFields()) {
-            Label name1 = new Label(composite, SWT.NONE);
-            name1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-            name1.setText(_table.getFieldPresentation(field));
+		_acceptButton = new Button(_shell, SWT.PUSH);
+		_acceptButton.setText("ОК");
 
-            if (!(field.getType().equals(Float.class))) {
-                AbstractFieldEditor editor = AbstractFieldEditor.getInstance(
-                        composite, SWT.NONE, field, AbstractFieldEditor.EDIT,
-                        false);
-                editor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-                        false));
-                editor.setData(field);
-                _fieldEditors.add(editor);
-            }
-        }
+		_discardButton = new Button(_shell, SWT.PUSH);
+		_discardButton.setText("Отмена");
 
-        _acceptButton = new Button(_shell, SWT.PUSH);
-        _acceptButton.setText("ОК");
+		_acceptButton.addListener(SWT.Selection, new Listener() {
 
-        _discardButton = new Button(_shell, SWT.PUSH);
-        _discardButton.setText("Отмена");
+			@Override
+			public void handleEvent(Event aEvent) {
+				okButtonPressed();
+			}
 
-        _acceptButton.addListener(SWT.Selection, new Listener() {
+		});
+		_discardButton.addListener(SWT.Selection, new Listener() {
 
-            @Override
-            public void handleEvent(Event aEvent) {
-                okButtonPressed();
-            }
+			@Override
+			public void handleEvent(Event aEvent) {
+				cancelButtonPressed();
+			}
 
-        });
-        _discardButton.addListener(SWT.Selection, new Listener() {
+		});
 
-            @Override
-            public void handleEvent(Event aEvent) {
-                cancelButtonPressed();
-            }
+		_shell.pack();
+		_shell.setSize(_shell.getSize().x + 75, _shell.getSize().y);
+	}
 
-        });
+	protected abstract void okButtonPressed();
 
-        _shell.pack();
-        _shell.setSize(_shell.getSize().x + 75, _shell.getSize().y);
-    }
+	protected abstract void cancelButtonPressed();
 
-    protected abstract void okButtonPressed();
+	public boolean open() throws IllegalAccessException {
+		fillContent();
+		_shell.open();
 
-    protected abstract void cancelButtonPressed();
+		Shell parentShell = _shell.getShell();
+		Display display = _shell.getDisplay();
 
-    public boolean open() throws IllegalAccessException {
-        fillContent();
-        _shell.open();
+		while ((!parentShell.isDisposed()) && (!_shell.isDisposed())) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
 
-        Shell parentShell = _shell.getShell();
-        Display display = _shell.getDisplay();
+		return _actionPerformed;
+	}
 
-        while ((!parentShell.isDisposed()) && (!_shell.isDisposed())) {
-            if (!display.readAndDispatch()) {
-                display.sleep();
-            }
-        }
+	protected abstract void fillContent() throws IllegalAccessException;
 
-        return _actionPerformed;
-    }
-
-    protected abstract void fillContent() throws IllegalAccessException;
-
-    protected void fillItem() throws IllegalAccessException {
-        for (AbstractFieldEditor editor : _fieldEditors) {
-            Field field = (Field) editor.getData();
-            field.set(_item, editor.getValue());
-        }
-
-        _item.setTable(_currentTable);
-    }
-
-    protected List<String> getNfilledFields() throws IllegalAccessException {
-        List<String> fieldPresns = new LinkedList<String>();
-        for (Field field : _table.getRequiredFields()) {
-            if (field.get(_item) == null) {
-                fieldPresns.add(_table.getFieldPresentation(field));
-            }
-        }
-        return fieldPresns;
-    }
-
-    public void setItem(AbstractEntity item) {
-        _item = item;
-    }
-
-    public AbstractEntity getItem() {
-        return _item;
-    }
 }
