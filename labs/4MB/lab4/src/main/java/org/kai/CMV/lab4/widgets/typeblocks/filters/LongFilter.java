@@ -74,7 +74,7 @@ public class LongFilter extends AbstractFilter {
 		combo.add(SE);
 		combo.select(0);
 
-		numericText = new Text(this, SWT.SINGLE);
+		numericText = new Text(this, SWT.SINGLE | SWT.BORDER);
 		numericText
 				.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 		numericText.setText("0");

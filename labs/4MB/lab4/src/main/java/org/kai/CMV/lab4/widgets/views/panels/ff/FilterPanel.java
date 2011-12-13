@@ -1,5 +1,7 @@
 package org.kai.CMV.lab4.widgets.views.panels.ff;
 
+import java.util.Calendar;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -11,6 +13,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
+import org.kai.CMV.lab4.gui.ProgWin;
+import org.kai.CMV.lab4.main.Application;
 import org.kai.CMV.lab4.main.SC;
 import org.kai.CMV.lab4.widgets.ExtendedTable;
 import org.kai.CMV.lab4.widgets.typeblocks.filters.AbstractFilter;
@@ -141,6 +145,12 @@ public class FilterPanel extends AbstractPanel {
 		}
 
 		setState(true);
+
+		if (!ProgWin.getStartButtonEnabled()) {
+			Application.setEndTime(Calendar.getInstance().getTimeInMillis());
+			ProgWin.setStartButtonEnabled(true);
+			Application.calcElapsedTime();
+		}
 	}
 
 	private void removeFilter() throws IllegalArgumentException,
