@@ -10,12 +10,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.kai.CMV.lab4.widgets.TableViewer;
 
 public class ProgWin {
-
-	private Shell _shell;
 
 	private final Label _tableLabel;
 
@@ -25,8 +22,6 @@ public class ProgWin {
 
 	public ProgWin(Composite composite) throws IllegalArgumentException,
 			IllegalAccessException {
-		_shell = composite.getShell();
-
 		_tableLabel = new Label(composite, SWT.NONE);
 		_tableLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
@@ -39,80 +34,22 @@ public class ProgWin {
 
 		_menuBar = new Menu(composite.getShell(), SWT.BAR);
 		MenuItem tables = new MenuItem(_menuBar, SWT.CASCADE);
-		tables.setText("&Таблицы");
+		tables.setText("&Склады");
 
 		Menu tablesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
 		tables.setMenu(tablesMenu);
-
-		// Reports
-		MenuItem reports = new MenuItem(_menuBar, SWT.CASCADE);
-		reports.setText("&Отчеты");
-
-		Menu reportsMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
-		reports.setMenu(reportsMenu);
-
-		MenuItem reportAllAuto = new MenuItem(reportsMenu, SWT.PUSH);
-
-		MenuItem reportDMonth = new MenuItem(reportsMenu, SWT.PUSH);
-		ReportDMonth report2 = new ReportDMonth();
-		reportDMonth.setData(report2);
-		reportDMonth.setText(report2.getName());
-		reportDMonth.addListener(SWT.Selection, reportListener);
-
-		MenuItem reportPK = new MenuItem(reportsMenu, SWT.PUSH);
-		ReportPK report3 = new ReportPK(_tableViewer.getTable());
-		reportPK.setData(report3);
-		reportPK.setText(report3.getName());
-		reportPK.addListener(SWT.Selection, reportListener);
-
-		MenuItem reportSC = new MenuItem(reportsMenu, SWT.PUSH);
-		ReportSC report4 = new ReportSC(_tableViewer.getTable());
-		reportSC.setData(report4);
-		reportSC.setText(report4.getName());
-		reportSC.addListener(SWT.Selection, reportListener);
-
-		// RQueries
-		MenuItem rqueries = new MenuItem(_menuBar, SWT.CASCADE);
-		rqueries.setText("&Распределенный запрос");
-
-		Menu rqueriesMenu = new Menu(composite.getShell(), SWT.DROP_DOWN);
-		rqueries.setMenu(rqueriesMenu);
-
-		MenuItem queries = new MenuItem(rqueriesMenu, SWT.PUSH);
-		queries.setText("&Распределенный запрос 1");
-		queries.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				System.out.println("Rquery");
-				new RQuery(_shell).open();
-			}
-
-		});
 
 		Listener listener = new Listener() {
 
 			@Override
 			public void handleEvent(Event aEvent) {
-				MenuItem item = (MenuItem) aEvent.widget;
-				EntitySet table = (EntitySet) item.getData();
-				try {
-					_tableViewer.fill(table);
-					_tableLabel.setText(table.getViewName());
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
+				_tableViewer.init();
 			}
 		};
 
-		for (EntitySet table : _generalSession.getTables()) {
-			MenuItem item = new MenuItem(tablesMenu, SWT.RADIO);
-			item.setData(table);
-			item.setText(table.getViewName());
-			item.addListener(SWT.Selection, listener);
-		}
+		MenuItem item = new MenuItem(tablesMenu, SWT.RADIO);
+		item.setText("Склад №1");
+		item.addListener(SWT.Selection, listener);
 
 		composite.getShell().setMenuBar(_menuBar);
 

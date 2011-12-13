@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.kai.CMV.lab4.cmanager.session.EntitySet;
 import org.kai.CMV.lab4.widgets.ExtendedTable;
 
 public class PanelsTab {
@@ -72,9 +71,9 @@ public class PanelsTab {
 		_toolBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 	}
 
-	public void initType(EntitySet dbTable) {
+	public void initType() {
 		for (AbstractPanel panel : _panels) {
-			panel.initType(dbTable);
+			panel.initType();
 		}
 	}
 

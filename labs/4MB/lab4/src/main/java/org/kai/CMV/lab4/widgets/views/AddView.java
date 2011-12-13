@@ -4,8 +4,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class AddView extends AbstractView {
 
-	public AddView(Shell shell, String name) throws InstantiationException,
-			IllegalAccessException {
+	public AddView(Shell shell, String name) {
 		super(shell, name);
 		_headerLabel.setText("Заполните поля добавляемого объекта:");
 	}
@@ -23,7 +22,7 @@ public class AddView extends AbstractView {
 	}
 
 	@Override
-	protected void fillContent() throws IllegalAccessException {
+	protected void fillContent() {
 		// for (AbstractFieldEditor editor : _fieldEditors) {
 		// editor.setValue("");
 		// }

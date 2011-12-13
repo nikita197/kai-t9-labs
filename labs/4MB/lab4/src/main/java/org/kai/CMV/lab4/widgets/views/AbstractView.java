@@ -7,7 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -23,8 +22,6 @@ public abstract class AbstractView {
 
 	protected final Shell _shell;
 
-	protected Combo _sessionsCombo;
-
 	protected Label _headerLabel;
 
 	protected final Button _acceptButton;
@@ -35,8 +32,7 @@ public abstract class AbstractView {
 
 	protected int selectedIndex;
 
-	public AbstractView(Shell shell, String name)
-			throws InstantiationException, IllegalAccessException {
+	public AbstractView(Shell shell, String name) {
 		_actionPerformed = false;
 		_fieldEditors = new ArrayList<AbstractFieldEditor>();
 
@@ -45,10 +41,6 @@ public abstract class AbstractView {
 		shellLayout.numColumns = 2;
 		_shell.setLayout(shellLayout);
 		_shell.setText(name);
-
-		_sessionsCombo = new Combo(_shell, SWT.READ_ONLY);
-		_sessionsCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 2, 1));
 
 		_headerLabel = new Label(_shell, SWT.NONE);
 		_headerLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
@@ -107,7 +99,7 @@ public abstract class AbstractView {
 
 	protected abstract void cancelButtonPressed();
 
-	public boolean open() throws IllegalAccessException {
+	public boolean open() {
 		fillContent();
 		_shell.open();
 
@@ -123,6 +115,6 @@ public abstract class AbstractView {
 		return _actionPerformed;
 	}
 
-	protected abstract void fillContent() throws IllegalAccessException;
+	protected abstract void fillContent();
 
 }

@@ -4,8 +4,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class UpdateView extends AbstractView {
 
-	public UpdateView(Shell shell, String name) throws InstantiationException,
-			IllegalAccessException {
+	public UpdateView(Shell shell, String name) {
 		super(shell, name);
 		_headerLabel.setText("Изменение полей записи:");
 	}
@@ -24,9 +23,6 @@ public class UpdateView extends AbstractView {
 
 	@Override
 	protected void fillContent() {
-		// for (AbstractFieldEditor editor : _fieldEditors) {
-		// editor.setValue(value);
-		// }
 	}
 
 }

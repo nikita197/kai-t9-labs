@@ -42,6 +42,8 @@ public abstract class AbstractPanel extends Composite {
 
 	public abstract void init();
 
+	public abstract void initType();
+
 	public String getPanelName() {
 		return _name;
 	}
