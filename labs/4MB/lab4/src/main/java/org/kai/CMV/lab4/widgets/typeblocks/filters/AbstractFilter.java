@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.eclipse.swt.widgets.Composite;
-import org.kai.CMV.lab4.mappings.AbstractEntity;
 
 /**
  * Абстрактный фильтр
@@ -38,8 +37,6 @@ public abstract class AbstractFilter extends Composite {
 			return new StringFilter(composite, style, type);
 		} else if (type.equals(Calendar.class)) {
 			return new DateFilter(composite, style, type);
-		} else if (type.getSuperclass().equals(AbstractEntity.class)) {
-			return new RelatedObjectFilter(composite, style, type);
 		}
 		return null;
 	}

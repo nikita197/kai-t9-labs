@@ -60,11 +60,11 @@ public class IntegerFilter extends AbstractFilter {
 		label.setText(SC.FILTER_HEADER);
 
 		Label xLabel = new Label(this, SWT.NONE);
-		xLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true));
+		xLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, true));
 		xLabel.setText(SC.VAR_VALUE);
 
 		combo = new Combo(this, SWT.READ_ONLY);
-		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true));
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, true));
 
 		combo.add(E);
 		combo.add(B);
@@ -76,8 +76,7 @@ public class IntegerFilter extends AbstractFilter {
 		combo.select(0);
 
 		numericText = new Text(this, SWT.SINGLE);
-		numericText
-				.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		numericText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 		numericText.setText("0");
 
 		numericText.addListener(SWT.Verify, new Listener() {

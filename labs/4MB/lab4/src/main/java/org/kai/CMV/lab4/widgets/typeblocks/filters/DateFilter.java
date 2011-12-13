@@ -60,12 +60,12 @@ public class DateFilter extends AbstractFilter {
 		_timeText = new Text(this, SWT.READ_ONLY | SWT.BORDER);
 		_timeText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		_editButton = new Button(this, SWT.PUSH);
-		_editButton.setText("E");
-		_editButton
-				.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+		// _editButton = new Button(this, SWT.PUSH);
+		// _editButton.setText("E");
+		// _editButton
+		// .setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
-		_editButton.addListener(SWT.Selection, new Listener() {
+		_timeText.addListener(SWT.MouseUp, new Listener() {
 
 			@Override
 			public void handleEvent(Event arg0) {
@@ -178,6 +178,5 @@ public class DateFilter extends AbstractFilter {
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		combo.setEnabled(enabled);
-		_editButton.setEnabled(enabled);
 	}
 }

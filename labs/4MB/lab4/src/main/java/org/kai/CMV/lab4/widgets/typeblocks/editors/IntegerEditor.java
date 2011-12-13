@@ -25,7 +25,7 @@ public class IntegerEditor extends AbstractFieldEditor {
 		layout.marginHeight = 0;
 		super.setLayout(layout);
 
-		numericText = new Text(this, SWT.SINGLE);
+		numericText = new Text(this, SWT.SINGLE | SWT.BORDER);
 		numericText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
 		numericText.addListener(SWT.Verify, new Listener() {

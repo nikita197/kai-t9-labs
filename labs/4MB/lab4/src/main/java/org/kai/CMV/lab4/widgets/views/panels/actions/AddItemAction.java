@@ -3,6 +3,7 @@ package org.kai.CMV.lab4.widgets.views.panels.actions;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.kai.CMV.lab4.widgets.ExtendedTable;
 import org.kai.CMV.lab4.widgets.TableViewer;
+import org.kai.CMV.lab4.widgets.views.AddView;
 
 public class AddItemAction extends AbstractAction {
 
@@ -13,6 +14,6 @@ public class AddItemAction extends AbstractAction {
 
 	@Override
 	public void run() {
-
+		new AddView(_visualTable.getShell(), "Добавление").open();
 	}
 }
