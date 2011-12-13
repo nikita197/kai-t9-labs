@@ -2,7 +2,6 @@ package org.kai.CMV.lab4.widgets.views.panels.ff;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.kai.CMV.lab4.cmanager.session.EntitySet;
 import org.kai.CMV.lab4.widgets.ExtendedTable;
 
 /**
@@ -10,7 +9,6 @@ import org.kai.CMV.lab4.widgets.ExtendedTable;
  */
 public abstract class AbstractPanel extends Composite {
 	ExtendedTable _visualTable;
-	protected EntitySet _dbTable;
 	protected String _name;
 
 	public AbstractPanel(PanelsTab panelsTab, String name, int style) {
@@ -43,10 +41,6 @@ public abstract class AbstractPanel extends Composite {
 	}
 
 	public abstract void init();
-
-	public void initType(EntitySet dbTable) {
-		_dbTable = dbTable;
-	}
 
 	public String getPanelName() {
 		return _name;
