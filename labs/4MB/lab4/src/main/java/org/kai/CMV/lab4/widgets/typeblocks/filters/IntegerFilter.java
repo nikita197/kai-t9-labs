@@ -75,7 +75,7 @@ public class IntegerFilter extends AbstractFilter {
 
 		combo.select(0);
 
-		numericText = new Text(this, SWT.SINGLE);
+		numericText = new Text(this, SWT.SINGLE | SWT.BORDER);
 		numericText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 		numericText.setText("0");
 
